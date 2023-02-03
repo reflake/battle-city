@@ -1,18 +1,22 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class Tank : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private float speed;
 
-    // Update is called once per frame
-    void Update()
+    [Inject] private readonly Rigidbody2D _rig = null;
+
+    void FixedUpdate()
     {
+        float inputAxisX = Input.GetAxis("Horizontal");
+        float inputAxisY = Input.GetAxis("Vertical");
+
+        Vector2 inputVelocity = new Vector2(inputAxisX, inputAxisY) * speed;
         
+        _rig.velocity = inputVelocity * Time.fixedDeltaTime;
     }
 }
