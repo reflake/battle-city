@@ -20,14 +20,16 @@ public class Player : MonoBehaviour
 		_tankControls.Movement.Horizontal.canceled += HorizontalMovementInputCanceled;
 		_tankControls.Movement.Vertical.performed += VerticalMovementInputPressed;
 		_tankControls.Movement.Vertical.canceled += VerticalMovementInputCanceled;
+
+		_tankControls.Action.Shoot.started += ShootInputPressed;
 	}
 
-	private void HorizontalMovementInputCanceled(InputAction.CallbackContext obj)
+	private void HorizontalMovementInputCanceled(InputAction.CallbackContext _)
 	{
 		TryStop();
 	}
 
-	private void VerticalMovementInputCanceled(InputAction.CallbackContext obj)
+	private void VerticalMovementInputCanceled(InputAction.CallbackContext _)
 	{
 		TryStop();
 	}
@@ -91,5 +93,10 @@ public class Player : MonoBehaviour
 	private void Move(Direction dir)
 	{
 		_tank.SetMoveDirection(dir);
+	}
+
+	private void ShootInputPressed(InputAction.CallbackContext _)
+	{
+		_tank.Shoot();
 	}
 }

@@ -15,20 +15,12 @@ public class Tank : MonoBehaviour
     
     private Direction _currentDirection = Direction.None;
 
-    void Shoot()
+    public void Shoot()
     {
         var forward = Quaternion.Euler(0,0, 90f);
         var bullet = Instantiate(bulletPrefab, transform.position, forward);
         
         bullet.Setup(forward, _collider);
-    }
-
-    private void Update()
-    {
-        /*if (Input.GetButtonDown("Fire1"))
-        {
-            Shoot();
-        }*/
     }
 
     public void SetMoveDirection(Direction newDirection)
