@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
 	[Inject] private readonly Tank _tank = null;
 	
 	private TankControls _tankControls;
+	private Direction _lastKnownMoveDirection = Direction.North;
 
 	private void Awake()
 	{
@@ -90,13 +91,18 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	private void Move(Direction dir)
+	private void Move(Direction newDirection)
 	{
-		_tank.SetMoveDirection(dir);
+		if (newDirection != Direction.None)
+		{
+			_lastKnownMoveDirection = newDirection;
+		}
+		
+		_tank.SetMoveDirection(newDirection);
 	}
 
 	private void ShootInputPressed(InputAction.CallbackContext _)
 	{
-		_tank.Shoot();
+		_tank.Shoot(_lastKnownMoveDirection);
 	}
 }

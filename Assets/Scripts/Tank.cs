@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
+
 using UnityEngine;
+
 using Zenject;
 
 public class Tank : MonoBehaviour
@@ -15,12 +14,11 @@ public class Tank : MonoBehaviour
     
     private Direction _currentDirection = Direction.None;
 
-    public void Shoot()
+    public void Shoot(Direction direction)
     {
-        var forward = Quaternion.Euler(0,0, 90f);
-        var bullet = Instantiate(bulletPrefab, transform.position, forward);
+        var bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
         
-        bullet.Setup(forward, _collider);
+        bullet.Setup(direction, _collider);
     }
 
     public void SetMoveDirection(Direction newDirection)
