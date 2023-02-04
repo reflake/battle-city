@@ -160,6 +160,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 375331160}
+  - component: {fileID: 375331166}
   - component: {fileID: 375331161}
   - component: {fileID: 375331163}
   - component: {fileID: 375331162}
@@ -167,8 +168,8 @@ GameObject:
   - component: {fileID: 375331165}
   - component: {fileID: 375331164}
   m_Layer: 0
-  m_Name: Tank
-  m_TagString: Untagged
+  m_Name: PlayerTank
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -328,6 +329,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ab2647bd1066c247b9b48f8a3cf67c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &375331166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 375331158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29e76f7a43f44d7496382c0400a74c19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &519420028

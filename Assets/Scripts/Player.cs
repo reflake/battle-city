@@ -1,37 +1,95 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Zenject;
 
 // Player controls its tank
 public class Player : MonoBehaviour
 {
 	[Inject] private readonly Tank _tank = null;
+	
+	private TankControls _tankControls;
 
-	void FixedUpdate()
+	private void Awake()
 	{
-		float inputAxisX = Input.GetAxis("Horizontal");
-		float inputAxisY = Input.GetAxis("Vertical");
+		_tankControls = new TankControls();
 		
-		var newDirection = DirectionByInput(inputAxisX, inputAxisY);
+		_tankControls.Enable();
 		
-		_tank.SetMoveDirection(newDirection);
+		_tankControls.Movement.Horizontal.performed += HorizontalMovementInputPressed;
+		_tankControls.Movement.Horizontal.canceled += HorizontalMovementInputCanceled;
+		_tankControls.Movement.Vertical.performed += VerticalMovementInputPressed;
+		_tankControls.Movement.Vertical.canceled += VerticalMovementInputCanceled;
 	}
 
-	Direction DirectionByInput(float inputAxisX, float inputAxisY)
+	private void HorizontalMovementInputCanceled(InputAction.CallbackContext obj)
 	{
-		const float inputEpsilon = 0.05f;
-        
-		if (Mathf.Abs(inputAxisY) > inputEpsilon)
+		TryStop();
+	}
+
+	private void VerticalMovementInputCanceled(InputAction.CallbackContext obj)
+	{
+		TryStop();
+	}
+
+	private void HorizontalMovementInputPressed(InputAction.CallbackContext context)
+	{
+		float val = context.ReadValue<float>();
+
+		HorizontalAxisToDirection(val);
+	}
+
+	private void HorizontalAxisToDirection(float val)
+	{
+		switch (val)
 		{
-			return inputAxisY > 0 ? Direction.North : Direction.South;
+			case 1:
+				Move(Direction.East);
+				break;
+			case -1:
+				Move(Direction.West);
+				break;
 		}
-		else if (Mathf.Abs(inputAxisX) > inputEpsilon)
+	}
+
+	private void VerticalMovementInputPressed(InputAction.CallbackContext context)
+	{
+		float val = context.ReadValue<float>();
+
+		VerticalAxisToDirection(val);
+	}
+
+	private void VerticalAxisToDirection(float val)
+	{
+		switch (val)
 		{
-			return inputAxisX > 0 ? Direction.East : Direction.West;
+			case 1:
+				Move(Direction.North);
+				break;
+			case -1:
+				Move(Direction.South);
+				break;
+		}
+	}
+
+	private void TryStop()
+	{
+		if (!_tankControls.Movement.Horizontal.inProgress && !_tankControls.Movement.Vertical.inProgress)
+		{
+			Move(Direction.None);
 		}
 		else
 		{
-			return Direction.None;
+			float horizontalAxis = _tankControls.Movement.Horizontal.ReadValue<float>();
+			float verticalAxis = _tankControls.Movement.Vertical.ReadValue<float>();
+			
+			HorizontalAxisToDirection(horizontalAxis);
+			VerticalAxisToDirection(verticalAxis);
 		}
+	}
+
+	private void Move(Direction dir)
+	{
+		_tank.SetMoveDirection(dir);
 	}
 }
