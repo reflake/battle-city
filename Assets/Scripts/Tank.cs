@@ -25,10 +25,10 @@ public class Tank : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        /*if (Input.GetButtonDown("Fire1"))
         {
             Shoot();
-        }
+        }*/
     }
 
     public void SetMoveDirection(Direction newDirection)
