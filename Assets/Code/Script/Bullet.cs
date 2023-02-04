@@ -13,7 +13,7 @@ public class Bullet : MonoBehaviour
 
     public void Setup(Direction direction, Collider2D ignoreCollider)
     {
-        _linearVelocity = VectorForDirection(direction) * speed;
+        _linearVelocity = direction.ToVector() * speed;
         
         Physics2D.IgnoreCollision(ignoreCollider, collider);
     }
@@ -26,17 +26,5 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D other)
     {
         Destroy(gameObject);
-    }
-    Vector2 VectorForDirection(Direction direction)
-    {
-        switch (direction)
-        {
-            case Direction.North: return Vector2.up;
-            case Direction.South: return Vector2.down;
-            case Direction.East: return Vector2.right;
-            case Direction.West: return Vector2.left;
-        }
-
-        throw new Exception($"No vector for this direction: {direction}");
     }
 }
