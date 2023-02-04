@@ -34,8 +34,44 @@ public class Tank : MonoBehaviour
         float inputAxisX = Input.GetAxis("Horizontal");
         float inputAxisY = Input.GetAxis("Vertical");
 
-        Vector2 inputVelocity = new Vector2(inputAxisX, inputAxisY) * speed;
+        var newDirection = DirectionByInput(inputAxisX, inputAxisY);
         
-        _rig.velocity = inputVelocity * Time.fixedDeltaTime;
+        if (newDirection != Direction.None)
+        {
+            Vector2 inputWishDir = VectorForDirection(newDirection);
+
+            _rig.velocity = inputWishDir * speed * Time.fixedDeltaTime;
+        }
+    }
+
+    Vector2 VectorForDirection(Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.North: return Vector2.up;
+            case Direction.South: return Vector2.down;
+            case Direction.East: return Vector2.right;
+            case Direction.West: return Vector2.left;
+        }
+
+        throw new Exception($"No vector for this direction: {direction}");
+    }
+
+    Direction DirectionByInput(float inputAxisX, float inputAxisY)
+    {
+        const float inputEpsilon = 0.05f;
+        
+        if (Mathf.Abs(inputAxisY) > inputEpsilon)
+        {
+            return inputAxisY > 0 ? Direction.North : Direction.South;
+        }
+        else if (Mathf.Abs(inputAxisX) > inputEpsilon)
+        {
+            return inputAxisX > 0 ? Direction.East : Direction.West;
+        }
+        else
+        {
+            return Direction.None;
+        }
     }
 }
