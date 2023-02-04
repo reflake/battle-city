@@ -12,6 +12,8 @@ public class Tank : MonoBehaviour
     
     [Inject] private readonly Rigidbody2D _rig = null;
     [Inject] private readonly Collider2D _collider = null;
+    
+    private Direction _currentDirection = Direction.None;
 
     void Shoot()
     {
@@ -29,18 +31,22 @@ public class Tank : MonoBehaviour
         }
     }
 
+    public void SetMoveDirection(Direction newDirection)
+    {
+        _currentDirection = newDirection;
+    }
+
     void FixedUpdate()
     {
-        float inputAxisX = Input.GetAxis("Horizontal");
-        float inputAxisY = Input.GetAxis("Vertical");
-
-        var newDirection = DirectionByInput(inputAxisX, inputAxisY);
-        
-        if (newDirection != Direction.None)
+        if (_currentDirection != Direction.None)
         {
-            Vector2 inputWishDir = VectorForDirection(newDirection);
+            Vector2 inputWishDir = VectorForDirection(_currentDirection);
 
             _rig.velocity = inputWishDir * speed * Time.fixedDeltaTime;
+        }
+        else
+        {
+            _rig.velocity = Vector2.zero;
         }
     }
 
@@ -55,23 +61,5 @@ public class Tank : MonoBehaviour
         }
 
         throw new Exception($"No vector for this direction: {direction}");
-    }
-
-    Direction DirectionByInput(float inputAxisX, float inputAxisY)
-    {
-        const float inputEpsilon = 0.05f;
-        
-        if (Mathf.Abs(inputAxisY) > inputEpsilon)
-        {
-            return inputAxisY > 0 ? Direction.North : Direction.South;
-        }
-        else if (Mathf.Abs(inputAxisX) > inputEpsilon)
-        {
-            return inputAxisX > 0 ? Direction.East : Direction.West;
-        }
-        else
-        {
-            return Direction.None;
-        }
     }
 }
