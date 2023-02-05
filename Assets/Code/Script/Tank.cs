@@ -2,7 +2,7 @@
 
 using Zenject;
 
-public class Tank : MonoBehaviour
+public class Tank : MonoBehaviour, IDestructible
 {
     [SerializeField] private float speed;
     [SerializeField] private Bullet bulletPrefab;
@@ -11,7 +11,7 @@ public class Tank : MonoBehaviour
     [Inject] private readonly Collider2D _collider = null;
     
     private Direction _currentDirection = Direction.None;
-    private bool _alive = true;
+    public bool Alive { get; private set; } = true;
 
     public void Shoot(Direction direction)
     {
@@ -41,11 +41,8 @@ public class Tank : MonoBehaviour
 
     public void Kill()
     {
-        if (_alive)
-        {
-            _alive = false;
-            
-            Destroy(gameObject);
-        }
+        Alive = false;
+        
+        Destroy(gameObject);
     }
 }

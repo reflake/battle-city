@@ -25,12 +25,14 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Base"))
+        if (other.gameObject.CompareTag("Destructible"))
         {
-            other.GetComponent<Base>().Kill();
-        } else if (other.gameObject.CompareTag("Tank"))
-        {
-            other.GetComponent<Tank>().Kill();
+            if (!other.TryGetComponent<IDestructible>(out var destructible))
+            {
+                throw new Exception("Object tagged as 'Destructible' should have IDestructible component!");
+            }
+            
+            destructible.Kill();
         }
         
         Destroy(gameObject);

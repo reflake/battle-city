@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 88787876}
   m_Layer: 0
   m_Name: Flag
-  m_TagString: Base
+  m_TagString: Destructible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -294,7 +294,7 @@ GameObject:
   - component: {fileID: 375331164}
   m_Layer: 0
   m_Name: PlayerTank
-  m_TagString: Player
+  m_TagString: Destructible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -568,7 +568,7 @@ GameObject:
   - component: {fileID: 662385096}
   m_Layer: 0
   m_Name: BasicEnemyTank
-  m_TagString: Tank
+  m_TagString: Destructible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

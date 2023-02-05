@@ -1,25 +1,20 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Base : MonoBehaviour
+public class Base : MonoBehaviour, IDestructible
 {
 	[SerializeField] private SpriteRenderer spriteRenderer;
 	[SerializeField] private Sprite destroyedSprite;
 
-	private bool _alive = true;
+	public bool Alive { get; private set; } = true;
 	
 	public void Kill()
 	{
-		if (_alive)
-		{
-			_alive = false;
+		Alive = false;
 
-			spriteRenderer.sprite = destroyedSprite;
+		spriteRenderer.sprite = destroyedSprite;
 
-			// TODO: Tell game manager that game is over
-			throw new NotImplementedException();
-		}
+		// TODO: Tell game manager that game is over
+		throw new NotImplementedException();
 	}
 }
