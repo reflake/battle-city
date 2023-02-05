@@ -23,7 +23,7 @@ public class Bullet : MonoBehaviour
         rig.velocity = _linearVelocity * Time.fixedDeltaTime;
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         Destroy(gameObject);
     }
