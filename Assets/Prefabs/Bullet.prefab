@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rig: {fileID: 2762107655628412678}
   collider: {fileID: 2762107655628412729}
-  speed: 187
+  speed: 400
 --- !u!212 &2762107655628412731
 SpriteRenderer:
   m_ObjectHideFlags: 0
