@@ -1,6 +1,4 @@
-﻿using System;
-
-using UnityEngine;
+﻿using UnityEngine;
 
 using Zenject;
 
@@ -13,6 +11,7 @@ public class Tank : MonoBehaviour
     [Inject] private readonly Collider2D _collider = null;
     
     private Direction _currentDirection = Direction.None;
+    private bool _alive = true;
 
     public void Shoot(Direction direction)
     {
@@ -37,6 +36,16 @@ public class Tank : MonoBehaviour
         else
         {
             _rig.velocity = Vector2.zero;
+        }
+    }
+
+    public void Kill()
+    {
+        if (_alive)
+        {
+            _alive = false;
+            
+            Destroy(gameObject);
         }
     }
 }

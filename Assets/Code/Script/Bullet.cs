@@ -28,6 +28,9 @@ public class Bullet : MonoBehaviour
         if (other.gameObject.CompareTag("Base"))
         {
             other.GetComponent<Base>().Kill();
+        } else if (other.gameObject.CompareTag("Tank"))
+        {
+            other.GetComponent<Tank>().Kill();
         }
         
         Destroy(gameObject);
