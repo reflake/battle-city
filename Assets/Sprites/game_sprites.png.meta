@@ -11,6 +11,12 @@ TextureImporter:
   - first:
       213: -3217679024236331426
     second: Bullet
+  - first:
+      213: -421106972061450299
+    second: game_sprites_3
+  - first:
+      213: -1701415245121888746
+    second: game_sprites_4
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -50,7 +56,7 @@ TextureImporter:
   lightmap: 0
   compressionQuality: 50
   spriteMode: 2
-  spriteExtrude: 1
+  spriteExtrude: 2
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
@@ -170,7 +176,7 @@ TextureImporter:
         width: 5
         height: 7
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -178,6 +184,48 @@ TextureImporter:
       bones: []
       spriteID: e5efa27b9f18853d0800000000000000
       internalID: -3217679024236331426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: game_sprites_3
+      rect:
+        serializedVersion: 2
+        x: 304
+        y: 208
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5cf36d5a07de72af0800000000000000
+      internalID: -421106972061450299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: game_sprites_4
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 208
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61e531b59db5368e0800000000000000
+      internalID: -1701415245121888746
       vertices: []
       indices: 
       edges: []
