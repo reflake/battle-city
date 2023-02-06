@@ -5,6 +5,8 @@ using Zenject;
 public class Tank : MonoBehaviour, IDestructible
 {
     [SerializeField] private float speed;
+    [SerializeField, Range(1, 10)] private int hp;
+    [Space]
     [SerializeField] private Bullet bulletPrefab;
     
     [Inject] private readonly Rigidbody2D _rig = null;
@@ -41,8 +43,13 @@ public class Tank : MonoBehaviour, IDestructible
 
     public void Kill()
     {
-        Alive = false;
+        hp--;
         
-        Destroy(gameObject);
+        if (hp < 1)
+        {
+            Alive = false;
+
+            Destroy(gameObject);
+        }
     }
 }

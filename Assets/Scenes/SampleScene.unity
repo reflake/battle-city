@@ -377,6 +377,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 200
+  hp: 1
   bulletPrefab: {fileID: 2762107655628412679, guid: cf0809c4cd0208b4ebc983190b5bbb7e,
     type: 3}
 --- !u!61 &375331162
@@ -663,6 +664,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 140
+  hp: 3
   bulletPrefab: {fileID: 2762107655628412679, guid: cf0809c4cd0208b4ebc983190b5bbb7e,
     type: 3}
 --- !u!4 &662385095
