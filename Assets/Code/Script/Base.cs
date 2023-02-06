@@ -1,4 +1,5 @@
 ﻿using System;
+
 using UnityEngine;
 
 public class Base : MonoBehaviour, IDestructible
