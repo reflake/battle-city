@@ -1,12 +1,15 @@
 ﻿using System;
 
 using UnityEngine;
+using Zenject;
 
 public class Base : MonoBehaviour, IDestructible
 {
 	[SerializeField] private SpriteRenderer spriteRenderer;
 	[SerializeField] private Sprite destroyedSprite;
 
+	[Inject] private readonly GameManager _gameManager = null;
+	
 	public bool Alive { get; private set; } = true;
 	
 	public void Kill()
@@ -15,7 +18,6 @@ public class Base : MonoBehaviour, IDestructible
 
 		spriteRenderer.sprite = destroyedSprite;
 
-		// TODO: Tell game manager that game is over
-		throw new NotImplementedException();
+		_gameManager.GameOver();
 	}
 }
