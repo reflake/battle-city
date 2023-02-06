@@ -32,7 +32,10 @@ public class Bullet : MonoBehaviour
                 throw new Exception("Object tagged as 'Destructible' should have IDestructible component!");
             }
             
-            destructible.Kill();
+            if (destructible.Alive)
+            {
+                destructible.Kill();
+            }
         }
         
         Destroy(gameObject);
