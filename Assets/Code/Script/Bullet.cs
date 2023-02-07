@@ -33,7 +33,7 @@ public class Bullet : MonoBehaviour
             
             if (destructible.Alive)
             {
-                destructible.Kill();
+                destructible.TakeDamage();
             }
         }
         

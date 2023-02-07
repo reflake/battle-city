@@ -41,7 +41,7 @@ public class Tank : MonoBehaviour, IDestructible
         }
     }
 
-    public void Kill()
+    public void TakeDamage()
     {
         hp--;
         
