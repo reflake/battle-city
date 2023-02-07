@@ -21,15 +21,16 @@ public class Player : MonoBehaviour
 		
 		_tankControls.Enable();
 
+		// Bind inputs to tank actions
 		var movement = _tankControls.Movement;
 		
-		BindInputDirections("Horizontal", movement.Horizontal, Direction.East, Direction.West);
-		BindInputDirections("Vertical", movement.Vertical, Direction.North, Direction.South);
+		BindInputMoveDirections("Horizontal", movement.Horizontal, Direction.East, Direction.West);
+		BindInputMoveDirections("Vertical", movement.Vertical, Direction.North, Direction.South);
 
 		_tankControls.Action.Shoot.started += ShootInputPressed;
 	}
 
-	private void BindInputDirections(string keyName, InputAction bindInputAction, Direction positiveDirection, Direction negativeDirection)
+	private void BindInputMoveDirections(string keyName, InputAction bindInputAction, Direction positiveDirection, Direction negativeDirection)
 	{
 		bindInputAction.performed += MoveInputPressed;
 		bindInputAction.canceled += MoveInputCanceled;
