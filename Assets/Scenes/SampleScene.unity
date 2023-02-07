@@ -246,6 +246,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 88787874}
   destroyedSprite: {fileID: -1701415245121888746, guid: b2fd065193bda9b4d81860ae34e78daa,
     type: 3}
+  collider: {fileID: 88787876}
 --- !u!1 &205333036
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,6 +7,7 @@ public class Base : MonoBehaviour, IDestructible
 {
 	[SerializeField] private SpriteRenderer spriteRenderer;
 	[SerializeField] private Sprite destroyedSprite;
+	[SerializeField] private Collider2D collider;
 
 	[Inject] private readonly GameManager _gameManager = null;
 	
@@ -18,6 +19,8 @@ public class Base : MonoBehaviour, IDestructible
 
 		spriteRenderer.sprite = destroyedSprite;
 
+		collider.enabled = false;
+		
 		_gameManager.GameOver();
 	}
 }
