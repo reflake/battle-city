@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,25 +31,14 @@ public class Player : MonoBehaviour
 
 	private void BindInputDirections(string keyName, InputAction bindInputAction, Direction positiveDirection, Direction negativeDirection)
 	{
-		bindInputAction.performed += InputPressed;
-		bindInputAction.canceled += InputCanceled;
+		bindInputAction.performed += MoveInputPressed;
+		bindInputAction.canceled += MoveInputCanceled;
 
-		void InputPressed(InputAction.CallbackContext context)
+		void MoveInputPressed(InputAction.CallbackContext context)
 		{
 			float val = context.ReadValue<float>();
 
-			AxisToDirection(val);
-		}
-
-		void InputCanceled(InputAction.CallbackContext _)
-		{
-			_currentlyPressedDirections.Remove(keyName);
-			
-			TryStop();
-		}
-
-		void AxisToDirection(float val)
-		{
+			// Get direction by axis value
 			switch (val)
 			{
 				case 1:
@@ -60,6 +50,13 @@ public class Player : MonoBehaviour
 					_currentlyPressedDirections[keyName] = negativeDirection;
 					break;
 			}
+		}
+
+		void MoveInputCanceled(InputAction.CallbackContext _)
+		{
+			_currentlyPressedDirections.Remove(keyName);
+			
+			TryStop();
 		}
 	}
 
