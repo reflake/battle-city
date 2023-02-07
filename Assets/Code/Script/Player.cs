@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 using Zenject;
@@ -10,84 +12,66 @@ public class Player : MonoBehaviour
 	
 	private TankControls _tankControls;
 	private Direction _lastKnownMoveDirection = Direction.North;
+	private Dictionary<string, Direction> _currentlyPressedDirections = new Dictionary<string, Direction>();
 
 	private void Awake()
 	{
 		_tankControls = new TankControls();
 		
 		_tankControls.Enable();
+
+		var movement = _tankControls.Movement;
 		
-		_tankControls.Movement.Horizontal.performed += HorizontalMovementInputPressed;
-		_tankControls.Movement.Horizontal.canceled += HorizontalMovementInputCanceled;
-		_tankControls.Movement.Vertical.performed += VerticalMovementInputPressed;
-		_tankControls.Movement.Vertical.canceled += VerticalMovementInputCanceled;
+		BindInputDirections("Horizontal", movement.Horizontal, Direction.East, Direction.West);
+		BindInputDirections("Vertical", movement.Vertical, Direction.North, Direction.South);
 
 		_tankControls.Action.Shoot.started += ShootInputPressed;
 	}
 
-	private void HorizontalMovementInputCanceled(InputAction.CallbackContext _)
+	private void BindInputDirections(string keyName, InputAction bindInputAction, Direction positiveDirection, Direction negativeDirection)
 	{
-		TryStop();
-	}
+		bindInputAction.performed += InputPressed;
+		bindInputAction.canceled += InputCanceled;
 
-	private void VerticalMovementInputCanceled(InputAction.CallbackContext _)
-	{
-		TryStop();
-	}
-
-	private void HorizontalMovementInputPressed(InputAction.CallbackContext context)
-	{
-		float val = context.ReadValue<float>();
-
-		HorizontalAxisToDirection(val);
-	}
-
-	private void HorizontalAxisToDirection(float val)
-	{
-		switch (val)
+		void InputPressed(InputAction.CallbackContext context)
 		{
-			case 1:
-				Move(Direction.East);
-				break;
-			case -1:
-				Move(Direction.West);
-				break;
+			float val = context.ReadValue<float>();
+
+			AxisToDirection(val);
 		}
-	}
 
-	private void VerticalMovementInputPressed(InputAction.CallbackContext context)
-	{
-		float val = context.ReadValue<float>();
-
-		VerticalAxisToDirection(val);
-	}
-
-	private void VerticalAxisToDirection(float val)
-	{
-		switch (val)
+		void InputCanceled(InputAction.CallbackContext _)
 		{
-			case 1:
-				Move(Direction.North);
-				break;
-			case -1:
-				Move(Direction.South);
-				break;
+			_currentlyPressedDirections.Remove(keyName);
+			
+			TryStop();
+		}
+
+		void AxisToDirection(float val)
+		{
+			switch (val)
+			{
+				case 1:
+					Move(positiveDirection);
+					_currentlyPressedDirections[keyName] = positiveDirection;
+					break;
+				case -1:
+					Move(negativeDirection);
+					_currentlyPressedDirections[keyName] = negativeDirection;
+					break;
+			}
 		}
 	}
 
 	private void TryStop()
 	{
-		if (!_tankControls.Movement.Horizontal.inProgress && !_tankControls.Movement.Vertical.inProgress)
+		if (_currentlyPressedDirections.Count == 0)
 		{
 			Move(Direction.None);
 		}
 		else
 		{
-			float horizontalAxis = _tankControls.Movement.Horizontal.ReadValue<float>();
-			float verticalAxis = _tankControls.Movement.Vertical.ReadValue<float>();
-			
-			HorizontalAxisToDirection(horizontalAxis);
-			VerticalAxisToDirection(verticalAxis);
+			Move(_currentlyPressedDirections.Values.First());
 		}
 	}
 
