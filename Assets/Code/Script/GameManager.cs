@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
 	public event GameOverDelegate OnGameOver;
 	
-	public async void GameOver()
+	public async UniTaskVoid GameOver()
 	{
 		OnGameOver.Invoke();
 
