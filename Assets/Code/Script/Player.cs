@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
 	{
 		_tankControls = new TankControls();
 		
-		_tankControls.Enable();
+		SetControlsEnabled(true);
 
 		// Bind inputs to tank actions
 		var movement = _tankControls.Movement;
@@ -86,5 +86,17 @@ public class Player : MonoBehaviour
 	private void ShootInputPressed(InputAction.CallbackContext _)
 	{
 		_tank.Shoot(_lastKnownMoveDirection);
+	}
+
+	public void SetControlsEnabled(bool enabled)
+	{
+		if (enabled)
+		{
+			_tankControls.Enable();
+		}
+		else
+		{
+			_tankControls.Disable();
+		}
 	}
 }

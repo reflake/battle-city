@@ -9,6 +9,12 @@ public class GameManager : MonoBehaviour
 	public async UniTaskVoid GameOver()
 	{
 		OnGameOver.Invoke();
+		
+		// Disable all players
+		foreach (var player in FindObjectsOfType<Player>())
+		{
+			player.SetControlsEnabled(false);
+		}
 
 		await UniTask.Delay(TimeSpan.FromSeconds(5f), DelayType.Realtime, PlayerLoopTiming.Update);
 		
