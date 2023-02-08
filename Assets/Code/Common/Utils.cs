@@ -16,4 +16,22 @@ public static class Utils
 
 		throw new Exception($"No vector for this direction: {direction}");
 	}
+
+	public static Quaternion DirectionToRotation(this Direction direction)
+	{
+		switch (direction)
+		{
+			case Direction.East: return Quaternion.Euler(0,0,0);
+			case Direction.North: return Quaternion.Euler(0,0,90);
+			case Direction.West: return Quaternion.Euler(0,0,180);
+			case Direction.South: return Quaternion.Euler(0,0,270);
+		}
+
+		throw new Exception("Unexpected behaviour");
+	}
+
+	public static void TurnToDirection(this SpriteRenderer spriteRenderer, Direction direction)
+	{
+		spriteRenderer.transform.rotation = direction.DirectionToRotation();
+	}
 }

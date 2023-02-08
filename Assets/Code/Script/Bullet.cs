@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    [SerializeField] private SpriteRenderer spriteRenderer = null;
     [SerializeField] private Rigidbody2D rig = null;
     [SerializeField] private Collider2D collider = null;
     [SerializeField] private float speed = 187f;
     
     private Vector2 _linearVelocity;
 
-    public void Setup(Direction direction, Collider2D ignoreCollider)
+    public void Shoot(Direction direction, Collider2D ignoreCollider)
     {
         _linearVelocity = direction.ToVector() * speed;
         
         Physics2D.IgnoreCollision(ignoreCollider, collider);
+        
+        spriteRenderer.TurnToDirection(direction);
     }
     
     void FixedUpdate()

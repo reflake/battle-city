@@ -9,5 +9,6 @@ public class TankInstaller : MonoInstaller
 		Container.Bind<Tank>().FromComponentSibling();
 		Container.Bind<Rigidbody2D>().FromComponentSibling();
 		Container.Bind<Collider2D>().FromComponentSibling();
+		Container.Bind<SpriteRenderer>().FromComponentSibling();
 	}
 }

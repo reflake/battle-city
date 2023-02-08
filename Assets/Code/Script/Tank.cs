@@ -8,7 +8,8 @@ public class Tank : MonoBehaviour, IDestructible
     [SerializeField, Range(1, 10)] private int hp;
     [Space]
     [SerializeField] private Bullet bulletPrefab;
-    
+
+    [Inject] private readonly SpriteRenderer _spriteRenderer = null;
     [Inject] private readonly Rigidbody2D _rig = null;
     [Inject] private readonly Collider2D _collider = null;
     
@@ -19,12 +20,16 @@ public class Tank : MonoBehaviour, IDestructible
     {
         var bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
         
-        bullet.Setup(direction, _collider);
+        bullet.Shoot(direction, _collider);
     }
 
     public void SetMoveDirection(Direction newDirection)
     {
         _currentDirection = newDirection;
+        
+        if (newDirection != Direction.None)
+        
+            _spriteRenderer.TurnToDirection(newDirection);
     }
 
     void FixedUpdate()

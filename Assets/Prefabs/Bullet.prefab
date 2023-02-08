@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d8b8be028b1adf42b1c2a1ca1356f23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 2762107655628412731}
   rig: {fileID: 2762107655628412678}
   collider: {fileID: 2762107655628412729}
   speed: 400
