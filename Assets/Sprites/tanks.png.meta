@@ -1,25 +1,19 @@
 fileFormatVersion: 2
-guid: b2fd065193bda9b4d81860ae34e78daa
+guid: fbe0aea2f7a787c4ba5b52d1a5582041
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8441112569408997745
-    second: blocks
+      213: 4875780125967944472
+    second: player_level_1a
   - first:
-      213: -4925095277483174255
-    second: bullet
+      213: -8517799911898572495
+    second: player_level_1b
   - first:
-      213: -3217679024236331426
-    second: base
+      213: -8391021626538507948
+    second: enemy_level_1a
   - first:
-      213: -421106972061450299
-    second: base_destroyed
-  - first:
-      213: -1701415245121888746
-    second: game_sprites_4
-  - first:
-      213: -870374169098018741
-    second: enemy_basic_tank
+      213: 1759124801147805373
+    second: enemy_level_1b
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -59,7 +53,7 @@ TextureImporter:
   lightmap: 0
   compressionQuality: 50
   spriteMode: 2
-  spriteExtrude: 2
+  spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
@@ -129,55 +123,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: blocks
+      name: player_level_1a
       rect:
         serializedVersion: 2
         x: 0
-        y: 224
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 17945b0b82bd42570800000000000000
-      internalID: 8441112569408997745
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: bullet
-      rect:
-        serializedVersion: 2
-        x: 89
-        y: 150
-        width: 6
-        height: 5
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 19659ac70fb86abb0800000000000000
-      internalID: -4925095277483174255
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: base
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 208
-        width: 16
-        height: 16
+        y: 1200
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -185,20 +137,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e5efa27b9f18853d0800000000000000
-      internalID: -3217679024236331426
+      spriteID: 81b8a3b01304aa340800000000000000
+      internalID: 4875780125967944472
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: base_destroyed
+      name: player_level_1b
       rect:
         serializedVersion: 2
-        x: 64
-        y: 208
-        width: 16
-        height: 16
+        x: 80
+        y: 1200
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -206,8 +158,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5cf36d5a07de72af0800000000000000
-      internalID: -421106972061450299
+      spriteID: 1399e6ffb12bac980800000000000000
+      internalID: -8517799911898572495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_level_1a
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 1200
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4514d87c94a1d8b80800000000000000
+      internalID: -8391021626538507948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_level_1b
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 1200
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dbe9ef7bfaaa96810800000000000000
+      internalID: 1759124801147805373
       vertices: []
       indices: 
       edges: []
