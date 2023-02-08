@@ -16,11 +16,13 @@ public class Tank : MonoBehaviour, IDestructible
     private Direction _currentDirection = Direction.None;
     public bool Alive { get; private set; } = true;
 
-    public void Shoot(Direction direction)
+    public void Shoot(Direction shootDirection)
     {
         var bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
         
-        bullet.Shoot(direction, _collider);
+        Face(shootDirection);
+        
+        bullet.Shoot(shootDirection, _collider);
     }
 
     public void SetMoveDirection(Direction newDirection)
@@ -28,8 +30,8 @@ public class Tank : MonoBehaviour, IDestructible
         _currentDirection = newDirection;
         
         if (newDirection != Direction.None)
-        
-            _spriteRenderer.TurnToDirection(newDirection);
+            
+            Face(newDirection);
     }
 
     void FixedUpdate()
@@ -44,6 +46,11 @@ public class Tank : MonoBehaviour, IDestructible
         {
             _rig.velocity = Vector2.zero;
         }
+    }
+
+    public void Face(Direction direction)
+    {
+        _spriteRenderer.TurnToDirection(direction);
     }
 
     public void TakeDamage()
