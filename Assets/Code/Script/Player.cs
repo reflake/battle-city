@@ -122,7 +122,7 @@ public class Player : MonoBehaviour
 		}
 		else
 		{
-			UniTask.RunOnThreadPool(() => _gameManager.GameOver());
+			_gameManager.GameOver();
 		}
 	}
 

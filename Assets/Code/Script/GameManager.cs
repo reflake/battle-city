@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -8,16 +9,13 @@ public class GameManager : MonoBehaviour
 
 	private bool _gameIsOver = false;
 	
-	public async UniTaskVoid GameOver()
+	public void GameOver()
 	{
 		if (_gameIsOver)
 			return;
 
 		_gameIsOver = true;
-		
-		// Syncronize with main thread
-		await UniTask.Yield();
-		
+
 		OnGameOver.Invoke();
 		
 		// Disable all players
@@ -26,6 +24,11 @@ public class GameManager : MonoBehaviour
 			player.SetControlsEnabled(false);
 		}
 
+		Task.Run(() => TransitToMainMenu());
+	}
+
+	private async UniTaskVoid TransitToMainMenu()
+	{
 		await UniTask.Delay(TimeSpan.FromSeconds(5f), DelayType.Realtime, PlayerLoopTiming.Update);
 		
 		GoToMainMenu();
