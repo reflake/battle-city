@@ -12,7 +12,8 @@ using Zenject;
 public class Player : MonoBehaviour
 {
 	[SerializeField] private int lives = 3;
-	
+
+	[Inject] private readonly GameManager _gameManager = null;
 	[Inject] private readonly Tank _tank = null;
 	
 	private TankControls _tankControls;
@@ -118,6 +119,10 @@ public class Player : MonoBehaviour
 			lives--;
 
 			Task.Run(() => RespawnTank());;
+		}
+		else
+		{
+			UniTask.RunOnThreadPool(() => _gameManager.GameOver());
 		}
 	}
 

@@ -5,9 +5,19 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 	public event GameOverDelegate OnGameOver;
+
+	private bool _gameIsOver = false;
 	
 	public async UniTaskVoid GameOver()
 	{
+		if (_gameIsOver)
+			return;
+
+		_gameIsOver = true;
+		
+		// Syncronize with main thread
+		await UniTask.Yield();
+		
 		OnGameOver.Invoke();
 		
 		// Disable all players
