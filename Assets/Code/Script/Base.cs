@@ -13,7 +13,7 @@ public class Base : MonoBehaviour, IDestructible
 	
 	public bool Alive { get; private set; } = true;
 	
-	public void TakeDamage()
+	public void TakeDamage(DamageData _)
 	{
 		Alive = false;
 

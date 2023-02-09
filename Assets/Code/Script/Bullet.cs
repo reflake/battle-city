@@ -36,7 +36,12 @@ public class Bullet : MonoBehaviour
             
             if (destructible.Alive)
             {
-                destructible.TakeDamage();
+                DamageData damageData = new DamageData
+                {
+                    position = rig.position
+                };
+                
+                destructible.TakeDamage(damageData);
             }
         }
         

@@ -53,7 +53,7 @@ public class Tank : MonoBehaviour, IDestructible
         _spriteRenderer.TurnToDirection(direction);
     }
 
-    public void TakeDamage()
+    public void TakeDamage(DamageData _)
     {
         hp--;
         
