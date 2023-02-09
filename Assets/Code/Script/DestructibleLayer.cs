@@ -1,9 +1,7 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.InputSystem;
+﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class Terrain : MonoBehaviour, IDestructible
+public class DestructibleLayer : MonoBehaviour, IDestructible
 {
 	[SerializeField] private Tilemap _tilemap = null;
 	
@@ -30,7 +28,7 @@ public class Terrain : MonoBehaviour, IDestructible
 
 	private void CheckTile(Vector3Int position, TileBase tile)
 	{
-		if (tile is BattleTile battleTile && (battleTile.CanTakeDamage))
+		if (tile != null)
 		{
 			_tilemap.SetTile(position, null);
 		}
