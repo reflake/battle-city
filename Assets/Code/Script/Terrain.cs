@@ -6,13 +6,10 @@ using UnityEngine.Tilemaps;
 public class Terrain : MonoBehaviour, IDestructible
 {
 	[SerializeField] private Tilemap _tilemap = null;
-	[SerializeField] private bool _hasTile = false;
 	
 	public bool Alive => true;
 
 	private Vector2 damageSize = Vector2.one * .5f;
-	[SerializeField] private Vector3Int _position;
-	[SerializeField] private Bounds _bounds;
 
 	public void TakeDamage(DamageData damageData)
 	{
@@ -37,14 +34,5 @@ public class Terrain : MonoBehaviour, IDestructible
 		{
 			_tilemap.SetTile(position, null);
 		}
-	}
-
-	private void Update()
-	{
-		Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-	
-		_position = _tilemap.WorldToCell(worldPosition);
-
-		_hasTile = _tilemap.GetTile(_position);
 	}
 }
