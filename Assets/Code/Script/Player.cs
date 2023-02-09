@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
 	
 	private TankControls _tankControls;
 	private Direction _lastKnownMoveDirection = Direction.North;
-	private Dictionary<string, Direction> _currentlyPressedDirections = new Dictionary<string, Direction>();
+	private Dictionary<string, Direction> _currentlyPressedDirections = new();
 
 	private void Awake()
 	{
