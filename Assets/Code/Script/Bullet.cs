@@ -40,7 +40,7 @@ public class Bullet : MonoBehaviour
             {
                 DamageData damageData = new DamageData
                 {
-                    position = transform.position + transform.forward * .25f,
+                    position = transform.position + transform.forward * .4f,
                     direction = _direction
                 };
                 
