@@ -527,7 +527,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &250704764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -670,7 +670,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 006d48b3022b51841be6af78cb1c6409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 140
+  speed: 2
   hp: 3
   bulletPrefab: {fileID: 2762107655628412679, guid: cf0809c4cd0208b4ebc983190b5bbb7e,
     type: 3}
@@ -806,7 +806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 006d48b3022b51841be6af78cb1c6409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 200
+  speed: 3
   hp: 1
   bulletPrefab: {fileID: 2762107655628412679, guid: cf0809c4cd0208b4ebc983190b5bbb7e,
     type: 3}
@@ -8565,7 +8565,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &662385092
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8657,7 +8657,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 006d48b3022b51841be6af78cb1c6409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 140
+  speed: 2
   hp: 3
   bulletPrefab: {fileID: 2762107655628412679, guid: cf0809c4cd0208b4ebc983190b5bbb7e,
     type: 3}
@@ -8763,7 +8763,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &798869951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8906,7 +8906,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 006d48b3022b51841be6af78cb1c6409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 140
+  speed: 2
   hp: 3
   bulletPrefab: {fileID: 2762107655628412679, guid: cf0809c4cd0208b4ebc983190b5bbb7e,
     type: 3}
@@ -9159,7 +9159,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1065515683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9302,7 +9302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 006d48b3022b51841be6af78cb1c6409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 140
+  speed: 2
   hp: 3
   bulletPrefab: {fileID: 2762107655628412679, guid: cf0809c4cd0208b4ebc983190b5bbb7e,
     type: 3}

@@ -40,11 +40,7 @@ public class Tank : MonoBehaviour, IDestructible
         {
             Vector2 inputWishDir = _currentDirection.ToVector();
 
-            _rig.velocity = inputWishDir * speed * Time.fixedDeltaTime;
-        }
-        else
-        {
-            _rig.velocity = Vector2.zero;
+            _rig.MovePosition(_rig.position + inputWishDir * speed * Time.fixedDeltaTime);
         }
     }
 
