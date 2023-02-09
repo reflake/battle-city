@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +11,8 @@ using Zenject;
 // Player controls its tank
 public class Player : MonoBehaviour
 {
+	[SerializeField] private int lives = 3;
+	
 	[Inject] private readonly Tank _tank = null;
 	
 	private TankControls _tankControls;
@@ -28,6 +32,13 @@ public class Player : MonoBehaviour
 		BindInputMoveDirections("Vertical", movement.Vertical, Direction.North, Direction.South);
 
 		_tankControls.Action.Shoot.started += ShootInputPressed;
+
+		_tank.OnGetKilled += PlayerKilled;
+	}
+
+	private void OnDestroy()
+	{
+		_tank.OnGetKilled -= PlayerKilled;
 	}
 
 	private void BindInputMoveDirections(string keyName, InputAction bindInputAction, Direction positiveDirection, Direction negativeDirection)
@@ -98,5 +109,24 @@ public class Player : MonoBehaviour
 		{
 			_tankControls.Disable();
 		}
+	}
+
+	private void PlayerKilled()
+	{
+		if (lives > 0)
+		{
+			lives--;
+
+			Task.Run(() => RespawnTank());;
+		}
+	}
+
+	private async UniTaskVoid RespawnTank()
+	{
+		// TODO: show respawn animation
+		// Wait before respawn
+		await UniTask.Delay(TimeSpan.FromSeconds(1f), DelayType.DeltaTime, PlayerLoopTiming.Update);
+		
+		_tank.Respawn();
 	}
 }
