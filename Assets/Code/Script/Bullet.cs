@@ -10,9 +10,11 @@ public class Bullet : MonoBehaviour
     [SerializeField] private float speed = 187f;
     
     private Vector2 _linearVelocity;
+    private Direction _direction;
 
     public void Shoot(Direction direction, Collider2D ignoreCollider)
     {
+        _direction = direction;
         _linearVelocity = direction.ToVector() * speed;
         
         Physics2D.IgnoreCollision(ignoreCollider, collider);
@@ -38,7 +40,8 @@ public class Bullet : MonoBehaviour
             {
                 DamageData damageData = new DamageData
                 {
-                    position = rig.position
+                    position = transform.position + transform.forward * .25f,
+                    direction = _direction
                 };
                 
                 destructible.TakeDamage(damageData);
