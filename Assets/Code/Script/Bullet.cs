@@ -11,9 +11,11 @@ public class Bullet : MonoBehaviour
     
     private Vector2 _linearVelocity;
     private Direction _direction;
+    private int _damage;
 
-    public void Shoot(Direction direction, Collider2D ignoreCollider)
+    public void Shoot(Direction direction, int damage, Collider2D ignoreCollider)
     {
+        _damage = damage;
         _direction = direction;
         _linearVelocity = direction.ToVector() * speed;
         
@@ -41,7 +43,8 @@ public class Bullet : MonoBehaviour
                 DamageData damageData = new DamageData
                 {
                     position = transform.position + transform.forward * .4f,
-                    direction = _direction
+                    direction = _direction,
+                    damage = _damage
                 };
                 
                 destructible.TakeDamage(damageData);

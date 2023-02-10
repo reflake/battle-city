@@ -6,6 +6,7 @@ using Zenject;
 public class Tank : MonoBehaviour, IDestructible
 {
     [SerializeField] private float speed;
+    [SerializeField, Range(1, 10)] private int firePower;
     [SerializeField, Range(1, 10)] private int maxHp;
     [Space]
     [SerializeField] private Bullet bulletPrefab;
@@ -34,7 +35,7 @@ public class Tank : MonoBehaviour, IDestructible
         
         Face(shootDirection);
         
-        bullet.Shoot(shootDirection, _collider);
+        bullet.Shoot(shootDirection, firePower, _collider);
     }
 
     public void SetMoveDirection(Direction newDirection)

@@ -5,6 +5,8 @@ using UnityEngine.Tilemaps;
 public class DestructibleLayer : MonoBehaviour, IDestructible
 {
 	[SerializeField] private Tilemap _tilemap = null;
+	[SerializeField] private int durability = 1;
+	[SerializeField] private int blocksPerUnit = 4;
 	
 	public bool Alive => true;
 
@@ -12,8 +14,10 @@ public class DestructibleLayer : MonoBehaviour, IDestructible
 
 	public void TakeDamage(DamageData damageData)
 	{
-		Vector2 damageSize = GetNormalDamageSize(damageData.direction) * damageSizeRadius;
+		if (damageData.damage < durability)
+			return;
 		
+		Vector2 damageSize = GetNormalDamageSize(damageData.direction) * damageSizeRadius;
 		Bounds damageBounds = new Bounds(damageData.position, damageSize);
 		BoundsInt boundsInt = new BoundsInt();
 
@@ -24,14 +28,14 @@ public class DestructibleLayer : MonoBehaviour, IDestructible
 			case Direction.North:
 			case Direction.South:
 			{
-				int offset = boundsInt.xMax - boundsInt.xMin - 3;
+				int offset = boundsInt.xMax - boundsInt.xMin - (blocksPerUnit - 1);
 				boundsInt.xMin += offset;
 			}
 				break;
 			case Direction.East:
 			case Direction.West:
 			{
-				int offset = boundsInt.yMax - boundsInt.yMin - 3;
+				int offset = boundsInt.yMax - boundsInt.yMin - (blocksPerUnit - 1);
 				boundsInt.yMin += offset;
 			}
 				break;
