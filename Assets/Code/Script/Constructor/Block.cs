@@ -4,20 +4,31 @@ using UnityEngine.Tilemaps;
 
 namespace LevelDesigner
 {
+	public enum Type
+	{
+		Null = 0,
+		Brick
+	}
+	
 	public class Block : MonoBehaviour
 	{
 		[SerializeField] Tilemap tilemap;
+		[SerializeField] Type type;
 
 		public Tilemap Tilemap => tilemap;
+		public Type Type => type;
 
 		public void OnDrawGizmosSelected()
 		{
-			var max = tilemap.CellToWorld(tilemap.cellBounds.max);
-			var min = tilemap.CellToWorld(tilemap.cellBounds.min);
-			var size = max - min;
-			
-			Gizmos.color = Color.gray;
-			Gizmos.DrawWireCube(min + size / 2, size);
+			if (type != Type.Null)
+			{
+				var max = tilemap.CellToWorld(tilemap.cellBounds.max);
+				var min = tilemap.CellToWorld(tilemap.cellBounds.min);
+				var size = max - min;
+
+				Gizmos.color = Color.gray;
+				Gizmos.DrawWireCube(min + size / 2, size);
+			}
 		}
 	}
 }

@@ -27,8 +27,7 @@ namespace LevelDesigner
 			_controls.Enable();
 
 			MoveCursorInput(_controls.Cursor.Move, 400, 180);
-
-			_controls.Cursor.Paint.started += PaintBlockInput;
+			PaintBlockInput(_controls.Cursor.Paint);
 			
 			_blocks = blocksPrefab.GetComponentsInChildren<Block>();
 		}
@@ -45,10 +44,9 @@ namespace LevelDesigner
 
 				await UniTask.Yield();
 
-				samePlace = false;
-
 				while (!token.IsCancellationRequested)
 				{
+					samePlace = false;
 					transform.position += (Vector3)moveDirection;
 
 					if (_holdPaint)
@@ -73,40 +71,60 @@ namespace LevelDesigner
 			inputAction.canceled += (_) => cts.Cancel();
 		}
 
-		void PaintBlockInput(InputAction.CallbackContext context)
+		void PaintBlockInput(InputAction inputAction)
 		{
-			if (samePlace)
-				
-				blockCycle = (blockCycle + 1) % _blocks.Length;
-			else
-			
-				samePlace = true;
-
-			_holdPaint = true;
-
-			PaintBlock();
-
-			void Cancel(InputAction.CallbackContext _)
+			inputAction.started += (_) =>
 			{
-				_holdPaint = false;
+				// Cycle through all types of blocks
+				if (samePlace)
+					blockCycle = (blockCycle + 1) % _blocks.Length;
+				else
+					samePlace = true;
+
+				_holdPaint = true;
 				
-				context.action.canceled -= Cancel;
-			}
-
-			context.action.canceled += Cancel;
+				PaintBlock();
+			};
+			
+			inputAction.canceled += (_) => _holdPaint = false;
 		}
-
+		
 		void PaintBlock()
 		{
-			var brushOffset = new Vector3(-0.45f, -.45f);
+			Vector3 brushOffset = new(-0.45f, -.45f);
+			Vector3 cursorLocation = transform.position + brushOffset;
 			var block = _blocks[blockCycle];
 
+			if (block.Type != Type.Brick)
+			{
+				ClearLayer(brickLayer, cursorLocation);
+			}
+			
+			if (block.Type == Type.Brick)
+			{
+				PlaceNormalBlock(brickLayer, block, cursorLocation);
+			}
+		}
+
+		void ClearLayer(Tilemap tilemap, Vector3 cursorLocation)
+		{
+			var cellPosition = tilemap.WorldToCell(cursorLocation);
+			var nullBlocks = new TileBase[16];
+			
+			tilemap.SetTilesBlock(new BoundsInt(cellPosition, new Vector3Int(4,4,1)), nullBlocks);
+		}
+
+		void PlaceNormalBlock(Tilemap tilemap, Block block, Vector3 cursorLocation)
+		{
 			BoundsInt tilemapCellBounds = block.Tilemap.cellBounds;
 
-			block.Tilemap.GetTilesBlockNonAlloc(tilemapCellBounds, tiles);
-			tilemapCellBounds.position = brickLayer.WorldToCell(transform.position + brushOffset);
+			int count = block.Tilemap.GetTilesBlockNonAlloc(tilemapCellBounds, tiles);
+			tilemapCellBounds.position = tilemap.WorldToCell(cursorLocation);
 
-			for (int i = 0; i < tiles.Length; i++)
+			if (count > 16)
+				throw new Exception("Tiles amount must be less than 16");
+
+			for (int i = 0; i < count; i++)
 			{
 				if (tiles[i] != null && tiles[i].name.Contains("null_block"))
 				{
@@ -114,7 +132,7 @@ namespace LevelDesigner
 				}
 			}
 
-			brickLayer.SetTilesBlock(tilemapCellBounds, tiles);
+			tilemap.SetTilesBlock(tilemapCellBounds, tiles);
 		}
 
 		void OnDrawGizmos()

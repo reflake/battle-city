@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5265334174279507333}
   - component: {fileID: 547570535856169719}
   m_Layer: 0
-  m_Name: Block3
+  m_Name: Blocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2120075626600076529}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.05, y: -1.82, z: -0.4715233}
+  m_LocalPosition: {x: 8.17, y: -0.83, z: -0.4715233}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 5265334174279507333}
+  type: 1
 --- !u!156049354 &6769018040386253382
 Grid:
   m_ObjectHideFlags: 0
@@ -361,7 +362,7 @@ GameObject:
   - component: {fileID: 6904367138410873511}
   - component: {fileID: 5008441291202657267}
   m_Layer: 0
-  m_Name: Block4
+  m_Name: Blocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -375,12 +376,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2644173829670582583}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.2, y: -2.11, z: -0.4715233}
+  m_LocalPosition: {x: 6.31, y: -0.83, z: -0.4715233}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4390758997381962399}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3947956597495848436
 MonoBehaviour:
@@ -395,6 +396,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 6904367138410873511}
+  type: 1
 --- !u!156049354 &2641181519326835003
 Grid:
   m_ObjectHideFlags: 0
@@ -694,6 +696,52 @@ TilemapRenderer:
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
+--- !u!1 &3458025298838941523
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5457817159322090440}
+  - component: {fileID: 7181377089831889467}
+  m_Layer: 0
+  m_Name: NULL
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5457817159322090440
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3458025298838941523}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.52, y: -2.9, z: -0.4715233}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4390758997381962399}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7181377089831889467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3458025298838941523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95e7956f79644150904041a58900b541, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilemap: {fileID: 0}
+  type: 0
 --- !u!1 &4390758995750795060
 GameObject:
   m_ObjectHideFlags: 0
@@ -708,7 +756,7 @@ GameObject:
   - component: {fileID: 4390758995750795063}
   - component: {fileID: 4390758995750795062}
   m_Layer: 0
-  m_Name: Block1
+  m_Name: Blocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -722,12 +770,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4390758995750795060}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.95, y: -2.102, z: -0.4715233}
+  m_LocalPosition: {x: 11.93, y: -0.76, z: -0.4715233}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4390758997381962399}
-  m_RootOrder: 0
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4390758995750795081
 MonoBehaviour:
@@ -742,6 +790,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 4390758995750795063}
+  type: 1
 --- !u!156049354 &4390758995750795080
 Grid:
   m_ObjectHideFlags: 0
@@ -1065,11 +1114,12 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4390758995750795061}
-  - {fileID: 3122539981958520386}
-  - {fileID: 1898927226481592212}
-  - {fileID: 3545578537948019063}
   - {fileID: 3922732509865685762}
+  - {fileID: 3545578537948019063}
+  - {fileID: 1898927226481592212}
+  - {fileID: 3122539981958520386}
+  - {fileID: 4390758995750795061}
+  - {fileID: 5457817159322090440}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1087,7 +1137,7 @@ GameObject:
   - component: {fileID: 2164584855577988690}
   - component: {fileID: 6083098289455490849}
   m_Layer: 0
-  m_Name: Block2
+  m_Name: Blocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1101,12 +1151,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5023295105424912387}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.98, y: -2.12, z: -0.4715233}
+  m_LocalPosition: {x: 9.97, y: -0.82, z: -0.4715233}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4390758997381962399}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2518783967778879385
 MonoBehaviour:
@@ -1121,6 +1171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 2164584855577988690}
+  type: 1
 --- !u!156049354 &8201606670537527334
 Grid:
   m_ObjectHideFlags: 0
@@ -1434,7 +1485,7 @@ GameObject:
   - component: {fileID: 5958690973120986589}
   - component: {fileID: 6516630198923841904}
   m_Layer: 0
-  m_Name: Block5
+  m_Name: Blocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1448,12 +1499,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7860955199545581186}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.61, y: -2.12, z: -0.4715233}
+  m_LocalPosition: {x: 4.48, y: -0.83, z: -0.4715233}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4390758997381962399}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8639031758144166252
 MonoBehaviour:
@@ -1468,6 +1519,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 5958690973120986589}
+  type: 1
 --- !u!156049354 &9189545918193372162
 Grid:
   m_ObjectHideFlags: 0
