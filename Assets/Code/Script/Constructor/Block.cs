@@ -7,7 +7,10 @@ namespace LevelDesigner
 	public enum Type
 	{
 		Null = 0,
-		Brick
+		Brick,
+		Concrete,
+		Top,
+		Bottom
 	}
 	
 	public class Block : MonoBehaviour
@@ -26,7 +29,7 @@ namespace LevelDesigner
 				var min = tilemap.CellToWorld(tilemap.cellBounds.min);
 				var size = max - min;
 
-				Gizmos.color = Color.gray;
+				Gizmos.color = Color.magenta;
 				Gizmos.DrawWireCube(min + size / 2, size);
 			}
 		}

@@ -11,6 +11,9 @@ namespace LevelDesigner
 	public class Constructor : MonoBehaviour
 	{
 		[SerializeField] Tilemap brickLayer;
+		[SerializeField] Tilemap concreteLayer;
+		[SerializeField] Tilemap topLayer;
+		[SerializeField] Tilemap bottomLayer;
 		[SerializeField] GameObject blocksPrefab;
 
 		bool _holdPaint = false;
@@ -88,41 +91,24 @@ namespace LevelDesigner
 			
 			inputAction.canceled += (_) => _holdPaint = false;
 		}
-		
-		void PaintBlock()
-		{
-			Vector3 brushOffset = new(-0.45f, -.45f);
-			Vector3 cursorLocation = transform.position + brushOffset;
-			var block = _blocks[blockCycle];
 
-			if (block.Type != Type.Brick)
-			{
-				ClearLayer(brickLayer, cursorLocation);
-			}
-			
-			if (block.Type == Type.Brick)
-			{
-				PlaceNormalBlock(brickLayer, block, cursorLocation);
-			}
-		}
-
-		void ClearLayer(Tilemap tilemap, Vector3 cursorLocation)
+		void ClearLayer(int cellsPerUnit, Tilemap tilemap, Vector3 cursorLocation)
 		{
 			var cellPosition = tilemap.WorldToCell(cursorLocation);
 			var nullBlocks = new TileBase[16];
 			
-			tilemap.SetTilesBlock(new BoundsInt(cellPosition, new Vector3Int(4,4,1)), nullBlocks);
+			tilemap.SetTilesBlock(new BoundsInt(cellPosition, new Vector3Int(cellsPerUnit,cellsPerUnit,1)), nullBlocks);
 		}
 
-		void PlaceNormalBlock(Tilemap tilemap, Block block, Vector3 cursorLocation)
+		void PlaceNormalBlock(int cellsPerUnit, Tilemap tilemap, Block block, Vector3 cursorLocation)
 		{
 			BoundsInt tilemapCellBounds = block.Tilemap.cellBounds;
 
 			int count = block.Tilemap.GetTilesBlockNonAlloc(tilemapCellBounds, tiles);
 			tilemapCellBounds.position = tilemap.WorldToCell(cursorLocation);
 
-			if (count > 16)
-				throw new Exception("Tiles amount must be less than 16");
+			if (count > cellsPerUnit * cellsPerUnit)
+				throw new Exception($"Tiles amount must be less than {cellsPerUnit * cellsPerUnit}");
 
 			for (int i = 0; i < count; i++)
 			{
@@ -133,6 +119,27 @@ namespace LevelDesigner
 			}
 
 			tilemap.SetTilesBlock(tilemapCellBounds, tiles);
+		}
+
+		void PaintBlock()
+		{
+			Vector3 brushOffset = new(-0.45f, -.45f);
+			Vector3 cursorLocation = transform.position + brushOffset;
+			var fillBlock = _blocks[blockCycle];
+			
+			void FillLayer(Type blockType, Tilemap layer, int cellsPerUnit)
+			{
+				if (blockType != fillBlock.Type)
+					ClearLayer(cellsPerUnit, layer, cursorLocation);
+
+				if (blockType == fillBlock.Type)
+					PlaceNormalBlock(cellsPerUnit, layer, fillBlock, cursorLocation);
+			}
+							
+			FillLayer(Type.Brick, brickLayer, 4);
+			FillLayer(Type.Concrete, concreteLayer, 2);
+			FillLayer(Type.Top, topLayer, 2);
+			FillLayer(Type.Bottom, bottomLayer, 2);
 		}
 
 		void OnDrawGizmos()
