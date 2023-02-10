@@ -23,11 +23,17 @@ public class DestructibleLayer : MonoBehaviour, IDestructible
 		{
 			case Direction.North:
 			case Direction.South:
-				boundsInt.size = new Vector3Int(3, 1);
+			{
+				int offset = boundsInt.xMax - boundsInt.xMin - 3;
+				boundsInt.xMin += offset;
+			}
 				break;
 			case Direction.East:
 			case Direction.West:
-				boundsInt.size = new Vector3Int(1, 3);
+			{
+				int offset = boundsInt.yMax - boundsInt.yMin - 3;
+				boundsInt.yMin += offset;
+			}
 				break;
 		}
 
