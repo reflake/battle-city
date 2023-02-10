@@ -13,12 +13,18 @@ public class Player : MonoBehaviour
 {
 	[SerializeField] private int lives = 3;
 
-	[Inject] private readonly GameManager _gameManager = null;
+	[Inject] private readonly PlayerManager _playerManager = null;
 	[Inject] private readonly Tank _tank = null;
 	
 	private TankControls _tankControls;
 	private Direction _lastKnownMoveDirection = Direction.North;
 	private Dictionary<string, Direction> _currentlyPressedDirections = new();
+
+	[Inject]
+	private void Construct()
+	{
+		_tank.OnGetKilled += PlayerKilled;
+	}
 
 	private void Awake()
 	{
@@ -33,8 +39,6 @@ public class Player : MonoBehaviour
 		BindInputMoveDirections("Vertical", movement.Vertical, Direction.North, Direction.South);
 
 		_tankControls.Action.Shoot.started += ShootInputPressed;
-
-		_tank.OnGetKilled += PlayerKilled;
 	}
 
 	private void OnDestroy()
@@ -122,7 +126,7 @@ public class Player : MonoBehaviour
 		}
 		else
 		{
-			_gameManager.GameOver();
+			_playerManager.PlayerDefeated();
 		}
 	}
 
