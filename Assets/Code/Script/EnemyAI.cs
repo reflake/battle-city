@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 public class EnemyAI : MonoBehaviour
 {
 	[Inject] private readonly Tank _tank = null;
+	[Inject] private readonly EnemyManager _enemyManager = null;
 	
 	[SerializeField] private Vector2 _shootDelayRange = Vector2.zero;
 	[SerializeField] private Vector2 _moveDelayRange = Vector2.zero;
@@ -16,6 +17,17 @@ public class EnemyAI : MonoBehaviour
 	private Direction _currentDirection = Direction.None;
 	private float _thinkShootTimer = 0f;
 	private float _thinkMoveTimer = 0f;
+
+	[Inject]
+	private void Construct()
+	{
+		_tank.OnGetKilled += EnemyKilled;
+	}
+
+	private void EnemyKilled()
+	{
+		_enemyManager.EnemyKilled(this);
+	}
 
 	private void Start()
 	{

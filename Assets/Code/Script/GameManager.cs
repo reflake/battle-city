@@ -2,12 +2,22 @@
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Zenject;
 
 public class GameManager : MonoBehaviour
 {
+	[Inject] private readonly LevelManager _levelManager;
+	
 	public event GameOverDelegate OnGameOver;
 
 	private bool _gameIsOver = false;
+
+	public void LevelComplete()
+	{
+		// TODO: show scoreboard
+		
+		_levelManager.NextLevel();
+	}
 	
 	public void GameOver()
 	{
@@ -31,11 +41,6 @@ public class GameManager : MonoBehaviour
 	{
 		await UniTask.Delay(TimeSpan.FromSeconds(5f), DelayType.Realtime, PlayerLoopTiming.Update);
 		
-		GoToMainMenu();
-	}
-
-	private void GoToMainMenu()
-	{
 		throw new NotImplementedException("Cannot transit to main menu: main menu is yet to be implemented!");
 	}
 }
