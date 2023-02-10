@@ -1449,6 +1449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87cdae80ba0548deb91dcffdcb056dd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cursorSprite: {fileID: 1854864428}
   brickLayer: {fileID: 599017746}
   concreteLayer: {fileID: 588209554}
   topLayer: {fileID: 2093279039}

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
@@ -10,6 +11,7 @@ namespace LevelDesigner
 {
 	public class Constructor : MonoBehaviour
 	{
+		[SerializeField] SpriteRenderer cursorSprite;
 		[SerializeField] Tilemap brickLayer;
 		[SerializeField] Tilemap concreteLayer;
 		[SerializeField] Tilemap topLayer;
@@ -33,6 +35,11 @@ namespace LevelDesigner
 			PaintBlockInput(_controls.Cursor.Paint);
 			
 			_blocks = blocksPrefab.GetComponentsInChildren<Block>();
+
+			cursorSprite.DOFade(0f, 0.66f)
+				// Flicker Easing
+				.SetEase((time, duration, _, __) => time > duration * .5f ? 1f : 0f)
+				.SetLoops(-1);
 		}
 
 		void MoveCursorInput(InputAction inputAction, int holdDelay, int holdInterval)
