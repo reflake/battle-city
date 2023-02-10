@@ -26,39 +26,33 @@ namespace LevelDesigner
 			
 			_controls.Enable();
 
-			_controls.Cursor.Move.started += MoveCursorInput;
+			MoveCursorInput(_controls.Cursor.Move, 400, 180);
 
 			_controls.Cursor.Paint.started += PaintBlockInput;
 			
 			_blocks = blocksPrefab.GetComponentsInChildren<Block>();
 		}
 
-		void MoveCursorInput(InputAction.CallbackContext context)
+		void MoveCursorInput(InputAction inputAction, int holdDelay, int holdInterval)
 		{
-			int holdDelay = 400;
-			int holdInterval = 100;
-			
-			Vector3 moveDirection = context.ReadValue<Vector2>();
+			Vector2 moveDirection = Vector2.zero;
+			CancellationTokenSource cts = null;
+			CancellationToken token;
 
-			var cts = new CancellationTokenSource();
-			var token = cts.Token;
-
-			async UniTaskVoid MoveCursorCycle()
+			async UniTaskVoid MoveCursorCycle(CancellationToken token)
 			{
 				bool needHold = true;
-				
+
 				await UniTask.Yield();
-				
+
 				samePlace = false;
-				
+
 				while (!token.IsCancellationRequested)
 				{
-					await UniTask.Yield();
+					transform.position += (Vector3)moveDirection;
 
-					transform.position += moveDirection;
-					
 					if (_holdPaint)
-						
+
 						PaintBlock();
 
 					await UniTask.Delay(needHold ? holdDelay : holdInterval, DelayType.Realtime);
@@ -67,23 +61,16 @@ namespace LevelDesigner
 				}
 			}
 
-			Task.Run(() => MoveCursorCycle(), token);
+			inputAction.started += (ctx) =>
+			{
+				cts = new CancellationTokenSource();
+				token = cts.Token;
+				moveDirection = ctx.ReadValue<Vector2>();
 
-			void Performed(InputAction.CallbackContext callbackContext)
-			{
-				moveDirection = callbackContext.ReadValue<Vector2>();
-			}
-			
-			void Canceled(InputAction.CallbackContext callbackContext)
-			{
-				cts.Cancel();
-				
-				context.action.performed -= Performed;
-				context.action.canceled -= Canceled;
-			}
-			
-			context.action.performed += Performed;
-			context.action.canceled += Canceled;
+				Task.Run(() => MoveCursorCycle(token), token);
+			};
+			inputAction.performed += (ctx) => moveDirection = ctx.ReadValue<Vector2>();
+			inputAction.canceled += (_) => cts.Cancel();
 		}
 
 		void PaintBlockInput(InputAction.CallbackContext context)
