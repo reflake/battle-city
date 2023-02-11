@@ -6,6 +6,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
+using Zenject;
 
 namespace LevelDesigner
 {
@@ -18,6 +19,8 @@ namespace LevelDesigner
 		[SerializeField] Tilemap bottomLayer;
 		[SerializeField] GameObject blocksPrefab;
 
+		[Inject] readonly BattleField _battleField;
+		
 		bool _holdPaint = false;
 		bool samePlace = false;
 		int blockCycle = 0;
@@ -57,7 +60,16 @@ namespace LevelDesigner
 				while (!token.IsCancellationRequested)
 				{
 					samePlace = false;
-					transform.position += (Vector3)moveDirection;
+					var newPosition = transform.position + (Vector3)moveDirection;
+
+					// Restrict cursor bounds
+					var boundsWithoutPadding = _battleField.Bounds;
+					boundsWithoutPadding.Expand(-1f);
+					
+					newPosition = boundsWithoutPadding.ClosestPoint(newPosition);
+					
+					// Move to new position
+					transform.position = newPosition;
 
 					OnCursorMoved();
 
