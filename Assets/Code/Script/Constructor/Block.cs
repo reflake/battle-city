@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 
 namespace LevelDesigner
 {
-	public enum Type
+	public enum LayerType
 	{
 		Null = 0,
 		Brick,
@@ -16,14 +16,16 @@ namespace LevelDesigner
 	public class Block : MonoBehaviour
 	{
 		[SerializeField] Tilemap tilemap;
-		[SerializeField] Type type;
+		[SerializeField] LayerType layerType;
+		[SerializeField] new string name;
 
 		public Tilemap Tilemap => tilemap;
-		public Type Type => type;
+		public LayerType LayerType => layerType;
+		public string Name => name;
 
 		public void OnDrawGizmosSelected()
 		{
-			if (type != Type.Null && tilemap != null)
+			if (layerType != LayerType.Null && tilemap != null)
 			{
 				var max = tilemap.CellToWorld(tilemap.cellBounds.max);
 				var min = tilemap.CellToWorld(tilemap.cellBounds.min);
@@ -32,6 +34,23 @@ namespace LevelDesigner
 				Gizmos.color = Color.magenta;
 				Gizmos.DrawWireCube(min + size / 2, size);
 			}
+		}
+
+		public int GetBlockTilesNonAlloc(TileBase[] array)
+		{
+			var blockSize = Tilemap.cellBounds;
+
+			int count = Tilemap.GetTilesBlockNonAlloc(blockSize, array);
+			
+			for (int i = 0; i < count; i++)
+			{
+				if (array[i] != null && array[i].name.Contains("null_block"))
+				{
+					array[i] = null;
+				}
+			}
+
+			return count;
 		}
 	}
 }

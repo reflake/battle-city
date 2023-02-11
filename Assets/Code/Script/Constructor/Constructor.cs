@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using ModestTree;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
@@ -27,6 +30,7 @@ namespace LevelDesigner
 		Block[] _blocks;
 		ConstructorControls _controls;
 		TileBase[] tiles = new TileBase[16];
+		Dictionary<Vector2Int, SaveDataBlock> _savedDataBlocks = new();
 
 		void Awake()
 		{
@@ -109,35 +113,6 @@ namespace LevelDesigner
 			inputAction.canceled += (_) => _holdPaint = false;
 		}
 
-		void ClearLayer(int cellsPerUnit, Tilemap tilemap, Vector3 cursorLocation)
-		{
-			var cellPosition = tilemap.WorldToCell(cursorLocation);
-			var nullBlocks = new TileBase[16];
-			
-			tilemap.SetTilesBlock(new BoundsInt(cellPosition, new Vector3Int(cellsPerUnit,cellsPerUnit,1)), nullBlocks);
-		}
-
-		void PlaceNormalBlock(int cellsPerUnit, Tilemap tilemap, Block block, Vector3 cursorLocation)
-		{
-			BoundsInt tilemapCellBounds = block.Tilemap.cellBounds;
-
-			int count = block.Tilemap.GetTilesBlockNonAlloc(tilemapCellBounds, tiles);
-			tilemapCellBounds.position = tilemap.WorldToCell(cursorLocation);
-
-			if (count > cellsPerUnit * cellsPerUnit)
-				throw new Exception($"Tiles amount must be less than {cellsPerUnit * cellsPerUnit}");
-
-			for (int i = 0; i < count; i++)
-			{
-				if (tiles[i] != null && tiles[i].name.Contains("null_block"))
-				{
-					tiles[i] = null;
-				}
-			}
-
-			tilemap.SetTilesBlock(tilemapCellBounds, tiles);
-		}
-
 		void OnCursorMoved()
 		{
 			if (_holdPaint)
@@ -150,26 +125,144 @@ namespace LevelDesigner
 			Vector3 brushOffset = new(-0.45f, -.45f);
 			Vector3 cursorLocation = transform.position + brushOffset;
 			var fillBlock = _blocks[blockCycle];
-			
-			void FillLayer(Type blockType, Tilemap layer, int cellsPerUnit)
-			{
-				if (blockType != fillBlock.Type)
-					ClearLayer(cellsPerUnit, layer, cursorLocation);
 
-				if (blockType == fillBlock.Type)
-					PlaceNormalBlock(cellsPerUnit, layer, fillBlock, cursorLocation);
+			foreach (var layerType in Enum.GetValues(typeof(LayerType))
+											.Cast<LayerType>())
+			{
+				if (layerType == LayerType.Null)
+					continue;
+				
+				var tileLayer = LayerTilemapFromType(layerType);
+				int cellsPerUnit = LayerPower(layerType);
+				
+				ClearLayer(cellsPerUnit, tileLayer, cursorLocation);
 			}
-							
-			FillLayer(Type.Brick, brickLayer, 4);
-			FillLayer(Type.Concrete, concreteLayer, 2);
-			FillLayer(Type.Top, topLayer, 2);
-			FillLayer(Type.Bottom, bottomLayer, 2);
+
+			{
+				PlaceNormalBlock(fillBlock, cursorLocation);
+				SerializeBlock(fillBlock, cursorLocation);
+			}
+		}
+
+		Tilemap LayerTilemapFromType(LayerType layerType)
+		{
+			return layerType switch
+			{
+				LayerType.Brick => brickLayer,
+				LayerType.Concrete => concreteLayer,
+				LayerType.Top => topLayer,
+				LayerType.Bottom => bottomLayer,
+				_ => throw new ArgumentOutOfRangeException()
+			};
+		}
+
+		int LayerPower(LayerType layerType)
+		{
+			return layerType switch
+			{
+				LayerType.Brick => 4,
+				LayerType.Concrete => 2,
+				LayerType.Top => 2,
+				LayerType.Bottom => 2,
+				_ => throw new ArgumentOutOfRangeException()
+			};
+		}
+
+		void ClearLayer(int cellsPerUnit, Tilemap tilemap, Vector3 cursorLocation)
+		{
+			var cellPosition = tilemap.WorldToCell(cursorLocation);
+			var nullBlocks = new TileBase[16];
+			
+			tilemap.SetTilesBlock(new BoundsInt(cellPosition, new Vector3Int(cellsPerUnit,cellsPerUnit,1)), nullBlocks);
+		}
+
+		void PlaceNormalBlock(Block block, Vector3 cursorLocation)
+		{
+			if (block.LayerType == LayerType.Null)
+				return;
+			
+			var layerTilemap = LayerTilemapFromType(block.LayerType);
+			var cellsPerUnit = LayerPower(block.LayerType);
+			int count = block.GetBlockTilesNonAlloc(tiles);
+
+			if (count > cellsPerUnit * cellsPerUnit)
+				throw new Exception($"Tiles amount must be less than {cellsPerUnit * cellsPerUnit}");
+
+			// TODO: better explanation
+			var blockBounds = block.Tilemap.cellBounds;
+			
+			blockBounds.position = layerTilemap.WorldToCell(cursorLocation);
+
+			layerTilemap.SetTilesBlock(blockBounds, tiles);
+		}
+
+		void SerializeBlock(Block block, Vector3 cursorLocation)
+		{
+			// Store to save data
+			Vector2Int blockPosition = _battleField.GetCell(cursorLocation);
+			
+			if (block.LayerType == LayerType.Null)
+			{
+				_savedDataBlocks.Remove(blockPosition);
+				return;
+			}
+			
+			var cellsPerUnit = LayerPower(block.LayerType);
+			int count = block.GetBlockTilesNonAlloc(tiles);
+
+			/*int bitInformation = tiles
+				.Take(count)
+				.Zip(Enumerable.Range(0, count), (tile, bitIndex) => (tile, bitIndex))
+				.Where(t => t.tile != null)
+				.Sum(t => 1 << t.bitIndex);*/
+
+			/*_savedDataBlocks[blockPosition] = new SaveDataBlock
+			{
+				blockName = block.Name,
+				blockPositionX = blockPosition.x,
+				blockPositionY = blockPosition.y,
+				blockPower = cellsPerUnit,
+				bitInformation = bitInformation,
+				layerType = block.LayerType
+			};*/
+
+			_savedDataBlocks[blockPosition] = new SaveDataBlock
+			{
+				blockIndex = _blocks.IndexOf(block),
+				blockPositionX = blockPosition.x,
+				blockPositionY = blockPosition.y,
+			};
 		}
 
 		void OnDrawGizmos()
 		{
 			Gizmos.color = Color.green;
 			Gizmos.DrawCube(transform.position, Vector3.one);
+		}
+
+		public SaveDataBlock[] GetSerializedData() => _savedDataBlocks.Values.ToArray();
+
+		public void LoadLevel(SaveDataBlock[] data)
+		{
+			foreach (var layerType in Enum.GetValues(typeof(LayerType))
+				.Cast<LayerType>())
+			{
+				if (layerType == LayerType.Null)
+					continue;
+				
+				var tileLayer = LayerTilemapFromType(layerType);
+				
+				tileLayer.ClearAllTiles();
+			}
+
+			_savedDataBlocks = data.ToDictionary(x => new Vector2Int(x.blockPositionX, x.blockPositionY));
+
+			foreach (var block in data)
+			{
+				PlaceNormalBlock(
+					_blocks[block.blockIndex], 
+					new Vector3(block.blockPositionX, block.blockPositionY) + Vector3.one * .5f);
+			}
 		}
 	}
 }

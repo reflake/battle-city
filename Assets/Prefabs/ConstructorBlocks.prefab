@@ -48,7 +48,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 5265334174279507333}
-  type: 1
+  layerType: 1
+  name: brick
 --- !u!156049354 &6769018040386253382
 Grid:
   m_ObjectHideFlags: 0
@@ -396,7 +397,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 6904367138410873511}
-  type: 1
+  layerType: 1
+  name: brick
 --- !u!156049354 &2641181519326835003
 Grid:
   m_ObjectHideFlags: 0
@@ -744,7 +746,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 8596615397122935999}
-  type: 2
+  layerType: 2
+  name: concrete
 --- !u!156049354 &1281880715624356514
 Grid:
   m_ObjectHideFlags: 0
@@ -960,7 +963,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 4558545732828106053}
-  type: 4
+  layerType: 4
+  name: water
 --- !u!156049354 &3765029242498660905
 Grid:
   m_ObjectHideFlags: 0
@@ -1201,7 +1205,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 0}
-  type: 0
+  layerType: 0
+  name: null
 --- !u!1 &4390758995750795060
 GameObject:
   m_ObjectHideFlags: 0
@@ -1250,7 +1255,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 4390758995750795063}
-  type: 1
+  layerType: 1
+  name: brick
 --- !u!156049354 &4390758995750795080
 Grid:
   m_ObjectHideFlags: 0
@@ -1639,7 +1645,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 2164584855577988690}
-  type: 1
+  layerType: 1
+  name: brick
 --- !u!156049354 &8201606670537527334
 Grid:
   m_ObjectHideFlags: 0
@@ -1987,7 +1994,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 7921964140087578210}
-  type: 4
+  layerType: 4
+  name: ice
 --- !u!156049354 &129931138809652939
 Grid:
   m_ObjectHideFlags: 0
@@ -2199,7 +2207,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 4714286425380978276}
-  type: 2
+  layerType: 2
+  name: concrete
 --- !u!156049354 &494497316467770473
 Grid:
   m_ObjectHideFlags: 0
@@ -2415,7 +2424,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 1612644619142744315}
-  type: 2
+  layerType: 2
+  name: concrete
 --- !u!156049354 &8040627812485567820
 Grid:
   m_ObjectHideFlags: 0
@@ -2631,7 +2641,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 3669863743483286506}
-  type: 2
+  layerType: 2
+  name: concrete
 --- !u!156049354 &1473611175717600769
 Grid:
   m_ObjectHideFlags: 0
@@ -2843,7 +2854,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 5958690973120986589}
-  type: 1
+  layerType: 1
+  name: brick
 --- !u!156049354 &9189545918193372162
 Grid:
   m_ObjectHideFlags: 0
@@ -3191,7 +3203,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 1661874336129490696}
-  type: 3
+  layerType: 3
+  name: grass
 --- !u!156049354 &7315938103974567486
 Grid:
   m_ObjectHideFlags: 0
@@ -3403,7 +3416,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 3682164421971991375}
-  type: 2
+  layerType: 2
+  name: concrete
 --- !u!156049354 &1861329679438193296
 Grid:
   m_ObjectHideFlags: 0

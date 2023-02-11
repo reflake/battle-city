@@ -16,4 +16,9 @@ public class BattleField : MonoBehaviour
 			Gizmos.DrawWireCube(bounds.center, bounds.size);
 		}
 	}
+
+	public Vector2Int GetCell(Vector3 location)
+	{
+		return (Vector2Int)grid.WorldToCell(location);
+	}
 }
