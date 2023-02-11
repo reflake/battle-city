@@ -59,9 +59,7 @@ namespace LevelDesigner
 					samePlace = false;
 					transform.position += (Vector3)moveDirection;
 
-					if (_holdPaint)
-
-						PaintBlock();
+					OnCursorMoved();
 
 					await UniTask.Delay(needHold ? holdDelay : holdInterval, DelayType.Realtime);
 
@@ -128,6 +126,13 @@ namespace LevelDesigner
 			tilemap.SetTilesBlock(tilemapCellBounds, tiles);
 		}
 
+		void OnCursorMoved()
+		{
+			if (_holdPaint)
+
+				PaintBlock();
+		}
+		
 		void PaintBlock()
 		{
 			Vector3 brushOffset = new(-0.45f, -.45f);
