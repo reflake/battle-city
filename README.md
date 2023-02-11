@@ -13,6 +13,7 @@ A Unity Engine project rip-off of a popular game for the [Famicom](https://en.wi
 
 - [Zenject](https://github.com/modesttree/Zenject) Dependency Injection framework
 - [UniTask](https://github.com/Cysharp/UniTask) library for async/await integration for Unity
+- [DOTween](http://dotween.demigiant.com/) fast and type-safe animation engine
 
 ## Installation
 
