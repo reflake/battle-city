@@ -23,7 +23,7 @@ namespace LevelDesigner
 
 		public void OnDrawGizmosSelected()
 		{
-			if (type != Type.Null)
+			if (type != Type.Null && tilemap != null)
 			{
 				var max = tilemap.CellToWorld(tilemap.cellBounds.max);
 				var min = tilemap.CellToWorld(tilemap.cellBounds.min);
