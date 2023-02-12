@@ -38,7 +38,7 @@ namespace LevelDesigner
 			
 			_controls.Enable();
 
-			MoveCursorInput(_controls.Cursor.Move, 400, 180);
+			MoveCursorInput(_controls.Cursor.Move, 400, 150);
 			PaintBlockInput(_controls.Cursor.Paint);
 			
 			_blocks = blocksPrefab.GetComponentsInChildren<Block>();
@@ -64,7 +64,7 @@ namespace LevelDesigner
 				while (!token.IsCancellationRequested)
 				{
 					samePlace = false;
-					var newPosition = transform.position + (Vector3)moveDirection;
+					Vector2 newPosition = transform.position + (Vector3)moveDirection;
 
 					// Restrict cursor bounds
 					var boundsWithoutPadding = _battleField.Bounds;
@@ -97,11 +97,11 @@ namespace LevelDesigner
 
 		void PaintBlockInput(InputAction inputAction)
 		{
-			inputAction.started += (_) =>
+			inputAction.performed += (_) =>
 			{
 				// Cycle through all types of blocks
 				if (samePlace)
-					blockCycle = (blockCycle + 1) % _blocks.Length;
+					blockCycle = (int)Mathf.Repeat(blockCycle + _.ReadValue<float>(), _blocks.Length);
 				else
 					samePlace = true;
 
@@ -112,7 +112,7 @@ namespace LevelDesigner
 			
 			inputAction.canceled += (_) => _holdPaint = false;
 		}
-
+		
 		void OnCursorMoved()
 		{
 			if (_holdPaint)
@@ -171,9 +171,10 @@ namespace LevelDesigner
 		void ClearLayer(int cellsPerUnit, Tilemap tilemap, Vector3 cursorLocation)
 		{
 			var cellPosition = tilemap.WorldToCell(cursorLocation);
-			var nullBlocks = new TileBase[16];
+			var nullBlocks = new TileBase[cellsPerUnit * cellsPerUnit];
+			var blockBounds = new BoundsInt(cellPosition, new Vector3Int(cellsPerUnit,cellsPerUnit,1));
 			
-			tilemap.SetTilesBlock(new BoundsInt(cellPosition, new Vector3Int(cellsPerUnit,cellsPerUnit,1)), nullBlocks);
+			tilemap.SetTilesBlock(blockBounds, nullBlocks);
 		}
 
 		void PlaceNormalBlock(Block block, Vector3 cursorLocation)
@@ -261,7 +262,7 @@ namespace LevelDesigner
 			{
 				PlaceNormalBlock(
 					_blocks[block.blockIndex], 
-					new Vector3(block.blockPositionX, block.blockPositionY) + Vector3.one * .5f);
+					new Vector3(block.blockPositionX, block.blockPositionY) + new Vector3(0.5f, 0.5f));
 			}
 		}
 	}
