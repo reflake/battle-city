@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 
 namespace LevelDesigner
 {
-	public enum LayerType
+	public enum LayerType : uint
 	{
 		Null = 0,
 		Brick,

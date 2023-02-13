@@ -16,11 +16,18 @@ namespace LevelDesigner
 	public class Constructor : MonoBehaviour
 	{
 		[SerializeField] SpriteRenderer cursorSprite;
+		
+		[Space]
+		
 		[SerializeField] Tilemap brickLayer;
 		[SerializeField] Tilemap concreteLayer;
 		[SerializeField] Tilemap topLayer;
 		[SerializeField] Tilemap bottomLayer;
 		[SerializeField] GameObject blocksPrefab;
+		
+		[Space]
+		
+		[SerializeField] TileList tileData;
 
 		[Inject] readonly BattleField _battleField;
 		
@@ -30,7 +37,6 @@ namespace LevelDesigner
 		Block[] _blocks;
 		ConstructorControls _controls;
 		TileBase[] tiles = new TileBase[16];
-		Dictionary<Vector2Int, SaveDataBlock> _savedDataBlocks = new();
 
 		void Awake()
 		{
@@ -138,10 +144,7 @@ namespace LevelDesigner
 				ClearLayer(cellsPerUnit, tileLayer, cursorLocation);
 			}
 
-			{
-				PlaceNormalBlock(fillBlock, cursorLocation);
-				SerializeBlock(fillBlock, cursorLocation);
-			}
+			PlaceNormalBlock(fillBlock, cursorLocation);
 		}
 
 		Tilemap LayerTilemapFromType(LayerType layerType)
@@ -197,72 +200,108 @@ namespace LevelDesigner
 			layerTilemap.SetTilesBlock(blockBounds, tiles);
 		}
 
-		void SerializeBlock(Block block, Vector3 cursorLocation)
-		{
-			// Store to save data
-			Vector2Int blockPosition = _battleField.GetCell(cursorLocation);
-			
-			if (block.LayerType == LayerType.Null)
-			{
-				_savedDataBlocks.Remove(blockPosition);
-				return;
-			}
-			
-			var cellsPerUnit = LayerPower(block.LayerType);
-			int count = block.GetBlockTilesNonAlloc(tiles);
-
-			/*int bitInformation = tiles
-				.Take(count)
-				.Zip(Enumerable.Range(0, count), (tile, bitIndex) => (tile, bitIndex))
-				.Where(t => t.tile != null)
-				.Sum(t => 1 << t.bitIndex);*/
-
-			/*_savedDataBlocks[blockPosition] = new SaveDataBlock
-			{
-				blockName = block.Name,
-				blockPositionX = blockPosition.x,
-				blockPositionY = blockPosition.y,
-				blockPower = cellsPerUnit,
-				bitInformation = bitInformation,
-				layerType = block.LayerType
-			};*/
-
-			_savedDataBlocks[blockPosition] = new SaveDataBlock
-			{
-				blockIndex = _blocks.IndexOf(block),
-				blockPositionX = blockPosition.x,
-				blockPositionY = blockPosition.y,
-			};
-		}
-
 		void OnDrawGizmos()
 		{
 			Gizmos.color = Color.green;
 			Gizmos.DrawCube(transform.position, Vector3.one);
 		}
 
-		public SaveDataBlock[] GetSerializedData() => _savedDataBlocks.Values.ToArray();
-
-		public void LoadLevel(SaveDataBlock[] data)
+		public SaveData GetSerializedData()
 		{
+			var layerTilemaps = Enum.GetValues(typeof(LayerType))
+				.Cast<LayerType>()
+				.Where(x => x != LayerType.Null)
+				.ToArray();
+
+			// Find and write individual tile names
+			var usedTiles = tileData.tiles;
+			var int2name = new Dictionary<int, string>();
+			var name2int = new Dictionary<string, int>();
+
+			int2name.Add(0, "null");
+
+			int index = 1;
+				
+			foreach (var tile in usedTiles)
+			{
+				name2int[tile.name] = index;
+				int2name[index++] = tile.name;
+			}
+			
+			var saveLayerDatas = layerTilemaps.Select(layerType =>
+			{
+				var layerTilemap = LayerTilemapFromType(layerType);
+				
+				// Prepare tilemaps for serialization
+				layerTilemap.CompressBounds();
+
+				// Find all tiles on layer and serialize as index of name
+				var bounds = layerTilemap.cellBounds;
+				var tilesArray = layerTilemap.GetTilesBlock(bounds);
+				
+				var tilesData = tilesArray
+					.Select(tile => tile != null ? name2int[tile.name] : 0)
+					.ToArray();
+
+				return new SaveLayerData
+				{
+					layerType = layerType,
+					boundsX = bounds.x,
+					boundsY = bounds.y,
+					boundsZ = bounds.z,
+					boundsW = bounds.size.x,
+					boundsH = bounds.size.y,
+					boundsD = bounds.size.z,
+					tilesData = tilesData
+				};
+			});
+
+			return new SaveData
+			{
+				int2tileName = int2name,
+				layers = saveLayerDatas.ToArray()
+			};
+		}
+
+		public void LoadLevel(SaveData saveData)
+		{
+			// Unload current map
 			foreach (var layerType in Enum.GetValues(typeof(LayerType))
-				.Cast<LayerType>())
+											.Cast<LayerType>())
 			{
 				if (layerType == LayerType.Null)
 					continue;
 				
-				var tileLayer = LayerTilemapFromType(layerType);
+				var layerTilemap = LayerTilemapFromType(layerType);
 				
-				tileLayer.ClearAllTiles();
+				layerTilemap.ClearAllTiles();
 			}
+			
+			// List all possibly used tiles
+			var tilesByName = tileData.tiles.ToDictionary(x => x.name);
 
-			_savedDataBlocks = data.ToDictionary(x => new Vector2Int(x.blockPositionX, x.blockPositionY));
-
-			foreach (var block in data)
+			tilesByName.Add("null", null);
+			
+			// Load new map
+			foreach (var saveLayerData in saveData.layers)
 			{
-				PlaceNormalBlock(
-					_blocks[block.blockIndex], 
-					new Vector3(block.blockPositionX, block.blockPositionY) + new Vector3(0.5f, 0.5f));
+				var bounds = new BoundsInt(
+					saveLayerData.boundsX, saveLayerData.boundsY, saveLayerData.boundsZ,
+					saveLayerData.boundsW, saveLayerData.boundsH, saveLayerData.boundsD);
+
+				var layerTilemap = LayerTilemapFromType(saveLayerData.layerType);
+				var tiles = saveLayerData.tilesData
+					.Select(integerIdentifier =>
+					{
+						var tileName = saveData.int2tileName[integerIdentifier];
+						var tileRef = tilesByName[tileName];
+
+						return tileRef;
+
+					})
+					.ToArray();
+				
+				layerTilemap.SetTilesBlock(bounds, tiles);
 			}
 		}
 	}

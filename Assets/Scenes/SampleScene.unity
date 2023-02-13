@@ -1579,6 +1579,7 @@ MonoBehaviour:
   bottomLayer: {fileID: 1930552269}
   blocksPrefab: {fileID: 4390758997381962398, guid: 43bedbc01aacfc84bb25ad0f94defd09,
     type: 3}
+  tileData: {fileID: 11400000, guid: f1b63bd552fdcf74bbdedc8e646d9ce0, type: 2}
 --- !u!4 &752480668
 Transform:
   m_ObjectHideFlags: 0
