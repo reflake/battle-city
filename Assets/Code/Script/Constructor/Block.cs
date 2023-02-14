@@ -4,28 +4,19 @@ using UnityEngine.Tilemaps;
 
 namespace LevelDesigner
 {
-	public enum LayerType : uint
-	{
-		Null = 0,
-		Brick,
-		Concrete,
-		Top,
-		Bottom
-	}
-	
 	public class Block : MonoBehaviour
 	{
 		[SerializeField] Tilemap tilemap;
-		[SerializeField] LayerType layerType;
 		[SerializeField] new string name;
+		[SerializeField] bool nullBlock = false;
 
 		public Tilemap Tilemap => tilemap;
-		public LayerType LayerType => layerType;
 		public string Name => name;
+		public bool IsNullBlock => nullBlock;
 
 		public void OnDrawGizmosSelected()
 		{
-			if (layerType != LayerType.Null && tilemap != null)
+			if (tilemap != null)
 			{
 				var max = tilemap.CellToWorld(tilemap.cellBounds.max);
 				var min = tilemap.CellToWorld(tilemap.cellBounds.min);
@@ -36,19 +27,29 @@ namespace LevelDesigner
 			}
 		}
 
-		public int GetBlockTilesNonAlloc(TileBase[] array)
+		public int GetBlockTilesNonAlloc(TileBase[] array, Matrix4x4[] transforms)
 		{
 			var blockSize = Tilemap.cellBounds;
 
 			int count = Tilemap.GetTilesBlockNonAlloc(blockSize, array);
+
+			int index = 0;
 			
-			for (int i = 0; i < count; i++)
+			for (int j = blockSize.yMin; j < blockSize.yMax; j++)
+			for (int i = blockSize.xMin; i < blockSize.xMax; i++)
 			{
-				if (array[i] != null && array[i].name.Contains("null_block"))
+				if (array[index] != null && array[index].name.Contains("null_block"))
 				{
-					array[i] = null;
+					array[index] = null;
 				}
+				else
+				{
+					transforms[index] = tilemap.GetTransformMatrix(new Vector3Int(i,j,0));
+				}
+
+				index++;
 			}
+
 
 			return count;
 		}

@@ -19,10 +19,7 @@ namespace LevelDesigner
 		
 		[Space]
 		
-		[SerializeField] Tilemap brickLayer;
-		[SerializeField] Tilemap concreteLayer;
-		[SerializeField] Tilemap topLayer;
-		[SerializeField] Tilemap bottomLayer;
+		[SerializeField] Tilemap tilemap;
 		[SerializeField] GameObject blocksPrefab;
 		
 		[Space]
@@ -37,6 +34,7 @@ namespace LevelDesigner
 		Block[] _blocks;
 		ConstructorControls _controls;
 		TileBase[] tiles = new TileBase[16];
+		Matrix4x4[] transforms = new Matrix4x4[16];
 
 		void Awake()
 		{
@@ -132,43 +130,8 @@ namespace LevelDesigner
 			Vector3 cursorLocation = transform.position + brushOffset;
 			var fillBlock = _blocks[blockCycle];
 
-			foreach (var layerType in Enum.GetValues(typeof(LayerType))
-											.Cast<LayerType>())
-			{
-				if (layerType == LayerType.Null)
-					continue;
-				
-				var tileLayer = LayerTilemapFromType(layerType);
-				int cellsPerUnit = LayerPower(layerType);
-				
-				ClearLayer(cellsPerUnit, tileLayer, cursorLocation);
-			}
-
-			PlaceNormalBlock(fillBlock, cursorLocation);
-		}
-
-		Tilemap LayerTilemapFromType(LayerType layerType)
-		{
-			return layerType switch
-			{
-				LayerType.Brick => brickLayer,
-				LayerType.Concrete => concreteLayer,
-				LayerType.Top => topLayer,
-				LayerType.Bottom => bottomLayer,
-				_ => throw new ArgumentOutOfRangeException()
-			};
-		}
-
-		int LayerPower(LayerType layerType)
-		{
-			return layerType switch
-			{
-				LayerType.Brick => 4,
-				LayerType.Concrete => 2,
-				LayerType.Top => 2,
-				LayerType.Bottom => 2,
-				_ => throw new ArgumentOutOfRangeException()
-			};
+			ClearLayer(4, tilemap, cursorLocation);
+			PlaceNormalBlock(4, fillBlock, cursorLocation);
 		}
 
 		void ClearLayer(int cellsPerUnit, Tilemap tilemap, Vector3 cursorLocation)
@@ -180,24 +143,30 @@ namespace LevelDesigner
 			tilemap.SetTilesBlock(blockBounds, nullBlocks);
 		}
 
-		void PlaceNormalBlock(Block block, Vector3 cursorLocation)
+		void PlaceNormalBlock(int cellsPerUnit, Block block, Vector3 cursorLocation)
 		{
-			if (block.LayerType == LayerType.Null)
+			if (block.IsNullBlock)
 				return;
 			
-			var layerTilemap = LayerTilemapFromType(block.LayerType);
-			var cellsPerUnit = LayerPower(block.LayerType);
-			int count = block.GetBlockTilesNonAlloc(tiles);
-
+			int count = block.GetBlockTilesNonAlloc(tiles, transforms);
+			
 			if (count > cellsPerUnit * cellsPerUnit)
 				throw new Exception($"Tiles amount must be less than {cellsPerUnit * cellsPerUnit}");
 
 			// TODO: better explanation
 			var blockBounds = block.Tilemap.cellBounds;
 			
-			blockBounds.position = layerTilemap.WorldToCell(cursorLocation);
+			blockBounds.position = tilemap.WorldToCell(cursorLocation);
 
-			layerTilemap.SetTilesBlock(blockBounds, tiles);
+ 			tilemap.SetTilesBlock(blockBounds, tiles);
+            
+            int index = 0;
+			
+            for (int j = blockBounds.yMin; j < blockBounds.yMax; j++)
+            for (int i = blockBounds.xMin; i < blockBounds.xMax; i++)
+            {
+	            tilemap.SetTransformMatrix(new Vector3Int(i, j, 0), transforms[index++]);
+            }
 		}
 
 		void OnDrawGizmos()
@@ -206,15 +175,14 @@ namespace LevelDesigner
 			Gizmos.DrawCube(transform.position, Vector3.one);
 		}
 
-		public SaveData GetSerializedData()
+		public LevelData GetSerializedData()
 		{
-			var layerTilemaps = Enum.GetValues(typeof(LayerType))
-				.Cast<LayerType>()
-				.Where(x => x != LayerType.Null)
-				.ToArray();
-
 			// Find and write individual tile names
-			var usedTiles = tileData.tiles;
+			var usedTilesCount = tilemap.GetUsedTilesCount();
+			var usedTiles = new TileBase[usedTilesCount];
+
+			tilemap.GetUsedTilesNonAlloc(usedTiles);
+			
 			var int2name = new Dictionary<int, string>();
 			var name2int = new Dictionary<string, int>();
 
@@ -228,81 +196,66 @@ namespace LevelDesigner
 				int2name[index++] = tile.name;
 			}
 			
-			var saveLayerDatas = layerTilemaps.Select(layerType =>
+			// Prepare tilemaps for serialization
+			tilemap.CompressBounds();
+
+			// Find all tiles on layer and serialize as index of name
+			var bounds = tilemap.cellBounds;
+			var tilesArray = tilemap.GetTilesBlock(bounds);
+			
+			var tilesData = tilesArray
+				.Select(tile => tile != null ? name2int[tile.name] : 0)
+				.ToArray();
+
+			return new LevelData
 			{
-				var layerTilemap = LayerTilemapFromType(layerType);
-				
-				// Prepare tilemaps for serialization
-				layerTilemap.CompressBounds();
-
-				// Find all tiles on layer and serialize as index of name
-				var bounds = layerTilemap.cellBounds;
-				var tilesArray = layerTilemap.GetTilesBlock(bounds);
-				
-				var tilesData = tilesArray
-					.Select(tile => tile != null ? name2int[tile.name] : 0)
-					.ToArray();
-
-				return new SaveLayerData
-				{
-					layerType = layerType,
-					boundsX = bounds.x,
-					boundsY = bounds.y,
-					boundsZ = bounds.z,
-					boundsW = bounds.size.x,
-					boundsH = bounds.size.y,
-					boundsD = bounds.size.z,
-					tilesData = tilesData
-				};
-			});
-
-			return new SaveData
-			{
-				int2tileName = int2name,
-				layers = saveLayerDatas.ToArray()
+				tileMapIds = int2name.Keys.ToArray(),
+				tileMapNames = int2name.Values.ToArray(),
+				boundsX = bounds.x,
+				boundsY = bounds.y,
+				boundsZ = bounds.z,
+				boundsW = bounds.size.x,
+				boundsH = bounds.size.y,
+				boundsD = bounds.size.z,
+				tilesData = tilesData,
 			};
 		}
 
-		public void LoadLevel(SaveData saveData)
+		public void LoadLevel(LevelData levelData)
 		{
 			// Unload current map
-			foreach (var layerType in Enum.GetValues(typeof(LayerType))
-											.Cast<LayerType>())
-			{
-				if (layerType == LayerType.Null)
-					continue;
-				
-				var layerTilemap = LayerTilemapFromType(layerType);
-				
-				layerTilemap.ClearAllTiles();
-			}
+			tilemap.ClearAllTiles();
 			
-			// List all possibly used tiles
-			var tilesByName = tileData.tiles.ToDictionary(x => x.name);
+			// List all names of used tiles
+			var tileByName = new Dictionary<int, TileBase>();
+			
+			for (int i = 0; i < levelData.tileMapNames.Length; i++)
+			{
+				var tileId = levelData.tileMapIds[i];
+				var tileName = levelData.tileMapNames[i];
 
-			tilesByName.Add("null", null);
+				if (tileName == "null")
+				{
+					tileByName.Add(tileId, null);
+				}
+				else
+				{
+					var tileRef = tileData.tiles.Single(x => x.name == tileName);
+					
+					tileByName.Add(tileId, tileRef);
+				}
+			}
 			
 			// Load new map
-			foreach (var saveLayerData in saveData.layers)
-			{
-				var bounds = new BoundsInt(
-					saveLayerData.boundsX, saveLayerData.boundsY, saveLayerData.boundsZ,
-					saveLayerData.boundsW, saveLayerData.boundsH, saveLayerData.boundsD);
+			var bounds = new BoundsInt(
+				levelData.boundsX, levelData.boundsY, levelData.boundsZ,
+				levelData.boundsW, levelData.boundsH, levelData.boundsD);
 
-				var layerTilemap = LayerTilemapFromType(saveLayerData.layerType);
-				var tiles = saveLayerData.tilesData
-					.Select(integerIdentifier =>
-					{
-						var tileName = saveData.int2tileName[integerIdentifier];
-						var tileRef = tilesByName[tileName];
-
-						return tileRef;
-
-					})
-					.ToArray();
-				
-				layerTilemap.SetTilesBlock(bounds, tiles);
-			}
+			var tiles = levelData.tilesData
+											.Select(tileId => tileByName[tileId])
+											.ToArray();
+			
+			tilemap.SetTilesBlock(bounds, tiles);
 		}
 	}
 }

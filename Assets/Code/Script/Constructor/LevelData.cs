@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace LevelDesigner
 {
 	[Serializable]
-	public struct SaveLayerData
+	public class LevelData
 	{
-		public LayerType layerType;
+		public int[] tileMapIds;
+		public string[] tileMapNames;
 		public int[] tilesData;
 		public int boundsX;
 		public int boundsY;
