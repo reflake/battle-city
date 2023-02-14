@@ -34,7 +34,7 @@ namespace LevelDesigner
 
 			using (var file = new FileStream(fileName, FileMode.Create))
 			{
-				var data = _constructor.GetSerializedData();
+				var data = _constructor.GetLevelData();
 				
 				formatter.Serialize(file, data);
 				file.Close();
@@ -50,7 +50,7 @@ namespace LevelDesigner
 			{
 				var data = formatter.Deserialize(file) as LevelData;
 
-				_constructor.LoadLevel(data);
+				_constructor.LoadLevelData(data);
 			}
 		}
 	}

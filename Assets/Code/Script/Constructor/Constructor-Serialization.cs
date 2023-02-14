@@ -9,7 +9,7 @@ namespace LevelDesigner
 	{
 		[SerializeField] TileList tileData;
 		
-		public LevelData GetSerializedData()
+		public LevelData GetLevelData()
 		{
 			// Find and write individual tile names
 			var usedTilesCount = tilemap.GetUsedTilesCount();
@@ -55,7 +55,7 @@ namespace LevelDesigner
 			};
 		}
 
-		public void LoadLevel(LevelData levelData)
+		public void LoadLevelData(LevelData levelData)
 		{
 			// Unload current map
 			tilemap.ClearAllTiles();
