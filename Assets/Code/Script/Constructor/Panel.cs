@@ -29,7 +29,7 @@ namespace LevelDesigner
 
 		private void SaveLevel()
 		{
-			string fileName = $"{Application.dataPath}/Level/Test.level";
+			string fileName = $"{Application.dataPath}/Resources/Level/Test.level";
 			IFormatter formatter = new BinaryFormatter();
 
 			using (var file = new FileStream(fileName, FileMode.Create))
@@ -43,7 +43,7 @@ namespace LevelDesigner
 
 		private void LoadLevel()
 		{
-			string fileName = $"{Application.dataPath}/Level/Test.level";
+			string fileName = $"{Application.dataPath}/Resources/Level/Test.level";
 			IFormatter formatter = new BinaryFormatter();
 
 			using (var file = new FileStream(fileName, FileMode.Open))
