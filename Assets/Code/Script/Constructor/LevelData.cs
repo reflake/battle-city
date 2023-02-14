@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
+using Matrix4x4 = System.Numerics.Matrix4x4;
 
 namespace LevelDesigner
 {
@@ -15,5 +17,6 @@ namespace LevelDesigner
 		public int boundsW;
 		public int boundsH;
 		public int boundsD;
+		public float[] transformsData;
 	}
 }

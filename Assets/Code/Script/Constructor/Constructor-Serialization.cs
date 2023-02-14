@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -8,6 +10,8 @@ namespace LevelDesigner
 	public partial class Constructor
 	{
 		[SerializeField] TileList tileData;
+		
+		const int matrixElements = 16;
 		
 		public LevelData GetLevelData()
 		{
@@ -36,10 +40,14 @@ namespace LevelDesigner
 			// Find all tiles on layer and serialize as index of name
 			var bounds = tilemap.cellBounds;
 			var tilesArray = tilemap.GetTilesBlock(bounds);
-
+			var filledTileAmount = tilesArray.Count(x => x != null);
+			var transformsArray = new float[filledTileAmount * matrixElements];
+			
 			var tilesData = tilesArray
 				.Select(tile => tile != null ? name2int[tile.name] : 0)
 				.ToArray();
+
+			ReadTransforms(bounds, transformsArray);
 
 			return new LevelData
 			{
@@ -52,7 +60,44 @@ namespace LevelDesigner
 				boundsH = bounds.size.y,
 				boundsD = bounds.size.z,
 				tilesData = tilesData,
+				transformsData = transformsArray
 			};
+		}
+
+		private void ReadTransforms(BoundsInt bounds, float[] arr)
+		{
+			IntPtr temporaryMemoryPtr = Marshal.AllocHGlobal(Marshal.SizeOf<Matrix4x4>());
+			bool structureCreated = false;
+			int index = 0;
+
+			// Write all transforms for tiles
+			try
+			{
+				foreach (var pos in bounds.allPositionsWithin)
+				{
+					if (tilemap.HasTile(pos))
+					{
+						var mat = tilemap.GetTransformMatrix(pos);
+
+						Marshal.StructureToPtr(mat, temporaryMemoryPtr, false);
+						structureCreated = true;
+						
+						Marshal.Copy(temporaryMemoryPtr, arr, index, matrixElements);
+						
+						Marshal.DestroyStructure<Matrix4x4>(temporaryMemoryPtr);
+						structureCreated = false;
+
+						index += matrixElements;
+					}
+				}
+			}
+			finally
+			{
+				if (structureCreated)
+					Marshal.DestroyStructure<Matrix4x4>(temporaryMemoryPtr);
+
+				Marshal.FreeHGlobal(temporaryMemoryPtr);
+			}
 		}
 
 		public void LoadLevelData(LevelData levelData)
@@ -90,6 +135,34 @@ namespace LevelDesigner
 				.ToArray();
 
 			tilemap.SetTilesBlock(bounds, tiles);
+
+			SetTransforms(bounds, levelData.transformsData);
+		}
+
+		private void SetTransforms(BoundsInt bounds, float[] transforms)
+		{
+			IntPtr temporaryMemoryPtr = Marshal.AllocHGlobal(Marshal.SizeOf<Matrix4x4>());
+			int index = 0;
+
+			try
+			{
+				foreach (var pos in bounds.allPositionsWithin)
+				{
+					if (tilemap.HasTile(pos))
+					{
+						Marshal.Copy(transforms, index, temporaryMemoryPtr, matrixElements);
+					
+						var matrix = Marshal.PtrToStructure<Matrix4x4>(temporaryMemoryPtr);
+						tilemap.SetTransformMatrix(pos, matrix);
+
+						index += matrixElements;
+					}
+				}
+			}
+			finally
+			{
+				Marshal.FreeHGlobal(temporaryMemoryPtr);
+			}
 		}
 	}
 }
