@@ -12,6 +12,11 @@ public class GameManager : MonoBehaviour
 
 	private bool _gameIsOver = false;
 
+	private void Start()
+	{
+		_levelManager.FirstLevel();
+	}
+
 	public void LevelComplete()
 	{
 		// TODO: show scoreboard
