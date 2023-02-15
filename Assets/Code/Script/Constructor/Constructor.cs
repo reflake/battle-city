@@ -54,11 +54,14 @@ namespace LevelDesigner
 				.SetLoops(-1);
 			
 			LoadChunk("Base");
+		}
 
+		void OnEnable()
+		{
 			_panel = _panelManager.CreatePanel<Panel>(Panel.prefabPath, 0);
 		}
 
-		void OnDestroy()
+		void OnDisable()
 		{
 			Destroy(_panel.gameObject);
 		}
