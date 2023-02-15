@@ -21,7 +21,10 @@ public class EnemyManager : MonoBehaviour
 
 	void Update()
 	{
-		if (_tanksAlive < maximumEnemiesOnScreen && _nextSpawnDelay < Time.time)
+		bool timeForRespawn = _nextSpawnDelay < Time.time;
+		bool notEnoughEnemyOnScreen = _tanksAlive < Mathf.Min(maximumEnemiesOnScreen, enemiesLeft);
+
+		if (notEnoughEnemyOnScreen && timeForRespawn)
 		{
 			// Spawn enemy
 			Transform chosenSpawn = spawnPositions[_spawnCycleIndex % spawnPositions.Length];
