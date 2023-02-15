@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
 	[Inject]
 	private void Construct()
 	{
+		_playerManager.OnSpawnPlayers += InitialPlayerSpawn;
 		_tank.OnGetKilled += PlayerKilled;
 	}
 
@@ -115,6 +116,11 @@ public class Player : MonoBehaviour
 			_tankControls.Disable();
 		}
 	}
+	
+	void InitialPlayerSpawn()
+	{
+		RespawnTank();
+	}
 
 	private void PlayerKilled()
 	{
@@ -122,7 +128,7 @@ public class Player : MonoBehaviour
 		{
 			lives--;
 
-			Task.Run(() => RespawnTank());;
+			RespawnTank();;
 		}
 		else
 		{

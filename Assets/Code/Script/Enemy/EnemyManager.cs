@@ -15,6 +15,7 @@ public class EnemyManager : MonoBehaviour
 
 	public int MaximumEnemiesOnScreen => maximumEnemiesOnScreen;
 
+	bool _active = false;
 	int _spawnCycleIndex = 0;
 	int _tanksAlive = 0;
 	float _nextSpawnDelay = -1;
@@ -24,7 +25,7 @@ public class EnemyManager : MonoBehaviour
 		bool timeForRespawn = _nextSpawnDelay < Time.time;
 		bool notEnoughEnemyOnScreen = _tanksAlive < Mathf.Min(maximumEnemiesOnScreen, enemiesLeft);
 
-		if (notEnoughEnemyOnScreen && timeForRespawn)
+		if (_active && notEnoughEnemyOnScreen && timeForRespawn)
 		{
 			// Spawn enemy
 			Transform chosenSpawn = spawnPositions[_spawnCycleIndex % spawnPositions.Length];
@@ -45,7 +46,17 @@ public class EnemyManager : MonoBehaviour
 
 		if (enemiesLeft == 0)
 		{
+			// Stop spawning after all enemies destroyed
+			_active = false;
 			_gameManager.LevelComplete();
 		}
+	}
+
+	public void SetEnemiesWave(int enemiesAmount)
+	{
+		_active = true;
+		_nextSpawnDelay = -1;
+		_spawnCycleIndex = 0;
+		enemiesLeft = enemiesAmount;
 	}
 }

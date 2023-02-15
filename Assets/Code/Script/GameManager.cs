@@ -6,25 +6,48 @@ using Zenject;
 
 public class GameManager : MonoBehaviour
 {
-	[Inject] private readonly LevelManager _levelManager;
+	[Inject] readonly LevelManager _levelManager;
+	[Inject] readonly EnemyManager _enemyManager;
+	[Inject] readonly PlayerManager _playerManager;
 	
 	public event GameOverDelegate OnGameOver;
 
-	private bool _gameIsOver = false;
+	bool _gameIsOver = false;
+	int waveStrength = 0;
 
-	async void Start()
+	void Start()
+	{
+		FirstLevel();
+	}
+
+	async UniTaskVoid FirstLevel()
 	{
 		await _levelManager.FirstLevel();
+
+		BeginGame();
 	}
 
 	public void LevelComplete()
 	{
-		Task.Run(() => TransitionToNextLevel());
+		TransitionToNextLevel();
 	}
 
 	async UniTaskVoid TransitionToNextLevel()
 	{
 		await _levelManager.NextLevel();
+		
+		BeginGame();
+	}
+
+	void BeginGame()
+	{
+		// Start spawn enemies
+		int enemiesAmount = 11 + waveStrength++;
+
+		_enemyManager.SetEnemiesWave(enemiesAmount);
+
+		// Prepare players
+		_playerManager.SpawnPlayers();
 	}
 	
 	public void GameOver()
@@ -45,7 +68,7 @@ public class GameManager : MonoBehaviour
 		Task.Run(() => TransitToMainMenu());
 	}
 
-	private async UniTaskVoid TransitToMainMenu()
+	async UniTaskVoid TransitToMainMenu()
 	{
 		await UniTask.Delay(TimeSpan.FromSeconds(5f), DelayType.Realtime, PlayerLoopTiming.Update);
 		

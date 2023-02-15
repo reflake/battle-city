@@ -4,10 +4,17 @@ using Zenject;
 
 public class PlayerManager : MonoBehaviour
 {
-	[Inject] private readonly GameManager _gameManager;
+	[Inject] readonly GameManager _gameManager;
+
+	public event SpawnPlayersDelegate OnSpawnPlayers;
 
 	public void PlayerDefeated()
 	{
 		_gameManager.GameOver();
+	}
+
+	public void SpawnPlayers()
+	{
+		OnSpawnPlayers?.Invoke();
 	}
 }
