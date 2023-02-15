@@ -1,45 +1,69 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
+
 using Cysharp.Threading.Tasks;
+
 using LevelDesigner;
+
 using UnityEngine;
+
 using Zenject;
 
 public class LevelManager : MonoBehaviour
 {
 	[Inject] readonly Constructor _constructor;
-	
+	[Inject] readonly PanelManager _panelManager;
+
+	[SerializeField] float transitionScreenShowTime = 1.5f;
 	[SerializeField] string[] levelList;
 
 	int _currentLevel = 0;
+	TransitionScreen _panel;
 
-	public void FirstLevel()
+	void Awake()
 	{
-		// TODO: show first level title
+		_panel = _panelManager.CreatePanel<TransitionScreen>(TransitionScreen.prefabPath, 1);
+	}
+
+	void OnDestroy()
+	{
+		Destroy(_panel);
+	}
+
+	public async UniTask FirstLevel()
+	{
 		_currentLevel = 0;
-		
-		Task.Run(() => LoadLevel(_currentLevel));
+
+		await LoadLevel(_currentLevel);
 	}
 	
-	public void NextLevel()
+	public async UniTask NextLevel()
 	{
-		// TODO: show next level Title
-		
-		Task.Run(() => LoadLevel(++_currentLevel));
+		await LoadLevel(++_currentLevel);
 	}
 
-	async UniTaskVoid LoadLevel(int index)
+	async UniTask LoadLevel(int index)
 	{
-		string path = $"Level/{levelList[index]}";
+		// Show transition screen and level number
+		var waitTransitionScreen = UniTask.Delay(TimeSpan.FromSeconds(transitionScreenShowTime));
+
+		// need to switch to main thread so animations play
+		await UniTask.SwitchToMainThread();
+		_panel.Show(index + 1);
+
+		var levelDataPath = $"Level/{levelList[index]}";
+		var levelLoadTask = LoadLevel(levelDataPath);
 		
-		var levelData = await LoadAsLevelData(path);
+		await UniTask.WhenAll(levelLoadTask, waitTransitionScreen);
 		
-		_constructor.LoadLevelData(levelData);
+		// Level loaded, ready to play
+		_panel.Hide();
 	}
 
-	async UniTask<LevelData> LoadAsLevelData(string path)
+	async UniTask LoadLevel(string path)
 	{
 		// Assets can be loaded only on main thread
 		await UniTask.SwitchToMainThread();
@@ -50,7 +74,7 @@ public class LevelManager : MonoBehaviour
 		IFormatter formatter = new BinaryFormatter();
 
 		var data = formatter.Deserialize(file) as LevelData;
-
-		return data;
+		
+		_constructor.LoadLevelData(data);
 	}
 }

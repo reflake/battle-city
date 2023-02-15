@@ -12,16 +12,19 @@ public class GameManager : MonoBehaviour
 
 	private bool _gameIsOver = false;
 
-	private void Start()
+	async void Start()
 	{
-		_levelManager.FirstLevel();
+		await _levelManager.FirstLevel();
 	}
 
 	public void LevelComplete()
 	{
-		// TODO: show scoreboard
-		
-		_levelManager.NextLevel();
+		Task.Run(() => TransitionToNextLevel());
+	}
+
+	async UniTaskVoid TransitionToNextLevel()
+	{
+		await _levelManager.NextLevel();
 	}
 	
 	public void GameOver()

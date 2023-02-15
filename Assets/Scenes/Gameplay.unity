@@ -877,7 +877,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maximumEnemiesOnScreen: 4
-  enemiesLeft: 7
+  enemiesLeft: 0
   spawnDelay: 2
   spawnPositions:
   - {fileID: 1277990276}
@@ -1827,6 +1827,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc6a84f566d24fe3bfa5b3d312f896fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transitionScreenShowTime: 1.5
   levelList:
   - LEVEL_01
   - LEVEL_04
