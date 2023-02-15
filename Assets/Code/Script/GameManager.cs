@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour
 		// Disable all players
 		foreach (var player in FindObjectsOfType<Player>())
 		{
+			// TODO: stun player instead of taking control
 			player.SetControlsEnabled(false);
 		}
 
