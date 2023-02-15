@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using Zenject;
 
@@ -16,10 +17,21 @@ public class GameManager : MonoBehaviour
 
 	bool _gameIsOver = false;
 	int waveStrength = 0;
+	Keyboard _kbDevice;
 
 	void Start()
 	{
 		FirstLevel();
+
+		_kbDevice = InputSystem.GetDevice<Keyboard>();
+	}
+
+	void Update()
+	{
+		if (_kbDevice.escapeKey.IsPressed())
+		{
+			_sceneLoader.LoadSceneAsync("MainMenu", LoadSceneMode.Single);
+		}
 	}
 
 	async UniTaskVoid FirstLevel()
