@@ -10,6 +10,8 @@ namespace LevelDesigner
 {
 	public class Panel : MonoBehaviour
 	{
+		public static string prefabPath = "ConstructorPanel";
+		
 		[Inject] readonly Constructor _constructor = null;
 		
 		[SerializeField] private Button _saveBtn;

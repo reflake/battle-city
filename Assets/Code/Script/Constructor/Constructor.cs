@@ -26,6 +26,7 @@ namespace LevelDesigner
 		[SerializeField] GameObject blocksPrefab;
 
 		[Inject] readonly BattleField _battleField;
+		[Inject] readonly PanelManager _panelManager;
 		
 		bool _holdPaint = false;
 		bool samePlace = false;
@@ -34,6 +35,7 @@ namespace LevelDesigner
 		ConstructorControls _controls;
 		TileBase[] tiles = new TileBase[16];
 		Matrix4x4[] transforms = new Matrix4x4[16];
+		Panel _panel;
 
 		void Awake()
 		{
@@ -52,6 +54,13 @@ namespace LevelDesigner
 				.SetLoops(-1);
 			
 			LoadChunk("Base");
+
+			_panel = _panelManager.CreatePanel<Panel>(Panel.prefabPath, 0);
+		}
+
+		void OnDestroy()
+		{
+			Destroy(_panel.gameObject);
 		}
 
 		void MoveCursorInput(InputAction inputAction, int holdDelay, int holdInterval)
