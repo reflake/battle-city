@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
@@ -47,6 +50,8 @@ namespace LevelDesigner
 				// Flicker Easing
 				.SetEase((time, duration, _, __) => time > duration * .5f ? 1f : 0f)
 				.SetLoops(-1);
+			
+			LoadChunk("Base");
 		}
 
 		void MoveCursorInput(InputAction inputAction, int holdDelay, int holdInterval)
@@ -169,6 +174,17 @@ namespace LevelDesigner
 		{
 			Gizmos.color = Color.green;
 			Gizmos.DrawCube(transform.position, Vector3.one);
+		}
+
+		void LoadChunk(string fileName)
+		{
+			var asset = Resources.Load<TextAsset>($"Level/{fileName}");
+			using var file = new MemoryStream(asset.bytes);
+			IFormatter formatter = new BinaryFormatter();
+
+			var data = formatter.Deserialize(file) as LevelData;
+
+			LoadLevelData(data);
 		}
 	}
 }
