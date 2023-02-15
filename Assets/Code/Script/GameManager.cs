@@ -34,6 +34,10 @@ public class GameManager : MonoBehaviour
 
 	async UniTaskVoid TransitionToNextLevel()
 	{
+		// Show scores
+		
+		_playerManager.DespawnAll();
+		
 		await _levelManager.NextLevel();
 		
 		BeginGame();

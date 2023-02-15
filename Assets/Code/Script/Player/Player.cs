@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
 	private void Construct()
 	{
 		_playerManager.OnSpawnPlayers += InitialPlayerSpawn;
+		_playerManager.OnDespawnPlayers += PlayerDespawn;
 		_tank.OnGetKilled += PlayerKilled;
 	}
 
@@ -120,6 +121,11 @@ public class Player : MonoBehaviour
 	void InitialPlayerSpawn()
 	{
 		RespawnTank();
+	}
+
+	void PlayerDespawn()
+	{
+		gameObject.SetActive(false);
 	}
 
 	private void PlayerKilled()
