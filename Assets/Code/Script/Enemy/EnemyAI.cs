@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 using Zenject;
 using Random = UnityEngine.Random;
 
-public class EnemyAI : MonoBehaviour
+public partial class EnemyAI : MonoBehaviour
 {
 	[Inject] private readonly Tank _tank = null;
 	[Inject] private readonly EnemyManager _enemyManager = null;
@@ -70,5 +68,11 @@ public class EnemyAI : MonoBehaviour
 		_currentDirection = newPossibleDirections[randomDirectionIndex];
 		
 		_tank.SetMoveDirection(_currentDirection);
+	}
+
+	public void Spawn(Vector2 position)
+	{
+		_tank.SetSpawnPosition(position);
+		_tank.Respawn();
 	}
 }

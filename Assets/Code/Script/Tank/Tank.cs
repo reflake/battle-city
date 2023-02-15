@@ -20,7 +20,7 @@ public class Tank : MonoBehaviour, IDestructible
 
     private int _currentHp = 0;
     private Direction _currentDirection = Direction.None;
-    private Vector3 _spawnLocation = Vector3.zero;
+    private Vector2 _spawnLocation = Vector2.zero;
 
     private void Awake()
     {
@@ -85,6 +85,16 @@ public class Tank : MonoBehaviour, IDestructible
         
         _currentHp = maxHp;
 
-        transform.position = _spawnLocation;
+        Vector3 newPosition = _spawnLocation;
+        
+        // We need to keep tank's Z position
+        newPosition.z = transform.position.z;
+        
+        transform.position = newPosition;
+    }
+
+    public void SetSpawnPosition(Vector2 spawnPosition)
+    {
+        _spawnLocation = spawnPosition;
     }
 }
