@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Zenject;
 
 public class GameManager : MonoBehaviour
@@ -9,6 +10,7 @@ public class GameManager : MonoBehaviour
 	[Inject] readonly LevelManager _levelManager;
 	[Inject] readonly EnemyManager _enemyManager;
 	[Inject] readonly PlayerManager _playerManager;
+	[Inject] readonly ZenjectSceneLoader _sceneLoader;
 	
 	public event GameOverDelegate OnGameOver;
 
@@ -75,7 +77,9 @@ public class GameManager : MonoBehaviour
 	async UniTaskVoid TransitToMainMenu()
 	{
 		await UniTask.Delay(TimeSpan.FromSeconds(5f), DelayType.Realtime, PlayerLoopTiming.Update);
-		
-		throw new NotImplementedException("Cannot transit to main menu: main menu is yet to be implemented!");
+		await _sceneLoader.LoadSceneAsync("MainMenu", LoadSceneMode.Single, container =>
+		{
+			// TODO: maybe pass HiScore there to highlight it in main menu
+		});
 	}
 }
