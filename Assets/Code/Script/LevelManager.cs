@@ -42,7 +42,9 @@ public class LevelManager : MonoBehaviour
 	
 	public async UniTask NextLevel()
 	{
-		await LoadLevel(++_currentLevel);
+		_currentLevel = (_currentLevel + 1) % levelList.Length;
+		
+		await LoadLevel(_currentLevel);
 	}
 
 	async UniTask LoadLevel(int index)
