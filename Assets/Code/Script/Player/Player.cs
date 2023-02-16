@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
 	TankControls _tankControls;
 	Direction _lastKnownMoveDirection = Direction.North;
 	Dictionary<string, Direction> _currentlyPressedDirections = new();
+	int _upgradeLevel = 0;
 
 	[Inject]
 	void Construct()
@@ -149,5 +150,31 @@ public class Player : MonoBehaviour
 		await UniTask.Delay(TimeSpan.FromSeconds(1f), DelayType.DeltaTime, PlayerLoopTiming.Update);
 		
 		_tank.Respawn();
+	}
+
+	void OnTriggerEnter2D(Collider2D other)
+	{
+		if (other.TryGetComponent<PowerUp>(out var powerUp))
+		{
+			powerUp.PickupByPlayer(this);
+		}
+	}
+
+	public void UpgradeTank()
+	{
+		_upgradeLevel++;
+
+		switch (_upgradeLevel)
+		{
+			case 1:
+				_tank.ProjectileSpeed = 2f;
+				break;
+			case 2:
+				_tank.FireRate = 2;
+				break;
+			case 3:
+				_tank.FirePower = 2;
+				break;
+		}
 	}
 }

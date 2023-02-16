@@ -65,11 +65,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
-  firePower: 1
   maxHp: 1
   bulletPrefab: {fileID: 2762107655628412679, guid: cf0809c4cd0208b4ebc983190b5bbb7e,
     type: 3}
   sprites: {fileID: 11400000, guid: 219f808495051cf46976f5b606ff9710, type: 2}
+  FirePower: 1
+  FireRate: 1
+  ProjectileSpeed: 0.6
 --- !u!212 &4416856508075162247
 SpriteRenderer:
   m_ObjectHideFlags: 0

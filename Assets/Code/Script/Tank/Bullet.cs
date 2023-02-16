@@ -13,16 +13,22 @@ public class Bullet : MonoBehaviour
     private Direction _direction;
     private int _damage;
     bool _hitSomething = false;
+    Action _destroyCallback;
 
-    public void Shoot(Direction direction, int damage, Collider2D ignoreCollider)
+    public void Shoot(Direction direction, float projectileSpeed, int damage, Collider2D ignoreCollider)
     {
         _damage = damage;
         _direction = direction;
-        _linearVelocity = direction.ToVector() * speed;
+        _linearVelocity = direction.ToVector() * projectileSpeed * speed;
         
         Physics2D.IgnoreCollision(ignoreCollider, collider);
         
         spriteRenderer.TurnToDirection(direction);
+    }
+
+    public void WhenDestroyed(Action callback)
+    {
+        _destroyCallback = callback;
     }
     
     void FixedUpdate()
@@ -57,6 +63,7 @@ public class Bullet : MonoBehaviour
         }
 
         _hitSomething = true;
+        _destroyCallback?.Invoke();
         Destroy(gameObject);
     }
 }

@@ -7,7 +7,6 @@ using Zenject;
 public class Tank : MonoBehaviour, IDestructible
 {
     [SerializeField] private float speed;
-    [SerializeField, Range(1, 10)] private int firePower;
     [SerializeField, Range(1, 10)] private int maxHp;
     [Space]
     [SerializeField] private Bullet bulletPrefab;
@@ -19,13 +18,21 @@ public class Tank : MonoBehaviour, IDestructible
     
     public bool Alive { get; private set; } = true;
     public bool Powered { get; set; } = false;
+    
+    // Stats
+    public int FirePower;
+    public int FireRate;
+    public float ProjectileSpeed;
+
+    // Events
     public event TankKilledDelegate OnGetKilled;
     public event TankHitDelegate OnGetHit;
 
     private int _currentHp = 0;
     private Direction _currentDirection = Direction.None;
     private Vector2 _spawnLocation = Vector2.zero;
-
+    int bulletsFired = 0;
+    
     private void Awake()
     {
         _spawnLocation = _rig.position;
@@ -35,11 +42,22 @@ public class Tank : MonoBehaviour, IDestructible
 
     public void Shoot(Direction shootDirection)
     {
+        if (bulletsFired >= FireRate)
+            return;
+        
         var bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
         
+        bullet.Shoot(shootDirection, ProjectileSpeed, FirePower, _collider);
+        bullet.WhenDestroyed(DecreaseBulletFiredCount);
+
         Face(shootDirection);
-        
-        bullet.Shoot(shootDirection, firePower, _collider);
+
+        bulletsFired++;
+    }
+
+    void DecreaseBulletFiredCount()
+    {
+        bulletsFired--;
     }
 
     public void SetMoveDirection(Direction newDirection)
