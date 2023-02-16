@@ -11,6 +11,7 @@ public class EnemyManager : MonoBehaviour
 	[SerializeField] Transform[] spawnPositions = null;
 	
 	[Inject] readonly GameManager _gameManager = null;
+	[Inject] readonly PowerUpManager _powerUpManager = null;
 	[Inject] readonly EnemyAI.Factory _enemyFactory = null;
 
 	public int MaximumEnemiesOnScreen => maximumEnemiesOnScreen;
@@ -18,6 +19,7 @@ public class EnemyManager : MonoBehaviour
 	bool _active = false;
 	int _spawnCycleIndex = 0;
 	int _tanksAlive = 0;
+	int _enemyIndex = 0;
 	float _nextSpawnDelay = -1;
 
 	void Update()
@@ -31,8 +33,14 @@ public class EnemyManager : MonoBehaviour
 			Transform chosenSpawn = spawnPositions[_spawnCycleIndex % spawnPositions.Length];
 			Vector2 spawnPosition = chosenSpawn.transform.position;
 			
-			_enemyFactory.Create(spawnPosition);
-			
+			var enemy = _enemyFactory.Create(spawnPosition);
+
+			if (_powerUpManager.IsEnemyDropsPowerUp(_enemyIndex + 1))
+			{
+				enemy.ShouldDropPowerUp();
+			}
+
+			_enemyIndex++;
 			_tanksAlive++;
 			_spawnCycleIndex++;
 			_nextSpawnDelay = Time.time + spawnDelay;
@@ -55,8 +63,14 @@ public class EnemyManager : MonoBehaviour
 	public void SetEnemiesWave(int enemiesAmount)
 	{
 		_active = true;
+		_enemyIndex = 0;
 		_nextSpawnDelay = -1;
 		_spawnCycleIndex = 0;
 		enemiesLeft = enemiesAmount;
+	}
+
+	public void DropPowerUp()
+	{
+		_powerUpManager.SpawnPowerUp();
 	}
 }

@@ -149,7 +149,7 @@ TextureImporter:
         width: 80
         height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -170,7 +170,7 @@ TextureImporter:
         width: 80
         height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -187,11 +187,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 160
-        y: 1200
+        y: 880
         width: 80
         height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -208,7 +208,28 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 240
-        y: 1200
+        y: 880
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dbe9ef7bfaaa96810800000000000000
+      internalID: 1759124801147805373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_pwr_level_1a
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 240
         width: 80
         height: 80
       alignment: 0
@@ -218,8 +239,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dbe9ef7bfaaa96810800000000000000
-      internalID: 1759124801147805373
+      spriteID: 176abe60de365364b982667eb012c944
+      internalID: 571518980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_pwr_level_1b
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 240
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a480bd7d7e0ff8b41b3a1e0b61ba542f
+      internalID: 849375622
       vertices: []
       indices: 
       edges: []
@@ -235,8 +277,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      enemy_pwr_level_1a: 571518980
       enemy_level_1b: 1759124801147805373
       player_level_1b: -8517799911898572495
+      enemy_pwr_level_1b: 849375622
       enemy_level_1a: -8391021626538507948
       player_level_1a: 4875780125967944472
   spritePackingTag: 

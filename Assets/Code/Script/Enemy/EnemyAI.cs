@@ -19,7 +19,18 @@ public partial class EnemyAI : MonoBehaviour
 	[Inject]
 	private void Construct()
 	{
+		_tank.OnGetHit += EnemyHit;
 		_tank.OnGetKilled += EnemyKilled;
+	}
+
+	void EnemyHit(DamageData damagedata)
+	{
+		if (_tank.Powered)
+		{
+			_enemyManager.DropPowerUp();
+		
+			_tank.Powered = false;
+		}
 	}
 
 	private void EnemyKilled()
@@ -74,5 +85,10 @@ public partial class EnemyAI : MonoBehaviour
 	{
 		_tank.SetSpawnPosition(position);
 		_tank.Respawn();
+	}
+
+	public void ShouldDropPowerUp()
+	{
+		_tank.Powered = true;
 	}
 }

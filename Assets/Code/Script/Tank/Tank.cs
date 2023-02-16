@@ -1,4 +1,5 @@
 ﻿using System;
+using Code.Script.Tank;
 using UnityEngine;
 
 using Zenject;
@@ -10,13 +11,16 @@ public class Tank : MonoBehaviour, IDestructible
     [SerializeField, Range(1, 10)] private int maxHp;
     [Space]
     [SerializeField] private Bullet bulletPrefab;
+    [SerializeField] TankSprites sprites;
 
     [Inject] private readonly SpriteRenderer _spriteRenderer = null;
     [Inject] private readonly Rigidbody2D _rig = null;
     [Inject] private readonly Collider2D _collider = null;
     
     public bool Alive { get; private set; } = true;
+    public bool Powered { get; set; } = false;
     public event TankKilledDelegate OnGetKilled;
+    public event TankHitDelegate OnGetHit;
 
     private int _currentHp = 0;
     private Direction _currentDirection = Direction.None;
@@ -62,9 +66,11 @@ public class Tank : MonoBehaviour, IDestructible
         _spriteRenderer.TurnToDirection(direction);
     }
 
-    public void TakeDamage(DamageData _)
+    public void TakeDamage(DamageData damageData)
     {
         _currentHp--;
+        
+        OnGetHit?.Invoke(damageData);
         
         // When less than 1 hp kill tank
         if (_currentHp < 1)
@@ -91,6 +97,17 @@ public class Tank : MonoBehaviour, IDestructible
         newPosition.z = transform.position.z;
         
         transform.position = newPosition;
+    }
+
+    void Update()
+    {
+        if (Powered)
+        {
+            const float period = .5f;
+            bool flicker = (Time.time % (period * 2f)) > period;
+
+            _spriteRenderer.sprite = flicker ? sprites.NormalSprite : sprites.PoweredSprite;
+        }
     }
 
     public void SetSpawnPosition(Vector2 spawnPosition)
