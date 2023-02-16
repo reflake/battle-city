@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer spriteRenderer = null;
-    [SerializeField] private Rigidbody2D rig = null;
-    [SerializeField] private Collider2D collider = null;
-    [SerializeField] private float speed = 187f;
+    [SerializeField] SpriteRenderer spriteRenderer = null;
+    [SerializeField] Rigidbody2D rig = null;
+    [SerializeField] Collider2D collider = null;
+    [SerializeField] float speed = 187f;
     
-    private Vector2 _linearVelocity;
-    private Direction _direction;
-    private int _damage;
+    Vector2 _linearVelocity;
+    Direction _direction;
+    int _damage;
     bool _hitSomething = false;
     Action _destroyCallback;
 
@@ -36,7 +36,7 @@ public class Bullet : MonoBehaviour
         rig.velocity = _linearVelocity * Time.fixedDeltaTime;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
         if (_hitSomething)
             return;
