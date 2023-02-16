@@ -9,12 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
+  m_Script: {fileID: 11500000, guid: 149efb4a8d7e483dba03019928e1f967, type: 3}
   m_Name: concrete
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: -17425352, guid: 221565138d07e87489b263d4805ae2c1, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Transform:
+  destructibleObject: {fileID: 1518638011507704479, guid: 800f4d8500c4a4e45b1b7cf2a7551cc6,
+    type: 3}
+  sprite: {fileID: -17425352, guid: 221565138d07e87489b263d4805ae2c1, type: 3}
+  transform:
     e00: 1
     e01: 0
     e02: 0
@@ -31,6 +32,6 @@ MonoBehaviour:
     e31: 0
     e32: 0
     e33: 1
-  m_InstancedGameObject: {fileID: 0}
-  m_Flags: 1
-  m_ColliderType: 1
+  color: {r: 1, g: 1, b: 1, a: 1}
+  colliderType: 0
+  flags: 1

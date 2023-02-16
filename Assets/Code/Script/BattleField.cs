@@ -1,12 +1,17 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class BattleField : MonoBehaviour
 {
+	public static BattleField Instance { get; private set; } = null;
+
+	[SerializeField] Tilemap tilemap;
 	[SerializeField] private Grid grid;
 	[SerializeField] private Bounds bounds;
 
 	public Bounds Bounds => bounds;
+	public Tilemap Tilemap => tilemap;
 
 	private void Awake()
 	{
@@ -19,6 +24,13 @@ public class BattleField : MonoBehaviour
 		CreateBox(bounds.center + (padding * .5f + bounds.extents.y) * Vector3.down, width);
 		CreateBox(bounds.center + (padding * .5f + bounds.extents.x) * Vector3.left, height);
 		CreateBox(bounds.center + (padding * .5f + bounds.extents.x) * Vector3.right, height);
+
+		Instance = this;
+	}
+
+	void OnDestroy()
+	{
+		Instance = null;
 	}
 
 	private void CreateBox(Vector2 offset, Vector2 size)

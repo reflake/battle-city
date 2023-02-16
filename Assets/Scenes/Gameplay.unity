@@ -962,7 +962,7 @@ Transform:
   m_Children:
   - {fileID: 1854864427}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &752480669
 MonoBehaviour:
@@ -1546,7 +1546,7 @@ Transform:
   m_Children:
   - {fileID: 2122169277}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!156049354 &1590878459
 Grid:
@@ -1572,6 +1572,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb0e7801eb244a7ca66c26271dd9f3bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tilemap: {fileID: 599017746}
   grid: {fileID: 1590878459}
   bounds:
     m_Center: {x: 0, y: 0, z: 0}

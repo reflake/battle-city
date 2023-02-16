@@ -12,6 +12,7 @@ public class Bullet : MonoBehaviour
     private Vector2 _linearVelocity;
     private Direction _direction;
     private int _damage;
+    bool _hitSomething = false;
 
     public void Shoot(Direction direction, int damage, Collider2D ignoreCollider)
     {
@@ -31,6 +32,9 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (_hitSomething)
+            return;
+        
         if (other.gameObject.CompareTag("Destructible"))
         {
             if (!other.TryGetComponent<IDestructible>(out var destructible))
@@ -42,15 +46,17 @@ public class Bullet : MonoBehaviour
             {
                 DamageData damageData = new DamageData
                 {
-                    position = transform.position + transform.forward * .4f,
+                    position = transform.position + transform.forward * .2f,
                     direction = _direction,
-                    damage = _damage
+                    damage = _damage,
+                    strength = 1,
                 };
                 
                 destructible.TakeDamage(damageData);
             }
         }
-        
+
+        _hitSomething = true;
         Destroy(gameObject);
     }
 }
