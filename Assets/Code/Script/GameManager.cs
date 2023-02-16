@@ -76,13 +76,6 @@ public class GameManager : MonoBehaviour
 		_gameIsOver = true;
 
 		OnGameOver.Invoke();
-		
-		// Disable all players
-		foreach (var player in FindObjectsOfType<Player>())
-		{
-			// TODO: stun player instead of taking control
-			player.SetControlsEnabled(false);
-		}
 
 		Task.Run(() => TransitToMainMenu());
 	}
