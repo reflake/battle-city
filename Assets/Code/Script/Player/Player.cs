@@ -11,24 +11,24 @@ using Zenject;
 // Player controls its tank
 public class Player : MonoBehaviour
 {
-	[SerializeField] private int lives = 3;
+	[SerializeField] int lives = 3;
 
-	[Inject] private readonly PlayerManager _playerManager = null;
-	[Inject] private readonly Tank _tank = null;
+	[Inject] readonly PlayerManager _playerManager = null;
+	[Inject] readonly Tank _tank = null;
 	
-	private TankControls _tankControls;
-	private Direction _lastKnownMoveDirection = Direction.North;
-	private Dictionary<string, Direction> _currentlyPressedDirections = new();
+	TankControls _tankControls;
+	Direction _lastKnownMoveDirection = Direction.North;
+	Dictionary<string, Direction> _currentlyPressedDirections = new();
 
 	[Inject]
-	private void Construct()
+	void Construct()
 	{
 		_playerManager.OnSpawnPlayers += InitialPlayerSpawn;
 		_playerManager.OnDespawnPlayers += PlayerDespawn;
 		_tank.OnGetKilled += PlayerKilled;
 	}
 
-	private void Awake()
+	void Awake()
 	{
 		_tankControls = new TankControls();
 		
@@ -43,12 +43,12 @@ public class Player : MonoBehaviour
 		_tankControls.Action.Shoot.started += ShootInputPressed;
 	}
 
-	private void OnDestroy()
+	void OnDestroy()
 	{
 		_tank.OnGetKilled -= PlayerKilled;
 	}
 
-	private void BindInputMoveDirections(string keyName, InputAction bindInputAction, Direction positiveDirection, Direction negativeDirection)
+	void BindInputMoveDirections(string keyName, InputAction bindInputAction, Direction positiveDirection, Direction negativeDirection)
 	{
 		bindInputAction.performed += MoveInputPressed;
 		bindInputAction.canceled += MoveInputCanceled;
@@ -79,7 +79,7 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	private void TryStop()
+	void TryStop()
 	{
 		if (_currentlyPressedDirections.Count == 0)
 		{
@@ -91,7 +91,7 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	private void Move(Direction newDirection)
+	void Move(Direction newDirection)
 	{
 		if (newDirection != Direction.None)
 		{
@@ -101,7 +101,7 @@ public class Player : MonoBehaviour
 		_tank.SetMoveDirection(newDirection);
 	}
 
-	private void ShootInputPressed(InputAction.CallbackContext _)
+	void ShootInputPressed(InputAction.CallbackContext _)
 	{
 		_tank.Shoot(_lastKnownMoveDirection);
 	}
@@ -128,7 +128,7 @@ public class Player : MonoBehaviour
 		gameObject.SetActive(false);
 	}
 
-	private void PlayerKilled()
+	void PlayerKilled()
 	{
 		if (lives > 0)
 		{
@@ -142,7 +142,7 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	private async UniTaskVoid RespawnTank()
+	async UniTaskVoid RespawnTank()
 	{
 		// TODO: show respawn animation
 		// Wait before respawn
