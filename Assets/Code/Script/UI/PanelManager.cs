@@ -19,6 +19,7 @@ public class PanelManager : MonoBehaviour
 			var newTierTransform = Instantiate(tierPrefab, transform);
 
 			newTierTransform.name = $"Tier {tier}";
+			newTierTransform.SetSiblingIndex(tier);
 			
 			_tiersTransforms[tier] = newTierTransform.transform;
 		}
