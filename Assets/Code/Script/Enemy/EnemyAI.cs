@@ -6,18 +6,18 @@ using Random = UnityEngine.Random;
 
 public partial class EnemyAI : MonoBehaviour
 {
-	[Inject] private readonly Tank _tank = null;
-	[Inject] private readonly EnemyManager _enemyManager = null;
+	[Inject] readonly Tank _tank = null;
+	[Inject] readonly EnemyManager _enemyManager = null;
 	
-	[SerializeField] private Vector2 _shootDelayRange = Vector2.zero;
-	[SerializeField] private Vector2 _moveDelayRange = Vector2.zero;
+	[SerializeField] Vector2 _shootDelayRange = Vector2.zero;
+	[SerializeField] Vector2 _moveDelayRange = Vector2.zero;
 
-	private Direction _currentDirection = Direction.None;
-	private float _thinkShootTimer = 0f;
-	private float _thinkMoveTimer = 0f;
+	Direction _currentDirection = Direction.None;
+	float _thinkShootTimer = 0f;
+	float _thinkMoveTimer = 0f;
 
 	[Inject]
-	private void Construct()
+	void Construct()
 	{
 		_tank.OnGetHit += EnemyHit;
 		_tank.OnGetKilled += EnemyKilled;
@@ -33,23 +33,23 @@ public partial class EnemyAI : MonoBehaviour
 		}
 	}
 
-	private void EnemyKilled()
+	void EnemyKilled()
 	{
 		_enemyManager.EnemyKilled(this);
 	}
 
-	private void Start()
+	void Start()
 	{
 		ChangeDirection();
 	}
 
-	private void Update()
+	void Update()
 	{
 		ThinkShoot();
 		ThinkMove();
 	}
 
-	private void ThinkShoot()
+	void ThinkShoot()
 	{
 		if (_thinkShootTimer > Time.time)
 			return;
@@ -59,7 +59,7 @@ public partial class EnemyAI : MonoBehaviour
 		_thinkShootTimer = Time.time + Random.Range(_shootDelayRange.x, _shootDelayRange.y);
 	}
 
-	private void ThinkMove()
+	void ThinkMove()
 	{
 		if (_thinkMoveTimer > Time.time)
 			return;
@@ -69,7 +69,7 @@ public partial class EnemyAI : MonoBehaviour
 		_thinkMoveTimer = Time.time + Random.Range(_moveDelayRange.x, _moveDelayRange.y);
 	}
 
-	private void ChangeDirection()
+	void ChangeDirection()
 	{
 		var newPossibleDirections = new List<Direction> { Direction.North, Direction.South, Direction.East, Direction.West };
 		int randomDirectionIndex = Random.Range(0, 3);
