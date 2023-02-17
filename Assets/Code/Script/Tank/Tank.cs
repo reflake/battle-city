@@ -44,8 +44,9 @@ public class Tank : MonoBehaviour, IDestructible
     {
         if (bulletsFired >= FireRate)
             return;
-        
-        var bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+
+        const float shootOffset = .4f;
+        var bullet = Instantiate(bulletPrefab, transform.position + transform.right * shootOffset, Quaternion.identity);
         
         bullet.Shoot(shootDirection, ProjectileSpeed, FirePower, _collider);
         bullet.WhenDestroyed(DecreaseBulletFiredCount);
