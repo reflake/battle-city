@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8075540fdd6d4010ad21a87c772577d2, type: 3}
-  m_Name: BasicEnemyTank
+  m_Name: PowerEnemyTank
   m_EditorClassIdentifier: 
   spritesData:
-    normalSprite: {fileID: -8391021626538507948, guid: fbe0aea2f7a787c4ba5b52d1a5582041,
-      type: 3}
-    poweredSprite: {fileID: 571518980, guid: fbe0aea2f7a787c4ba5b52d1a5582041, type: 3}
+    normalSprite: {fileID: 1411151308, guid: fbe0aea2f7a787c4ba5b52d1a5582041, type: 3}
+    poweredSprite: {fileID: -166249546, guid: fbe0aea2f7a787c4ba5b52d1a5582041, type: 3}
   hitPoints: 1
-  fireRate: 1
-  firePower: 1
+  fireRate: 2
+  firePower: 2
   moveSpeed: 2
-  projectileSpeed: 0.8
+  projectileSpeed: 1.5

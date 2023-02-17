@@ -17,6 +17,8 @@ public partial class EnemyAI : MonoBehaviour
 	float _thinkMoveTimer = 0f;
 	float _lastTurnTime = 0f;
 
+	public Tank Tank => _tank;
+
 	[Inject]
 	void Construct()
 	{

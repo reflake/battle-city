@@ -2,6 +2,7 @@
 using UnityEngine;
 
 using Zenject;
+using Random = System.Random;
 
 public class EnemyManager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class EnemyManager : MonoBehaviour
 	[SerializeField] int enemiesLeft = 4;
 	[SerializeField] float spawnDelay = 4f;
 	[SerializeField] Transform[] spawnPositions = null;
+	[SerializeField] EnemyData[] enemiesData;
 	
 	[Inject] readonly GameManager _gameManager = null;
 	[Inject] readonly PowerUpManager _powerUpManager = null;
@@ -32,8 +34,9 @@ public class EnemyManager : MonoBehaviour
 			// Spawn enemy
 			Transform chosenSpawn = spawnPositions[_spawnCycleIndex % spawnPositions.Length];
 			Vector2 spawnPosition = chosenSpawn.transform.position;
-			
-			var enemy = _enemyFactory.Create(spawnPosition);
+
+			var enemyData = enemiesData[UnityEngine.Random.Range(0, enemiesData.Length)];
+			var enemy = _enemyFactory.Create(enemyData, spawnPosition);
 
 			if (_powerUpManager.IsEnemyDropsPowerUp(_enemyIndex + 1))
 			{

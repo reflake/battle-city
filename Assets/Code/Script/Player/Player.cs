@@ -9,12 +9,13 @@ using UnityEngine.InputSystem;
 using Zenject;
 
 // Player controls its tank
-public class Player : MonoBehaviour
+public partial class Player : MonoBehaviour
 {
 	[SerializeField] int lives = 3;
 
 	[Inject] readonly PlayerManager _playerManager = null;
 	[Inject] readonly Tank _tank = null;
+	[Inject] readonly PlayerSpritesData _playerSpritesData;
 	
 	TankControls _tankControls;
 	Direction _lastKnownMoveDirection = Direction.North;
@@ -26,7 +27,9 @@ public class Player : MonoBehaviour
 	{
 		_playerManager.OnSpawnPlayers += InitialPlayerSpawn;
 		_playerManager.OnDespawnPlayers += PlayerDespawn;
+		
 		_tank.OnGetKilled += PlayerKilled;
+		_tank.SpritesData = _playerSpritesData;
 	}
 
 	void Awake()
@@ -117,6 +120,11 @@ public class Player : MonoBehaviour
 		{
 			_tankControls.Disable();
 		}
+	}
+
+	public void SetPlayerSpawn(Vector2 spawnPosition)
+	{
+		_tank.SetSpawnPosition(spawnPosition);
 	}
 	
 	void InitialPlayerSpawn()

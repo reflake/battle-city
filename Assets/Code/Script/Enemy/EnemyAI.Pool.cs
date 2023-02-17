@@ -2,7 +2,7 @@
 using UnityEngine;
 using Zenject;
 
-public partial class EnemyAI : IPoolable<Vector2, IMemoryPool>, IDisposable
+public partial class EnemyAI : IPoolable<EnemyData, Vector2, IMemoryPool>, IDisposable
 {
 	private IMemoryPool _pool = null;
 	
@@ -11,9 +11,17 @@ public partial class EnemyAI : IPoolable<Vector2, IMemoryPool>, IDisposable
 		_pool = null;
 	}
 
-	public void OnSpawned(Vector2 spawnPosition, IMemoryPool pool)
+	public void OnSpawned(EnemyData enemyData, Vector2 spawnPosition, IMemoryPool pool)
 	{
+		Tank.SpritesData = enemyData.spritesData;
+		Tank.MaxHp = enemyData.hitPoints;
+		Tank.FireRate = enemyData.fireRate;
+		Tank.FirePower = enemyData.firePower;
+		Tank.ProjectileSpeed = enemyData.projectileSpeed;
+		Tank.Speed = enemyData.moveSpeed;
+		
 		Spawn(spawnPosition);
+		
 		_pool = pool;
 	}
 

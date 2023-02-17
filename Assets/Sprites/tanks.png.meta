@@ -183,7 +183,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enemy_level_1a
+      name: enemy_basic_a
       rect:
         serializedVersion: 2
         x: 160
@@ -204,7 +204,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enemy_level_1b
+      name: enemy_basic_b
       rect:
         serializedVersion: 2
         x: 240
@@ -225,7 +225,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enemy_pwr_level_1a
+      name: enemy_basic_pwr_a
       rect:
         serializedVersion: 2
         x: 160
@@ -233,7 +233,7 @@ TextureImporter:
         width: 80
         height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -246,11 +246,116 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enemy_pwr_level_1b
+      name: enemy_basic_pwr_b
       rect:
         serializedVersion: 2
         x: 240
         y: 240
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a480bd7d7e0ff8b41b3a1e0b61ba542f
+      internalID: 849375622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_fast_a
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 800
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3bec9bea3fcede04ea140697db688122
+      internalID: 263474639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_fast_b
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 800
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eef3abb502807e24a9246b82a1019705
+      internalID: 556740814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_power_a
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 720
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ff222e88df8a7648b20d5f950e718d3
+      internalID: 1411151308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_power_b
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 720
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57408f2e97a92744a893d41bd5de6c47
+      internalID: 894770471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_fast_pwr_a
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 160
         width: 80
         height: 80
       alignment: 0
@@ -260,8 +365,71 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a480bd7d7e0ff8b41b3a1e0b61ba542f
-      internalID: 849375622
+      spriteID: 900b164349a09df499031efabbbbcfeb
+      internalID: -1802441505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_fast_pwr_b
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 160
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 16d5830b93bb20d4b88a0572cce95013
+      internalID: 1556818383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_power_pwr_a
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 80
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a83d744500de8bd4bbbc8c95b1ab8932
+      internalID: -166249546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemy_power_pwr_b
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 80
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b903992005b194e44be5288bc4e47c5b
+      internalID: -404346553
       vertices: []
       indices: 
       edges: []
@@ -277,12 +445,20 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      enemy_pwr_level_1a: 571518980
-      enemy_level_1b: 1759124801147805373
+      enemy_basic_b: 1759124801147805373
+      enemy_fast_pwr_b: 1556818383
+      enemy_fast_a: 263474639
+      enemy_power_pwr_a: -166249546
+      enemy_basic_a: -8391021626538507948
       player_level_1b: -8517799911898572495
-      enemy_pwr_level_1b: 849375622
-      enemy_level_1a: -8391021626538507948
+      enemy_fast_pwr_a: -1802441505
+      enemy_power_pwr_b: -404346553
+      enemy_fast_b: 556740814
+      enemy_power_b: 894770471
+      enemy_basic_pwr_b: 849375622
       player_level_1a: 4875780125967944472
+      enemy_basic_pwr_a: 571518980
+      enemy_power_a: 1411151308
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -1,48 +1,41 @@
 ﻿using System;
-using Code.Script.Tank;
 using UnityEngine;
 
 using Zenject;
 
 public class Tank : MonoBehaviour, IDestructible
 {
-    [SerializeField] private float speed;
-    [SerializeField, Range(1, 10)] private int maxHp;
     [Space]
-    [SerializeField] private Bullet bulletPrefab;
-    [SerializeField] TankSprites sprites;
+    [SerializeField] Bullet bulletPrefab;
 
-    [Inject] private readonly SpriteRenderer _spriteRenderer = null;
-    [Inject] private readonly Rigidbody2D _rig = null;
-    [Inject] private readonly Collider2D _collider = null;
-    
+    [Inject] readonly SpriteRenderer _spriteRenderer = null;
+    [Inject] readonly Rigidbody2D _rig = null;
+    [Inject] readonly Collider2D _collider = null;
+
     public bool Alive { get; private set; } = true;
     public bool Powered { get; set; } = false;
-    
+
     // Stats
-    public int FirePower;
+    public ITankSprites SpritesData;
+    public int MaxHp;
     public int FireRate;
+    public int FirePower;
+    public float Speed;
     public float ProjectileSpeed;
 
     // Events
     public event TankKilledDelegate OnGetKilled;
     public event TankHitDelegate OnGetHit;
 
-    private int _currentHp = 0;
-    private Direction _currentDirection = Direction.None;
-    private Vector2 _spawnLocation = Vector2.zero;
-    int bulletsFired = 0;
+    int _currentHp = 0;
+    Direction _currentDirection = Direction.None;
+    Vector2 _spawnLocation = Vector2.zero;
+    int _bulletsFired = 0;
+    bool _spawnSet = false;
     
-    private void Awake()
-    {
-        _spawnLocation = _rig.position;
-        
-        Respawn();
-    }
-
     public void Shoot(Direction shootDirection)
     {
-        if (bulletsFired >= FireRate)
+        if (_bulletsFired >= FireRate)
             return;
 
         const float shootOffset = .4f;
@@ -53,12 +46,12 @@ public class Tank : MonoBehaviour, IDestructible
 
         Face(shootDirection);
 
-        bulletsFired++;
+        _bulletsFired++;
     }
 
     void DecreaseBulletFiredCount()
     {
-        bulletsFired--;
+        _bulletsFired--;
     }
 
     public void SetMoveDirection(Direction newDirection)
@@ -76,7 +69,7 @@ public class Tank : MonoBehaviour, IDestructible
         {
             Vector2 inputWishDir = _currentDirection.ToVector();
 
-            _rig.MovePosition(_rig.position + inputWishDir * speed * Time.fixedDeltaTime);
+            _rig.MovePosition(_rig.position + inputWishDir * Speed * Time.fixedDeltaTime);
         }
     }
 
@@ -104,13 +97,18 @@ public class Tank : MonoBehaviour, IDestructible
 
     public void Respawn()
     {
+        if (!_spawnSet)
+            throw new Exception($"Spawn is not set for the tank {gameObject.name}");
+        
         gameObject.SetActive(true);
         
         Alive = true;
         
-        _currentHp = maxHp;
+        _currentHp = MaxHp;
 
         Vector3 newPosition = _spawnLocation;
+
+        _spriteRenderer.sprite = SpritesData.NormalSprite;
         
         // We need to keep tank's Z position
         newPosition.z = transform.position.z;
@@ -122,15 +120,16 @@ public class Tank : MonoBehaviour, IDestructible
     {
         if (Powered)
         {
-            const float period = .5f;
+            const float period = .33f;
             bool flicker = (Time.time % (period * 2f)) > period;
 
-            _spriteRenderer.sprite = flicker ? sprites.NormalSprite : sprites.PoweredSprite;
+            _spriteRenderer.sprite = flicker ? SpritesData.NormalSprite : SpritesData.PoweredSprite;
         }
     }
 
     public void SetSpawnPosition(Vector2 spawnPosition)
     {
+        _spawnSet = true;
         _spawnLocation = spawnPosition;
     }
 }

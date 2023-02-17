@@ -3,5 +3,5 @@ using Zenject;
 
 public partial class EnemyAI
 {
-	public class Factory : PlaceholderFactory<Vector2, EnemyAI> {}
+	public class Factory : PlaceholderFactory<EnemyData, Vector2, EnemyAI> {}
 }

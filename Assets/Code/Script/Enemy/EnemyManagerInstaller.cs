@@ -11,7 +11,7 @@ public class EnemyManagerInstaller : MonoInstaller
 		int maximumEnemiesOnScreen = enemyManager.MaximumEnemiesOnScreen;
 
 		Container.BindInstance(enemyManager);
-		Container.BindFactory<Vector2, EnemyAI, EnemyAI.Factory>()
+		Container.BindFactory<EnemyData, Vector2, EnemyAI, EnemyAI.Factory>()
 			.FromMonoPoolableMemoryPool(x => x.WithInitialSize(maximumEnemiesOnScreen)
 				.FromComponentInNewPrefab(enemyTankPrefab));
 	}
