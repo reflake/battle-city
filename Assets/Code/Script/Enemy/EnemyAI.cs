@@ -15,6 +15,7 @@ public partial class EnemyAI : MonoBehaviour
 	Direction _currentDirection = Direction.None;
 	float _thinkShootTimer = 0f;
 	float _thinkMoveTimer = 0f;
+	float _lastTurnTime = 0f;
 
 	[Inject]
 	void Construct()
@@ -51,11 +52,19 @@ public partial class EnemyAI : MonoBehaviour
 
 	void ThinkShoot()
 	{
+		if (_lastTurnTime + 1.5f > Time.time)
+			return;
+		
 		if (_thinkShootTimer > Time.time)
 			return;
 		
 		_tank.Shoot(_currentDirection);
 
+		ShootCooldown();
+	}
+
+	void ShootCooldown()
+	{
 		_thinkShootTimer = Time.time + Random.Range(_shootDelayRange.x, _shootDelayRange.y);
 	}
 
@@ -79,10 +88,14 @@ public partial class EnemyAI : MonoBehaviour
 		_currentDirection = newPossibleDirections[randomDirectionIndex];
 		
 		_tank.SetMoveDirection(_currentDirection);
+
+		_lastTurnTime = Time.time;
 	}
 
 	public void Spawn(Vector2 position)
 	{
+		ShootCooldown();
+		
 		_tank.SetSpawnPosition(position);
 		_tank.Respawn();
 	}
