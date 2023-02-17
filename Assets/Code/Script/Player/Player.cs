@@ -167,7 +167,7 @@ public class Player : MonoBehaviour
 		switch (_upgradeLevel)
 		{
 			case 1:
-				_tank.ProjectileSpeed = 2f;
+				_tank.ProjectileSpeed = 1.5f;
 				break;
 			case 2:
 				_tank.FireRate = 2;

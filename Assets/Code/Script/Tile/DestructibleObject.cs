@@ -25,53 +25,35 @@ public class DestructibleObject : MonoBehaviour, IDestructible
 
 	public void TakeDamage(DamageData damageData)
 	{
-		if (Alive && damageData.strength >= durability)
+		if (Alive && damageData.damage >= durability)
 		{
-			var tilemap = BattleField.Instance.Tilemap;
+			Vector2 impactPosition = damageData.position;
+			Vector2 damageSize = GetNormalDamageSize(damageData.damage, damageData.direction);
+			Bounds damageBounds = new Bounds(impactPosition, damageSize);
+
+			var snappedCenter = damageBounds.center;
 			
-			Vector2 damageSize = GetNormalDamageSize(damageData.direction);
-			Bounds damageBounds = new Bounds(damageData.position, damageSize);
-			BoundsInt boundsInt = new BoundsInt();
+			snappedCenter *= 4;
+			snappedCenter.x = Mathf.Round(snappedCenter.x);
+			snappedCenter.y = Mathf.Round(snappedCenter.y);
+			snappedCenter /= 4;
 
-			boundsInt.SetMinMax(tilemap.WorldToCell(damageBounds.min), tilemap.WorldToCell(damageBounds.max));
+			damageBounds.center = snappedCenter;
 
-			switch (damageData.direction)
-			{
-				case Direction.North:
-				case Direction.South:
-				{
-					int offset = boundsInt.xMax - boundsInt.xMin - 3;
-					boundsInt.xMin += offset;
-				}
-					break;
-				case Direction.East:
-				case Direction.West:
-				{
-					int offset = boundsInt.yMax - boundsInt.yMin - 3;
-					boundsInt.yMin += offset;
-				}
-					break;
-			}
-
-			const float boundsEpsilon = 0.04f;
-			Bounds worldBounds = new Bounds();
-			
-			worldBounds.SetMinMax(tilemap.CellToWorld(boundsInt.min), tilemap.CellToWorld(boundsInt.max));
-			worldBounds.Expand(-boundsEpsilon);
-
-			var hits = Physics2D.OverlapBoxAll(damageData.position, worldBounds.size, 0f,
+			var hits = Physics2D.OverlapBoxAll(damageBounds.center, damageBounds.size, 0f,
 				LayerMask.GetMask("Default"));
+
+#if UNITY_EDITOR
+			// DebugGizmos.Instance?.DrawBox(damageBounds);
+#endif
 
 			foreach (var collider in hits.Where(x => x.CompareTag("Destructible")))
 			{
-				if (collider.TryGetComponent<DestructibleObject>(out var otherDestructibleObject) &&
-				    otherDestructibleObject._tileName == _tileName)
+				if (collider.TryGetComponent<DestructibleObject>(out var otherDestructibleObject))
 				{
 					otherDestructibleObject.InnerTakeDamage();
 				}
 			}
-			
-			// InnerTakeDamage();
 		}
 	}
 
@@ -87,16 +69,18 @@ public class DestructibleObject : MonoBehaviour, IDestructible
 		}
 	}
 	
-	Vector2 GetNormalDamageSize(Direction direction)
+	Vector2 GetNormalDamageSize(int damage, Direction direction)
 	{
+		const float widthEpsilon = 0.175f;
+		
 		switch (direction)
 		{
 			case Direction.North:
 			case Direction.South:
-				return new Vector2(1, 0.2f);
+				return new Vector2(1f - widthEpsilon, .24f * damage);
 			case Direction.East:
 			case Direction.West:
-				return new Vector2(0.2f, 1f);
+				return new Vector2(.24f * damage, 1f - widthEpsilon);
 		}
 
 		throw new Exception("Unexpected behaviour!");

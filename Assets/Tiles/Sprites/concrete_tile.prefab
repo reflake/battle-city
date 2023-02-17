@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 2
-  durability: 3
+  durability: 2
 --- !u!61 &7976590576973610923
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Linq;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -14,6 +14,7 @@ public class Bullet : MonoBehaviour
     int _damage;
     bool _hitSomething = false;
     Action _destroyCallback;
+    ContactPoint2D[] _contactPoint2Ds = new ContactPoint2D[16];
 
     public void Shoot(Direction direction, float projectileSpeed, int damage, Collider2D ignoreCollider)
     {
@@ -33,7 +34,7 @@ public class Bullet : MonoBehaviour
     
     void FixedUpdate()
     {
-        rig.velocity = _linearVelocity * Time.fixedDeltaTime;
+        rig.velocity = _linearVelocity;
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -50,12 +51,32 @@ public class Bullet : MonoBehaviour
             
             if (destructible.Alive)
             {
+                Vector3 impactPoint = transform.position;
+                Vector3 penetrationOffset = Vector3.zero;
+                
+                switch (_direction)
+                {
+                    case Direction.North:
+                        penetrationOffset.y = other.bounds.min.y - impactPoint.y;
+                        break;
+                    case Direction.South:
+                        penetrationOffset.y = other.bounds.max.y - impactPoint.y;
+                        break;
+                    case Direction.East:
+                        penetrationOffset.x = other.bounds.min.x - impactPoint.x;
+                        break;
+                    case Direction.West:
+                        penetrationOffset.x = other.bounds.max.x - impactPoint.x;
+                        break;
+                }
+                
+                impactPoint += penetrationOffset;
+                
                 DamageData damageData = new DamageData
                 {
-                    position = transform.position + transform.forward * .2f,
+                    position = impactPoint,
                     direction = _direction,
                     damage = _damage,
-                    strength = 1,
                 };
                 
                 destructible.TakeDamage(damageData);
