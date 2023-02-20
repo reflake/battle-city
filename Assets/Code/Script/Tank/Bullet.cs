@@ -11,13 +11,15 @@ public class Bullet : MonoBehaviour
     
     Vector2 _linearVelocity;
     Direction _direction;
+    int _firePower;
     int _damage;
     bool _hitSomething = false;
     Action _destroyCallback;
     ContactPoint2D[] _contactPoint2Ds = new ContactPoint2D[16];
 
-    public void Shoot(Direction direction, float projectileSpeed, int damage, Collider2D ignoreCollider)
+    public void Shoot(Direction direction, float projectileSpeed, int firePower, int damage, Collider2D ignoreCollider)
     {
+        _firePower = firePower;
         _damage = damage;
         _direction = direction;
         _linearVelocity = direction.ToVector() * projectileSpeed * speed;
@@ -76,6 +78,7 @@ public class Bullet : MonoBehaviour
                 {
                     position = impactPoint,
                     direction = _direction,
+                    firePower = _firePower,
                     damage = _damage,
                 };
                 

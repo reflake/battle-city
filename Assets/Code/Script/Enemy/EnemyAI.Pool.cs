@@ -17,6 +17,7 @@ public partial class EnemyAI : IPoolable<EnemyData, Vector2, IMemoryPool>, IDisp
 		Tank.MaxHp = enemyData.hitPoints;
 		Tank.FireRate = enemyData.fireRate;
 		Tank.FirePower = enemyData.firePower;
+		Tank.DamageBonus = enemyData.damageBonus;
 		Tank.ProjectileSpeed = enemyData.projectileSpeed;
 		Tank.Speed = enemyData.moveSpeed;
 		

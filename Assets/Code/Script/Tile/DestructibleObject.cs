@@ -28,7 +28,7 @@ public class DestructibleObject : MonoBehaviour, IDestructible
 		if (Alive && damageData.damage >= durability)
 		{
 			Vector2 impactPosition = damageData.position;
-			Vector2 damageSize = GetNormalDamageSize(damageData.damage, damageData.direction);
+			Vector2 damageSize = GetNormalDamageSize(damageData.firePower, damageData.direction);
 			Bounds damageBounds = new Bounds(impactPosition, damageSize);
 
 			var snappedCenter = damageBounds.center;

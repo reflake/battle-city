@@ -189,6 +189,7 @@ public partial class Player : MonoBehaviour
 				break;
 			case 3:
 				_tank.FirePower = 2;
+				_tank.DamageBonus = 1;
 				break;
 		}
 	}

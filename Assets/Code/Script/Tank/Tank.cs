@@ -22,6 +22,7 @@ public class Tank : MonoBehaviour, IDestructible
     public int FirePower;
     public float Speed;
     public float ProjectileSpeed;
+    public int DamageBonus;
 
     // Events
     public event TankKilledDelegate OnGetKilled;
@@ -32,7 +33,7 @@ public class Tank : MonoBehaviour, IDestructible
     Vector2 _spawnLocation = Vector2.zero;
     int _bulletsFired = 0;
     bool _spawnSet = false;
-    
+
     public void Shoot(Direction shootDirection)
     {
         if (_bulletsFired >= FireRate)
@@ -41,7 +42,7 @@ public class Tank : MonoBehaviour, IDestructible
         const float shootOffset = .4f;
         var bullet = Instantiate(bulletPrefab, transform.position + transform.right * shootOffset, Quaternion.identity);
         
-        bullet.Shoot(shootDirection, ProjectileSpeed, FirePower, _collider);
+        bullet.Shoot(shootDirection, ProjectileSpeed, FirePower, 1 + DamageBonus, _collider);
         bullet.WhenDestroyed(DecreaseBulletFiredCount);
 
         Face(shootDirection);
