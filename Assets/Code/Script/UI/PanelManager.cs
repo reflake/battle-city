@@ -1,29 +1,33 @@
 ﻿using System.Collections.Generic;
+using UI;
 using UnityEngine;
 using Zenject;
 
-public class PanelManager : MonoBehaviour
+namespace UI
 {
-	[SerializeField] Transform tierPrefab;
-	
-	[Inject] IPanelFactory _panelFactory;
-
-	Dictionary<int, Transform> _tiersTransforms = new();
-
-	public T CreatePanel<T>(string prefabPath, int tier) where T : Object
+	public class PanelManager : MonoBehaviour
 	{
-		prefabPath = $"Prefabs/{prefabPath}";
-		
-		if (!_tiersTransforms.ContainsKey(tier))
-		{
-			var newTierTransform = Instantiate(tierPrefab, transform);
+		[SerializeField] Transform tierPrefab;
+	
+		[Inject] IPanelFactory _panelFactory;
 
-			newTierTransform.name = $"Tier {tier}";
-			newTierTransform.SetSiblingIndex(tier);
-			
-			_tiersTransforms[tier] = newTierTransform.transform;
-		}
+		Dictionary<int, Transform> _tiersTransforms = new();
+
+		public T CreatePanel<T>(string prefabPath, int tier) where T : Object
+		{
+			prefabPath = $"Prefabs/{prefabPath}";
 		
-		return _panelFactory.Create<T>(prefabPath, _tiersTransforms[tier]);
+			if (!_tiersTransforms.ContainsKey(tier))
+			{
+				var newTierTransform = Instantiate(tierPrefab, transform);
+
+				newTierTransform.name = $"Tier {tier}";
+				newTierTransform.SetSiblingIndex(tier);
+			
+				_tiersTransforms[tier] = newTierTransform.transform;
+			}
+		
+			return _panelFactory.Create<T>(prefabPath, _tiersTransforms[tier]);
+		}
 	}
 }

@@ -1,26 +1,28 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public abstract class DestructibleTile : TileBase
+namespace Tiles
 {
-	[SerializeField] protected DestructibleObject destructibleObject;
-
-	public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData)
+	public abstract class DestructibleTile : TileBase
 	{
-		if (destructibleObject != null)
-			tileData.gameObject = destructibleObject.gameObject;
-	}
+		[SerializeField] protected DestructibleObject destructibleObject;
 
-	public override bool StartUp(Vector3Int position, ITilemap tilemap, GameObject go)
-	{
-		if (go != null)
+		public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData)
 		{
-			var destructibleObject = go.GetComponent<DestructibleObject>();
-
-			destructibleObject.Setup(name, position);
+			if (destructibleObject != null)
+				tileData.gameObject = destructibleObject.gameObject;
 		}
 
-		return true;
+		public override bool StartUp(Vector3Int position, ITilemap tilemap, GameObject go)
+		{
+			if (go != null)
+			{
+				var destructibleObject = go.GetComponent<DestructibleObject>();
+
+				destructibleObject.Setup(name, position);
+			}
+
+			return true;
+		}
 	}
 }

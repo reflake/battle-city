@@ -1,9 +1,13 @@
-﻿using Zenject;
+﻿using UI;
+using Zenject;
 
-public class PanelManagerInstaller : MonoInstaller
+namespace UI
 {
-	public override void InstallBindings()
+	public class PanelManagerInstaller : MonoInstaller
 	{
-		Container.Bind<IPanelFactory>().To<PanelFactory>().AsSingle();
+		public override void InstallBindings()
+		{
+			Container.Bind<IPanelFactory>().To<PanelFactory>().AsSingle();
+		}
 	}
 }

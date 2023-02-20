@@ -1,8 +1,11 @@
-﻿public enum Direction
+﻿namespace Common
 {
-	North,
-	West,
-	South,
-	East,
-	None,
+	public enum Direction
+	{
+		North,
+		West,
+		South,
+		East,
+		None,
+	}
 }

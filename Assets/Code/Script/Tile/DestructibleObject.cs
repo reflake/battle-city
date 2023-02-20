@@ -1,88 +1,93 @@
 ﻿using System;
 using System.Linq;
+using Common;
+using Gameplay;
 using UnityEngine;
 
-public class DestructibleObject : MonoBehaviour, IDestructible
+namespace Tiles
 {
-	[SerializeField] int hp;
-	[SerializeField] int durability;
-
-	public bool Alive { get; private set; } = true;
-
-	bool set = false;
-	string _tileName;
-	Vector3Int _position;
-
-	public void Setup(string tileName, Vector3Int position)
+	public class DestructibleObject : MonoBehaviour, IDestructible
 	{
-		if (set)
-			throw new Exception("Already set!");
-		
-		set = true;
-		_tileName = tileName;
-		_position = position;
-	}
+		[SerializeField] int hp;
+		[SerializeField] int durability;
 
-	public void TakeDamage(DamageData damageData)
-	{
-		if (Alive && damageData.damage >= durability)
+		public bool Alive { get; private set; } = true;
+
+		bool set = false;
+		string _tileName;
+		Vector3Int _position;
+
+		public void Setup(string tileName, Vector3Int position)
 		{
-			Vector2 impactPosition = damageData.position;
-			Vector2 damageSize = GetNormalDamageSize(damageData.firePower, damageData.direction);
-			Bounds damageBounds = new Bounds(impactPosition, damageSize);
+			if (set)
+				throw new Exception("Already set!");
+		
+			set = true;
+			_tileName = tileName;
+			_position = position;
+		}
 
-			var snappedCenter = damageBounds.center;
+		public void TakeDamage(DamageData damageData)
+		{
+			if (Alive && damageData.damage >= durability)
+			{
+				Vector2 impactPosition = damageData.position;
+				Vector2 damageSize = GetNormalDamageSize(damageData.firePower, damageData.direction);
+				Bounds damageBounds = new Bounds(impactPosition, damageSize);
+
+				var snappedCenter = damageBounds.center;
 			
-			snappedCenter *= 4;
-			snappedCenter.x = Mathf.Round(snappedCenter.x);
-			snappedCenter.y = Mathf.Round(snappedCenter.y);
-			snappedCenter /= 4;
+				snappedCenter *= 4;
+				snappedCenter.x = Mathf.Round(snappedCenter.x);
+				snappedCenter.y = Mathf.Round(snappedCenter.y);
+				snappedCenter /= 4;
 
-			damageBounds.center = snappedCenter;
+				damageBounds.center = snappedCenter;
 
-			var hits = Physics2D.OverlapBoxAll(damageBounds.center, damageBounds.size, 0f,
-				LayerMask.GetMask("Default"));
+				var hits = Physics2D.OverlapBoxAll(damageBounds.center, damageBounds.size, 0f,
+					LayerMask.GetMask("Default"));
 
 #if UNITY_EDITOR
-			// DebugGizmos.Instance?.DrawBox(damageBounds);
+				// DebugGizmos.Instance?.DrawBox(damageBounds);
 #endif
 
-			foreach (var collider in hits.Where(x => x.CompareTag("Destructible")))
-			{
-				if (collider.TryGetComponent<DestructibleObject>(out var otherDestructibleObject))
+				foreach (var collider in hits.Where(x => x.CompareTag("Destructible")))
 				{
-					otherDestructibleObject.InnerTakeDamage();
+					if (collider.TryGetComponent<DestructibleObject>(out var otherDestructibleObject))
+					{
+						otherDestructibleObject.InnerTakeDamage();
+					}
 				}
 			}
 		}
-	}
 
-	void InnerTakeDamage()
-	{
-		hp--;
-
-		if (hp <= 0)
+		void InnerTakeDamage()
 		{
-			Alive = false;
+			hp--;
 
-			BattleField.Instance.Tilemap.SetTile(_position, null);
+			if (hp <= 0)
+			{
+				Alive = false;
+
+				BattleField.Instance.Tilemap.SetTile(_position, null);
+			}
 		}
-	}
 	
-	Vector2 GetNormalDamageSize(int damage, Direction direction)
-	{
-		const float widthEpsilon = 0.175f;
-		
-		switch (direction)
+		Vector2 GetNormalDamageSize(int damage, Direction direction)
 		{
-			case Direction.North:
-			case Direction.South:
-				return new Vector2(1f - widthEpsilon, .24f * damage);
-			case Direction.East:
-			case Direction.West:
-				return new Vector2(.24f * damage, 1f - widthEpsilon);
-		}
+			const float widthEpsilon = 0.175f;
+		
+			switch (direction)
+			{
+				case Direction.North:
+				case Direction.South:
+					return new Vector2(1f - widthEpsilon, .24f * damage);
+				case Direction.East:
+				case Direction.West:
+					return new Vector2(.24f * damage, 1f - widthEpsilon);
+			}
 
-		throw new Exception("Unexpected behaviour!");
+			throw new Exception("Unexpected behaviour!");
+		}
 	}
 }

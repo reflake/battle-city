@@ -1,23 +1,26 @@
-﻿using UnityEngine;
-
+﻿using Gameplay;
+using UnityEngine;
 using Zenject;
 
-public class GameOverPanel : MonoBehaviour
+namespace UI
 {
-	public static readonly string prefabPath = "GameOverPanel";
-	
-	[SerializeField] private CanvasGroup _canvasGroup = null;
-
-	[Inject] readonly GameManager _gameManager = null;
-
-	[Inject]
-	public void Construct()
+	public class GameOverPanel : MonoBehaviour
 	{
-		_gameManager.OnGameOver += ShowPanel;
-	}
+		public static readonly string prefabPath = "GameOverPanel";
 	
-	public void ShowPanel()
-	{
-		_canvasGroup.alpha = 1f;
+		[SerializeField] private CanvasGroup _canvasGroup = null;
+
+		[Inject] readonly GameManager _gameManager = null;
+
+		[Inject]
+		public void Construct()
+		{
+			_gameManager.OnGameOver += ShowPanel;
+		}
+	
+		public void ShowPanel()
+		{
+			_canvasGroup.alpha = 1f;
+		}
 	}
 }

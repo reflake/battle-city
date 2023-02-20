@@ -1,9 +1,11 @@
-﻿using UnityEngine;
-using Zenject;
+﻿using Zenject;
 
-public partial class Player
+namespace Players
 {
-	public class Factory : PlaceholderFactory<PlayerSpritesData, Player>
+	public partial class Player
 	{
+		public class Factory : PlaceholderFactory<PlayerSpritesData, Player>
+		{
+		}
 	}
 }

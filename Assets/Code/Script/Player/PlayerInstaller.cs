@@ -1,13 +1,17 @@
-﻿using Zenject;
+﻿using Tanks;
+using Zenject;
 
-public class PlayerInstaller : TankInstaller
+namespace Players
 {
-	[Inject] readonly PlayerSpritesData _playerSpritesData;
-
-	public override void InstallBindings()
+	public class PlayerInstaller : TankInstaller
 	{
-		Container.BindInstance(_playerSpritesData);
+		[Inject] readonly PlayerSpritesData _playerSpritesData;
+
+		public override void InstallBindings()
+		{
+			Container.BindInstance(_playerSpritesData);
 		
-		base.InstallBindings();
+			base.InstallBindings();
+		}
 	}
 }

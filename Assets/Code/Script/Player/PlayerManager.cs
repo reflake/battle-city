@@ -1,44 +1,48 @@
-﻿using System;
+﻿using Gameplay;
+using Tanks;
+using UI;
 using UnityEngine;
-
 using Zenject;
 
-public class PlayerManager : MonoBehaviour
+namespace Players
 {
-	[SerializeField] Transform[] spawnPositions = null;
-	[SerializeField] PlayerSpritesData playerSpritesData = null;
-	
-	[Inject] readonly GameManager _gameManager;
-	[Inject] readonly Player.Factory _playerFactory;
-	[Inject] readonly PanelManager _panelManager;
-	
-	public event DespawnPlayersDelegate OnDespawnPlayers;
-	public event SpawnPlayersDelegate OnSpawnPlayers;
-
-	void Awake()
+	public class PlayerManager : MonoBehaviour
 	{
-		var panel = _panelManager.CreatePanel<PlayerHUD>(PlayerHUD.prefabPath, 1);
+		[SerializeField] Transform[] spawnPositions = null;
+		[SerializeField] PlayerSpritesData playerSpritesData = null;
+	
+		[Inject] readonly GameManager _gameManager;
+		[Inject] readonly Player.Factory _playerFactory;
+		[Inject] readonly PanelManager _panelManager;
+	
+		public event DespawnPlayersDelegate OnDespawnPlayers;
+		public event SpawnPlayersDelegate OnSpawnPlayers;
+
+		void Awake()
+		{
+			var panel = _panelManager.CreatePanel<PlayerHUD>(PlayerHUD.prefabPath, 1);
 		
-		var spawnPosition = spawnPositions[0].position;
-		var player = _playerFactory.Create(playerSpritesData);
+			var spawnPosition = spawnPositions[0].position;
+			var player = _playerFactory.Create(playerSpritesData);
 
-		player.SetPlayerSpawn(spawnPosition);
+			player.SetPlayerSpawn(spawnPosition);
 
-		panel.HookPlayer(player);
-	}
+			panel.HookPlayer(player);
+		}
 
-	public void PlayerDefeated()
-	{
-		_gameManager.GameOver();
-	}
+		public void PlayerDefeated()
+		{
+			_gameManager.GameOver();
+		}
 
-	public void DespawnAll()
-	{
-		OnDespawnPlayers?.Invoke();
-	}
+		public void DespawnAll()
+		{
+			OnDespawnPlayers?.Invoke();
+		}
 
-	public void SpawnPlayers()
-	{
-		OnSpawnPlayers?.Invoke();
+		public void SpawnPlayers()
+		{
+			OnSpawnPlayers?.Invoke();
+		}
 	}
 }

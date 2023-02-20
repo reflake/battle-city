@@ -1,26 +1,29 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Common;
+using Gameplay;
 using UnityEngine;
 using Zenject;
 
-public class Base : MonoBehaviour, IDestructible
+namespace Players
 {
-	[SerializeField] private SpriteRenderer spriteRenderer;
-	[SerializeField] private Sprite destroyedSprite;
-	[SerializeField] private Collider2D collider;
-
-	[Inject] private readonly GameManager _gameManager = null;
-	
-	public bool Alive { get; private set; } = true;
-	
-	public void TakeDamage(DamageData _)
+	public class Base : MonoBehaviour, IDestructible
 	{
-		Alive = false;
+		[SerializeField] private SpriteRenderer spriteRenderer;
+		[SerializeField] private Sprite destroyedSprite;
+		[SerializeField] private Collider2D collider;
 
-		spriteRenderer.sprite = destroyedSprite;
+		[Inject] private readonly GameManager _gameManager = null;
+	
+		public bool Alive { get; private set; } = true;
+	
+		public void TakeDamage(DamageData _)
+		{
+			Alive = false;
 
-		collider.enabled = false;
+			spriteRenderer.sprite = destroyedSprite;
+
+			collider.enabled = false;
 		
-		_gameManager.GameOver();
+			_gameManager.GameOver();
+		}
 	}
 }

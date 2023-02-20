@@ -1,5 +1,8 @@
-﻿public interface IDestructible
+﻿namespace Common
 {
-	bool Alive { get; }
-	void TakeDamage(DamageData damageData);
+	public interface IDestructible
+	{
+		bool Alive { get; }
+		void TakeDamage(DamageData damageData);
+	}
 }

@@ -1,1 +1,4 @@
-﻿public delegate void LivesChangeDelegate(int count);
+﻿namespace Players
+{
+	public delegate void LivesChangeDelegate(int count);
+}

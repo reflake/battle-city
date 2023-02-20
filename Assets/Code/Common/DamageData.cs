@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 
-public struct DamageData
+namespace Common
 {
-	public Vector2 position;
-	public Direction direction;
-	public int damage;
-	public int firePower;
+	public struct DamageData
+	{
+		public Vector2 position;
+		public Direction direction;
+		public int damage;
+		public int firePower;
+	}
 }
