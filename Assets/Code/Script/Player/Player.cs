@@ -16,6 +16,11 @@ public partial class Player : MonoBehaviour
 	[Inject] readonly PlayerManager _playerManager = null;
 	[Inject] readonly Tank _tank = null;
 	[Inject] readonly PlayerSpritesData _playerSpritesData;
+
+	public int Lives => lives;
+
+	// Events
+	public event LivesChangeDelegate OnLivesChange;
 	
 	TankControls _tankControls;
 	Direction _lastKnownMoveDirection = Direction.North;
@@ -142,6 +147,8 @@ public partial class Player : MonoBehaviour
 		if (lives > 0)
 		{
 			lives--;
+			
+			OnLivesChange?.Invoke(lives);
 
 			RespawnTank();;
 		}

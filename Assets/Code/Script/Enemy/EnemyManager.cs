@@ -16,7 +16,11 @@ public class EnemyManager : MonoBehaviour
 	[Inject] readonly PowerUpManager _powerUpManager = null;
 	[Inject] readonly EnemyAI.Factory _enemyFactory = null;
 
+	// Events
+	public event EnemyLeftChangeDelegate OnEnemyLeftChange;
+	
 	public int MaximumEnemiesOnScreen => maximumEnemiesOnScreen;
+	public int EnemiesLeft => enemiesLeft;
 
 	bool _active = false;
 	int _spawnCycleIndex = 0;
@@ -54,6 +58,8 @@ public class EnemyManager : MonoBehaviour
 	{
 		enemiesLeft--;
 		_tanksAlive--;
+		
+		OnEnemyLeftChange?.Invoke(enemiesLeft);
 
 		if (enemiesLeft == 0)
 		{
@@ -69,7 +75,10 @@ public class EnemyManager : MonoBehaviour
 		_enemyIndex = 0;
 		_nextSpawnDelay = -1;
 		_spawnCycleIndex = 0;
+		
 		enemiesLeft = enemiesAmount;
+		
+		OnEnemyLeftChange.Invoke(enemiesLeft);
 	}
 
 	public void DropPowerUp()
