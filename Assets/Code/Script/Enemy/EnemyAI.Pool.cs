@@ -14,12 +14,7 @@ public partial class EnemyAI : IPoolable<EnemyData, Vector2, IMemoryPool>, IDisp
 	public void OnSpawned(EnemyData enemyData, Vector2 spawnPosition, IMemoryPool pool)
 	{
 		Tank.SpritesData = enemyData.spritesData;
-		Tank.MaxHp = enemyData.hitPoints;
-		Tank.FireRate = enemyData.fireRate;
-		Tank.FirePower = enemyData.firePower;
-		Tank.DamageBonus = enemyData.damageBonus;
-		Tank.ProjectileSpeed = enemyData.projectileSpeed;
-		Tank.Speed = enemyData.moveSpeed;
+		Tank.Stats = enemyData.stats;
 		
 		Spawn(spawnPosition);
 		

@@ -66,11 +66,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 2762107655628412679, guid: cf0809c4cd0208b4ebc983190b5bbb7e,
     type: 3}
+  <Stats>k__BackingField:
+    hitPoints: 1
+    fireRate: 1
+    firePower: 1
+    damageBonus: 0
+    moveSpeed: 3
+    projectileSpeed: 1
   MaxHp: 1
   FireRate: 1
   FirePower: 1
   Speed: 3
   ProjectileSpeed: 1
+  DamageBonus: 0
 --- !u!50 &7051971626709663368
 Rigidbody2D:
   serializedVersion: 4

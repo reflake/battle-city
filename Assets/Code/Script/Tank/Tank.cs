@@ -7,6 +7,7 @@ public class Tank : MonoBehaviour, IDestructible
 {
     [Space]
     [SerializeField] Bullet bulletPrefab;
+    [field: SerializeField] public Stats Stats { get; set; } = default;
 
     [Inject] readonly SpriteRenderer _spriteRenderer = null;
     [Inject] readonly Rigidbody2D _rig = null;
@@ -17,12 +18,6 @@ public class Tank : MonoBehaviour, IDestructible
 
     // Stats
     public ITankSprites SpritesData;
-    public int MaxHp;
-    public int FireRate;
-    public int FirePower;
-    public float Speed;
-    public float ProjectileSpeed;
-    public int DamageBonus;
 
     // Events
     public event TankKilledDelegate OnGetKilled;
@@ -36,13 +31,13 @@ public class Tank : MonoBehaviour, IDestructible
 
     public void Shoot(Direction shootDirection)
     {
-        if (_bulletsFired >= FireRate)
+        if (_bulletsFired >= Stats.fireRate)
             return;
 
         const float shootOffset = .4f;
         var bullet = Instantiate(bulletPrefab, transform.position + transform.right * shootOffset, Quaternion.identity);
         
-        bullet.Shoot(shootDirection, ProjectileSpeed, FirePower, 1 + DamageBonus, _collider);
+        bullet.Shoot(shootDirection, Stats.projectileSpeed, Stats.firePower, 1 + Stats.damageBonus, _collider);
         bullet.WhenDestroyed(DecreaseBulletFiredCount);
 
         Face(shootDirection);
@@ -70,7 +65,7 @@ public class Tank : MonoBehaviour, IDestructible
         {
             Vector2 inputWishDir = _currentDirection.ToVector();
 
-            _rig.MovePosition(_rig.position + inputWishDir * Speed * Time.fixedDeltaTime);
+            _rig.MovePosition(_rig.position + inputWishDir * Stats.moveSpeed * Time.fixedDeltaTime);
         }
     }
 
@@ -105,7 +100,7 @@ public class Tank : MonoBehaviour, IDestructible
         
         Alive = true;
         
-        _currentHp = MaxHp;
+        _currentHp = Stats.hitPoints;
 
         Vector3 newPosition = _spawnLocation;
 

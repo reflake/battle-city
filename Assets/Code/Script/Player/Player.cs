@@ -179,18 +179,22 @@ public partial class Player : MonoBehaviour
 	{
 		_upgradeLevel++;
 
+		var modifiedStats = _tank.Stats;
+
 		switch (_upgradeLevel)
 		{
 			case 1:
-				_tank.ProjectileSpeed = 1.5f;
+				modifiedStats.projectileSpeed = 1.5f;
 				break;
 			case 2:
-				_tank.FireRate = 2;
+				modifiedStats.fireRate = 2;
 				break;
 			case 3:
-				_tank.FirePower = 2;
-				_tank.DamageBonus = 1;
+				modifiedStats.firePower = 2;
+				modifiedStats.damageBonus = 1;
 				break;
 		}
+
+		_tank.Stats = modifiedStats;
 	}
 }

@@ -4,10 +4,5 @@
 public class EnemyData : ScriptableObject
 {
 	public EnemySpritesData spritesData;
-	public int hitPoints;
-	public int fireRate;
-	public int firePower;
-	public int damageBonus;
-	public float moveSpeed;
-	public float projectileSpeed;
+	public Stats stats;
 }
