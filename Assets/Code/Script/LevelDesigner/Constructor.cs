@@ -37,7 +37,7 @@ namespace LevelDesigner
 		ConstructorControls _controls;
 		TileBase[] tiles = new TileBase[16];
 		Matrix4x4[] transforms = new Matrix4x4[16];
-		Panel _panel;
+		ConstructorPanel _constructorPanel;
 
 		void Awake()
 		{
@@ -60,12 +60,12 @@ namespace LevelDesigner
 
 		void OnEnable()
 		{
-			_panel = _panelManager.CreatePanel<Panel>(Panel.prefabPath, 0);
+			_constructorPanel = _panelManager.CreatePanel<ConstructorPanel>(ConstructorPanel.prefabPath, 0);
 		}
 
 		void OnDisable()
 		{
-			Destroy(_panel.gameObject);
+			Destroy(_constructorPanel.gameObject);
 		}
 
 		void MoveCursorInput(InputAction inputAction, int holdDelay, int holdInterval)

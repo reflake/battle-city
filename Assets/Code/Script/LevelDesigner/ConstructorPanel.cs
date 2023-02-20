@@ -8,7 +8,7 @@ using Zenject;
 
 namespace LevelDesigner
 {
-	public class Panel : MonoBehaviour
+	public class ConstructorPanel : MonoBehaviour
 	{
 		public static string prefabPath = "ConstructorPanel";
 		
