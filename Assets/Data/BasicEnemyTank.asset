@@ -16,8 +16,10 @@ MonoBehaviour:
     normalSprite: {fileID: -8391021626538507948, guid: fbe0aea2f7a787c4ba5b52d1a5582041,
       type: 3}
     poweredSprite: {fileID: 571518980, guid: fbe0aea2f7a787c4ba5b52d1a5582041, type: 3}
-  hitPoints: 1
-  fireRate: 1
-  firePower: 1
-  moveSpeed: 2
-  projectileSpeed: 0.8
+  stats:
+    hitPoints: 1
+    fireRate: 1
+    firePower: 1
+    damageBonus: 0
+    moveSpeed: 2.2
+    projectileSpeed: 0.8

@@ -15,8 +15,10 @@ MonoBehaviour:
   spritesData:
     normalSprite: {fileID: 263474639, guid: fbe0aea2f7a787c4ba5b52d1a5582041, type: 3}
     poweredSprite: {fileID: -1802441505, guid: fbe0aea2f7a787c4ba5b52d1a5582041, type: 3}
-  hitPoints: 1
-  fireRate: 2
-  firePower: 1
-  moveSpeed: 3.5
-  projectileSpeed: 0.8
+  stats:
+    hitPoints: 1
+    fireRate: 2
+    firePower: 1
+    damageBonus: 0
+    moveSpeed: 3.5
+    projectileSpeed: 1
