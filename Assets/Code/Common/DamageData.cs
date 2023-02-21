@@ -8,5 +8,6 @@ namespace Common
 		public Direction direction;
 		public int damage;
 		public int firePower;
+		public Vector2 directionVector;
 	}
 }

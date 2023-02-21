@@ -81,6 +81,7 @@ namespace Tanks
                 {
                     position = impactPoint,
                     direction = _direction,
+                    directionVector = _vectorDirection,
                     firePower = _firePower,
                     damage = _damage,
                 };

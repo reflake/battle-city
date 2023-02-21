@@ -35,5 +35,15 @@ namespace Common
 		{
 			spriteRenderer.transform.rotation = direction.DirectionToRotation();
 		}
+
+		public static Vector2 Snap(this GridLayout gridLayout, Vector2 vector)
+		{
+			vector /= gridLayout.cellSize;
+			vector.x = Mathf.Round(vector.x);
+			vector.y = Mathf.Round(vector.y);
+			vector *= gridLayout.cellSize;
+
+			return vector;
+		}
 	}
 }

@@ -19,7 +19,7 @@ namespace Tiles
 			{
 				var destructibleObject = go.GetComponent<DestructibleObject>();
 
-				destructibleObject.Setup(name, position);
+				destructibleObject.Setup(position);
 			}
 
 			return true;

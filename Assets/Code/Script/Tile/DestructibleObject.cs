@@ -14,16 +14,14 @@ namespace Tiles
 		public bool Alive { get; private set; } = true;
 
 		bool set = false;
-		string _tileName;
 		Vector3Int _position;
 
-		public void Setup(string tileName, Vector3Int position)
+		public void Setup(Vector3Int position)
 		{
 			if (set)
 				throw new Exception("Already set!");
 		
 			set = true;
-			_tileName = tileName;
 			_position = position;
 		}
 
@@ -31,24 +29,34 @@ namespace Tiles
 		{
 			if (Alive && damageData.damage >= durability)
 			{
+				const float half = 1 / 2f;
+				float penetrationAbility = damageData.firePower;
 				Vector2 impactPosition = damageData.position;
-				Vector2 damageSize = GetNormalDamageSize(damageData.firePower, damageData.direction);
-				Bounds damageBounds = new Bounds(impactPosition, damageSize);
+				Bounds damageBounds = new Bounds();
+				Vector2 penetrationForward = damageData.directionVector;
+				Vector2 penetrationSide = Vector2.Perpendicular(penetrationForward);
+				
+				// Create hit box
+				damageBounds.Encapsulate(penetrationForward * half * penetrationAbility);
+				damageBounds.Encapsulate(penetrationSide);
+				
+				damageBounds.center = impactPosition;
 
-				var snappedCenter = damageBounds.center;
-			
-				snappedCenter *= 4;
-				snappedCenter.x = Mathf.Round(snappedCenter.x);
-				snappedCenter.y = Mathf.Round(snappedCenter.y);
-				snappedCenter /= 4;
+				const float errorMargin = -.1f;
+				
+				damageBounds.Expand(errorMargin);
+				
+				// Snap hitbox to grid
+				Vector2 snappedCenter = BattleField.Instance.Tilemap.Snap(damageBounds.center);
 
 				damageBounds.center = snappedCenter;
 
+				// Raycast closest tiles
 				var hits = Physics2D.OverlapBoxAll(damageBounds.center, damageBounds.size, 0f,
 					LayerMask.GetMask("Default"));
 
 #if UNITY_EDITOR
-				// DebugGizmos.Instance?.DrawBox(damageBounds);
+				DebugGizmos.Instance?.DrawBox(damageBounds);
 #endif
 
 				foreach (var collider in hits.Where(x => x.CompareTag("Destructible")))
@@ -71,23 +79,6 @@ namespace Tiles
 
 				BattleField.Instance.Tilemap.SetTile(_position, null);
 			}
-		}
-	
-		Vector2 GetNormalDamageSize(int damage, Direction direction)
-		{
-			const float widthEpsilon = 0.175f;
-		
-			switch (direction)
-			{
-				case Direction.North:
-				case Direction.South:
-					return new Vector2(1f - widthEpsilon, .24f * damage);
-				case Direction.East:
-				case Direction.West:
-					return new Vector2(.24f * damage, 1f - widthEpsilon);
-			}
-
-			throw new Exception("Unexpected behaviour!");
 		}
 	}
 }
