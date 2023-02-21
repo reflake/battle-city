@@ -10,14 +10,6 @@ namespace UI
 	
 		[SerializeField] private CanvasGroup _canvasGroup = null;
 
-		[Inject] readonly GameManager _gameManager = null;
-
-		[Inject]
-		public void Construct()
-		{
-			_gameManager.OnGameOver += ShowPanel;
-		}
-	
 		public void ShowPanel()
 		{
 			_canvasGroup.alpha = 1f;
