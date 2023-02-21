@@ -31,9 +31,9 @@ namespace Gameplay
 			Destroy(_panel);
 		}
 
-		public async UniTask FirstLevel()
+		public async UniTask SetLevel(int levelNumber)
 		{
-			_currentLevel = 0;
+			_currentLevel = levelNumber;
 
 			await LoadLevel(_currentLevel);
 		}

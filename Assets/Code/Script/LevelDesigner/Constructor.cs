@@ -38,7 +38,12 @@ namespace LevelDesigner
 		TileBase[] tiles = new TileBase[16];
 		Matrix4x4[] transforms = new Matrix4x4[16];
 		ConstructorPanel _constructorPanel;
-
+		
+		public void Activate()
+		{
+			gameObject.SetActive(true);
+		}
+		
 		void Awake()
 		{
 			_controls = new ConstructorControls();

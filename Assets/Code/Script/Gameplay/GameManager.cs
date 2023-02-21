@@ -23,11 +23,15 @@ namespace Gameplay
 		int waveStrength = 0;
 		Keyboard _kbDevice;
 
-		void Start()
+		public async UniTaskVoid SetLevel(int levelNumber)
 		{
-			FirstLevel();
-
+			gameObject.SetActive(true);
+			
 			_kbDevice = InputSystem.GetDevice<Keyboard>();
+			
+			await _levelManager.SetLevel(levelNumber);
+
+			BeginGame();
 		}
 
 		void Update()
@@ -38,19 +42,7 @@ namespace Gameplay
 			}
 		}
 
-		async UniTaskVoid FirstLevel()
-		{
-			await _levelManager.FirstLevel();
-
-			BeginGame();
-		}
-
-		public void LevelComplete()
-		{
-			TransitionToNextLevel();
-		}
-
-		async UniTaskVoid TransitionToNextLevel()
+		public async UniTaskVoid LevelComplete()
 		{
 			// Show scores
 		
@@ -60,7 +52,7 @@ namespace Gameplay
 		
 			BeginGame();
 		}
-
+		
 		void BeginGame()
 		{
 			// Start spawn enemies
