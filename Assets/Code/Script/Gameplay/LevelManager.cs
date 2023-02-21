@@ -2,6 +2,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using LevelDesigner;
 using UI;
@@ -47,18 +48,15 @@ namespace Gameplay
 
 		async UniTask LoadLevel(int index)
 		{
-			// Show transition screen and level number
-			var waitTransitionScreen = UniTask.Delay(TimeSpan.FromSeconds(transitionScreenShowTime));
-
 			// need to switch to main thread so animations play
 			await UniTask.SwitchToMainThread();
 			_panel.Show(index + 1);
 
 			var levelDataPath = $"Level/{levelList[index]}";
-			var levelLoadTask = LoadLevel(levelDataPath);
-		
-			await UniTask.WhenAll(levelLoadTask, waitTransitionScreen);
-		
+			
+			await LoadLevel(levelDataPath);
+			await Task.Delay(2000, this.GetCancellationTokenOnDestroy());
+
 			// Level loaded, ready to play
 			_panel.Hide();
 		}
@@ -68,7 +66,7 @@ namespace Gameplay
 			// Assets can be loaded only on main thread
 			await UniTask.SwitchToMainThread();
 		
-			var asset = (await Resources.LoadAsync<TextAsset>(path)) as TextAsset;
+			var asset = (await Resources.LoadAsync<TextAsset>(path).WithCancellation(this.GetCancellationTokenOnDestroy())) as TextAsset;
 
 			using var file = new MemoryStream(asset.bytes);
 			IFormatter formatter = new BinaryFormatter();

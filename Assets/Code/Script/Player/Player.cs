@@ -164,12 +164,8 @@ namespace Players
 			}
 		}
 
-		async UniTaskVoid RespawnTank()
+		void RespawnTank()
 		{
-			// TODO: show respawn animation
-			// Wait before respawn
-			await UniTask.Delay(TimeSpan.FromSeconds(1f), DelayType.DeltaTime, PlayerLoopTiming.Update);
-		
 			_tank.Respawn();
 		}
 

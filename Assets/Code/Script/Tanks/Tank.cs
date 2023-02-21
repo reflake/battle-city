@@ -1,5 +1,6 @@
 ﻿using System;
 using Common;
+using Cysharp.Threading.Tasks;
 using Tanks;
 using UnityEngine;
 using Zenject;
@@ -94,8 +95,12 @@ namespace Tanks
             }
         }
 
-        public void Respawn()
+        public async UniTaskVoid Respawn()
         {
+            // TODO: show respawn animation
+            // Wait before respawn
+            await UniTask.Delay(TimeSpan.FromSeconds(1f), DelayType.DeltaTime, cancellationToken: this.GetCancellationTokenOnDestroy());
+
             if (!_spawnSet)
                 throw new Exception($"Spawn is not set for the tank {gameObject.name}");
         
