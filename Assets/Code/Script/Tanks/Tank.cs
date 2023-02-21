@@ -65,6 +65,8 @@ namespace Tanks
 
         void FixedUpdate()
         {
+            _rig.velocity = Vector2.zero;
+            
             if (_currentDirection != Direction.None)
             {
                 Vector2 inputWishDir = _currentDirection.ToVector();
