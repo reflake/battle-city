@@ -21,25 +21,14 @@ namespace Gameplay
 
 		bool _gameIsOver = false;
 		int waveStrength = 0;
-		Keyboard _kbDevice;
 
 		public async UniTaskVoid SetLevel(int levelNumber)
 		{
 			gameObject.SetActive(true);
 			
-			_kbDevice = InputSystem.GetDevice<Keyboard>();
-			
 			await _levelManager.SetLevel(levelNumber);
 
 			BeginGame();
-		}
-
-		void Update()
-		{
-			if (_kbDevice.escapeKey.IsPressed())
-			{
-				_sceneLoader.LoadSceneAsync("MainMenu", LoadSceneMode.Single);
-			}
 		}
 
 		public async UniTaskVoid LevelComplete()
