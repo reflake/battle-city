@@ -7,14 +7,15 @@ namespace Players
 {
 	public class Base : MonoBehaviour, IDestructible
 	{
-		[SerializeField] private SpriteRenderer spriteRenderer;
-		[SerializeField] private Sprite destroyedSprite;
-		[SerializeField] private Collider2D collider;
+		[SerializeField] SpriteRenderer spriteRenderer;
+		[SerializeField] Sprite destroyedSprite;
+		[SerializeField] Collider2D collider;
 
-		[Inject] private readonly GameManager _gameManager = null;
-	
+		// Event
+		public event BaseDestroyDelegate OnBaseDestroy;
+		
 		public bool Alive { get; private set; } = true;
-	
+
 		public void TakeDamage(DamageData _)
 		{
 			Alive = false;
@@ -23,7 +24,7 @@ namespace Players
 
 			collider.enabled = false;
 		
-			_gameManager.GameOver();
+			OnBaseDestroy?.Invoke();
 		}
 	}
 }

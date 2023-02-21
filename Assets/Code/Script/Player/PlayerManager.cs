@@ -1,5 +1,5 @@
 ﻿using Gameplay;
-using Tanks;
+using Players;
 using UI;
 using UnityEngine;
 using Zenject;
@@ -14,6 +14,7 @@ namespace Players
 		[Inject] readonly GameManager _gameManager;
 		[Inject] readonly Player.Factory _playerFactory;
 		[Inject] readonly PanelManager _panelManager;
+		[Inject] readonly Base _playerBase;
 	
 		public event DespawnPlayersDelegate OnDespawnPlayers;
 		public event SpawnPlayersDelegate OnSpawnPlayers;
@@ -28,6 +29,13 @@ namespace Players
 			player.SetPlayerSpawn(spawnPosition);
 
 			panel.HookPlayer(player);
+
+			_playerBase.OnBaseDestroy += BaseDestroy;
+		}
+
+		void BaseDestroy()
+		{
+			_gameManager.GameOver();
 		}
 
 		public void PlayerDefeated()

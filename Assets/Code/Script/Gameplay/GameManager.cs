@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Common;
+using Players;
 using Cysharp.Threading.Tasks;
 using Enemies;
-using Players;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
