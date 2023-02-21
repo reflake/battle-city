@@ -41,7 +41,7 @@ namespace Tanks
             const float shootOffset = .4f;
             var bullet = Instantiate(bulletPrefab, transform.position + transform.right * shootOffset, Quaternion.identity);
         
-            bullet.Shoot(shootDirection, Stats.projectileSpeed, Stats.firePower, 1 + Stats.damageBonus, _collider);
+            bullet.Shoot(shootDirection, Stats, _collider);
             bullet.WhenDestroyed(DecreaseBulletFiredCount);
 
             Face(shootDirection);
