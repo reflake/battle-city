@@ -57,6 +57,9 @@ namespace Players
 
 		void OnDestroy()
 		{
+			// Free unmanaged resources
+			_tankControls.Dispose();
+			
 			_tank.OnGetKilled -= PlayerKilled;
 		}
 

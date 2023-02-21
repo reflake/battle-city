@@ -73,6 +73,11 @@ namespace LevelDesigner
 			Destroy(_constructorPanel.gameObject);
 		}
 
+		void OnDestroy()
+		{
+			_controls.Dispose();
+		}
+
 		void MoveCursorInput(InputAction inputAction, int holdDelay, int holdInterval)
 		{
 			Vector2 moveDirection = Vector2.zero;
