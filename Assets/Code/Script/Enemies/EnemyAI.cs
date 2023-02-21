@@ -42,6 +42,8 @@ namespace Enemies
 		void EnemyKilled()
 		{
 			_enemyManager.EnemyKilled(this);
+			
+			Dispose();
 		}
 
 		void Start()
