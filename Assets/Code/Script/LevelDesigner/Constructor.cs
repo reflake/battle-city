@@ -70,7 +70,8 @@ namespace LevelDesigner
 
 		void OnDisable()
 		{
-			Destroy(_constructorPanel.gameObject);
+			if (_constructorPanel != null)
+				Destroy(_constructorPanel.gameObject);
 		}
 
 		void OnDestroy()
