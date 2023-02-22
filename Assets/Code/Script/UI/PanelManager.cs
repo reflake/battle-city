@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UI;
+using UI.MessageBox;
+using UI.MessageBox.Generic;
 using UnityEngine;
 using Zenject;
 using Object = UnityEngine.Object;
@@ -50,6 +54,20 @@ namespace UI
 			}
 
 			return CreatePanel<T>(prefabPath, tier);
+		}
+
+		public Builder<T> MessageBoxBuilder<T>(string prefabPath, int tier) where T : Enum
+		{
+			void Show(MessageBox<T> messageBoxInstance, AnswerDelegate answerDelegate)
+			{
+				var panel = CreatePanel<MessageBoxPanel>(prefabPath, tier);
+
+				panel.Setup(messageBoxInstance, answerDelegate);
+			}
+			
+			var builder = new Builder<T>(Show);
+
+			return builder;
 		}
 	}
 }
