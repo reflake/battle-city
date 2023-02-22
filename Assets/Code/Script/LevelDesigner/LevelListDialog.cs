@@ -97,9 +97,7 @@ namespace LevelDesigner
 			
 			_cts = new CancellationTokenSource();
 			
-			_saveNewButton.gameObject.SetActive(true);
-			_stubListItem.SetActive(true);
-			
+			SetSaveNewButton(true);
 			Open();
 
 			await UniTask.WaitUntil(() => _submitFile, cancellationToken: _cts.Token);
@@ -107,16 +105,14 @@ namespace LevelDesigner
 			
 			gameObject.SetActive(false);
 		}
-		
+
 		public async UniTask<LevelData> GetLoadFile()
 		{
 			_header.text = "Load file";
 			
 			_cts = new CancellationTokenSource();
 			
-			_saveNewButton.gameObject.SetActive(false);
-			_stubListItem.SetActive(false);
-			
+			SetSaveNewButton(false);
 			Open();
 
 			await UniTask.WaitUntil(() => _submitFile, cancellationToken: _cts.Token);
@@ -125,6 +121,12 @@ namespace LevelDesigner
 			Close();
 
 			return data;
+		}
+
+		void SetSaveNewButton(bool visible)
+		{
+			_saveNewButton.gameObject.SetActive(visible);
+			_stubListItem.SetActive(visible);
 		}
 	}
 }
