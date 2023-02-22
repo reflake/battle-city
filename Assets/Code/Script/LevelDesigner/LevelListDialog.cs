@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Common;
 using Cysharp.Threading.Tasks;
 using TMPro;
+using UI;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -15,6 +17,7 @@ namespace LevelDesigner
 		public static string prefabPath => "LevelListDialog";
 		
 		[Inject] readonly CustomLevelList _customLevelList = null;
+		[Inject] readonly PanelManager _panelManager = null;
 
 		[SerializeField] TMP_Text _header;
 		[SerializeField] LevelItem _itemPrefab;
@@ -27,6 +30,7 @@ namespace LevelDesigner
 		[SerializeField] Button _backgroundButton;
 		
 		List<LevelItem> _items;
+		bool _savingFile = false;
 		bool _submitFile = false;
 		string _selectedFileName = string.Empty;
 		CancellationTokenSource _cts = default;
@@ -42,17 +46,13 @@ namespace LevelDesigner
 		{
 			int index = 0;
 
-			LevelItem CreateItem(string name)
+			LevelItem CreateItem(string fileName)
 			{
 				var item = Instantiate(_itemPrefab, _contentHolder);
 
-				item.Name = name;
+				item.Name = fileName;
 				item.SetBackgroundColor(index++ % 2 == 0 ? _evenItemColor : _oddItemColor);
-				item.ClickCallback = () =>
-				{
-					_submitFile = true;
-					_selectedFileName = name;
-				};
+				item.ClickCallback = () => SubmitSaveNewFile(fileName);
 			
 				return item;
 			}
@@ -85,10 +85,33 @@ namespace LevelDesigner
 			gameObject.SetActive(false);
 		}
 		
-		void SubmitSaveNewFile(string fileName)
+		async void SubmitSaveNewFile(string fileName)
 		{
+			if (_customLevelList.LevelNames.Contains(fileName))
+			{
+				var permissionGranted = await AskForPermissionToOverwrite(fileName);
+
+				if (!permissionGranted)
+				{
+					return;
+				}
+			}
 			_submitFile = true;
 			_selectedFileName = fileName;
+		}
+
+		async UniTask<bool> AskForPermissionToOverwrite(string fileName)
+		{
+			var builder = _panelManager.MessageBoxBuilder<AcceptOptions>("MessageBox", 3);
+
+			var messageBox = builder
+				.Description($"File {fileName} already exists. Do you want to overwrite it?")
+				.AddOption(AcceptOptions.OK, "Overwrite")
+				.AddOption(AcceptOptions.Cancel, "Cancel")
+				.DefaultOptions(AcceptOptions.Cancel)
+				.Build();
+
+			return (await messageBox.AsyncShow()) == AcceptOptions.OK;
 		}
 
 		public async UniTask GetSaveFile(LevelData levelData)
@@ -125,6 +148,7 @@ namespace LevelDesigner
 
 		void SetSaveNewButton(bool visible)
 		{
+			_savingFile = visible;
 			_saveNewButton.gameObject.SetActive(visible);
 			_stubListItem.SetActive(visible);
 		}
