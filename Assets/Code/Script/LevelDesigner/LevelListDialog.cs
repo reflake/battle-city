@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 namespace LevelDesigner
@@ -21,10 +23,20 @@ namespace LevelDesigner
 		[SerializeField] Transform _contentHolder;
 		[SerializeField] SaveNewButton _saveNewButton;
 		[SerializeField] GameObject _stubListItem;
+		[SerializeField] Button _closeButton;
+		[SerializeField] Button _backgroundButton;
 		
 		List<LevelItem> _items;
 		bool _submitFile = false;
 		string _selectedFileName = string.Empty;
+		CancellationTokenSource _cts = default;
+
+		void Awake()
+		{
+			_saveNewButton.OnSubmit += SubmitSaveNewFile;
+			_closeButton.onClick.AddListener(Close);
+			_backgroundButton.onClick.AddListener(Close);
+		}
 
 		void OnEnable()
 		{
@@ -49,7 +61,6 @@ namespace LevelDesigner
 				.Select(CreateItem)
 				.ToList();
 
-			_saveNewButton.OnSubmit += SubmitSaveNewFile;
 		}
 
 		void OnDisable()
@@ -60,10 +71,20 @@ namespace LevelDesigner
 			}
 
 			_items = null;
-
-			_saveNewButton.OnSubmit -= SubmitSaveNewFile;
+			
+			_cts.Cancel();
 		}
 
+		void Open()
+		{
+			gameObject.SetActive(true);
+		}
+		
+		void Close()
+		{
+			gameObject.SetActive(false);
+		}
+		
 		void SubmitSaveNewFile(string fileName)
 		{
 			_submitFile = true;
@@ -72,35 +93,36 @@ namespace LevelDesigner
 
 		public async UniTask GetSaveFile(LevelData levelData)
 		{
-			_saveNewButton.gameObject.SetActive(true);
+			_header.text = "Save file";
 			
-			// activate stub so it takes up some space
+			_cts = new CancellationTokenSource();
+			
+			_saveNewButton.gameObject.SetActive(true);
 			_stubListItem.SetActive(true);
 			
-			gameObject.SetActive(true);
-			
-			_header.text = "Save file";
+			Open();
 
-			await UniTask.WaitUntil(() => _submitFile);
-			await _customLevelList.WriteLevel(_selectedFileName, levelData, this.GetCancellationTokenOnDestroy());
+			await UniTask.WaitUntil(() => _submitFile, cancellationToken: _cts.Token);
+			await _customLevelList.WriteLevel(_selectedFileName, levelData, _cts.Token);
 			
 			gameObject.SetActive(false);
 		}
 		
 		public async UniTask<LevelData> GetLoadFile()
 		{
-			_saveNewButton.gameObject.SetActive(false);
+			_header.text = "Load file";
 			
+			_cts = new CancellationTokenSource();
+			
+			_saveNewButton.gameObject.SetActive(false);
 			_stubListItem.SetActive(false);
 			
-			gameObject.SetActive(true);
-			
-			_header.text = "Load file";
+			Open();
 
-			await UniTask.WaitUntil(() => _submitFile);
-			var data = await _customLevelList.ReadLevel(_selectedFileName, this.GetCancellationTokenOnDestroy());
+			await UniTask.WaitUntil(() => _submitFile, cancellationToken: _cts.Token);
+			var data = await _customLevelList.ReadLevel(_selectedFileName, _cts.Token);
 			
-			gameObject.SetActive(false);
+			Close();
 
 			return data;
 		}
