@@ -19,12 +19,14 @@ namespace LevelDesigner
 		[SerializeField] Color _evenItemColor;
 		[SerializeField] Color _oddItemColor;
 		[SerializeField] Transform _contentHolder;
+		[SerializeField] SaveNewButton _saveNewButton;
+		[SerializeField] GameObject _stubListItem;
 		
 		List<LevelItem> _items;
-		bool _fileSelected = false;
-		string _selectedFile = string.Empty;
+		bool _submitFile = false;
+		string _selectedFileName = string.Empty;
 
-		void Start()
+		void OnEnable()
 		{
 			int index = 0;
 
@@ -36,8 +38,8 @@ namespace LevelDesigner
 				item.SetBackgroundColor(index++ % 2 == 0 ? _evenItemColor : _oddItemColor);
 				item.ClickCallback = () =>
 				{
-					_fileSelected = true;
-					_selectedFile = name;
+					_submitFile = true;
+					_selectedFileName = name;
 				};
 			
 				return item;
@@ -46,25 +48,59 @@ namespace LevelDesigner
 			_items = _customLevelList.LevelNames
 				.Select(CreateItem)
 				.ToList();
+
+			_saveNewButton.OnSubmit += SubmitSaveNewFile;
 		}
 
-		public async UniTask<string> GetSaveFile(LevelData levelData)
+		void OnDisable()
 		{
+			foreach (var item in _items)
+			{
+				Destroy(item.gameObject);
+			}
+
+			_items = null;
+
+			_saveNewButton.OnSubmit -= SubmitSaveNewFile;
+		}
+
+		void SubmitSaveNewFile(string fileName)
+		{
+			_submitFile = true;
+			_selectedFileName = fileName;
+		}
+
+		public async UniTask GetSaveFile(LevelData levelData)
+		{
+			_saveNewButton.gameObject.SetActive(true);
+			
+			// activate stub so it takes up some space
+			_stubListItem.SetActive(true);
+			
+			gameObject.SetActive(true);
+			
 			_header.text = "Save file";
 
-			throw new NotImplementedException();
-
-			// await _customLevelList.WriteLevel(fileName, data, this.GetCancellationTokenOnDestroy());
+			await UniTask.WaitUntil(() => _submitFile);
+			await _customLevelList.WriteLevel(_selectedFileName, levelData, this.GetCancellationTokenOnDestroy());
+			
+			gameObject.SetActive(false);
 		}
 		
 		public async UniTask<LevelData> GetLoadFile()
 		{
+			_saveNewButton.gameObject.SetActive(false);
+			
+			_stubListItem.SetActive(false);
+			
+			gameObject.SetActive(true);
+			
 			_header.text = "Load file";
 
-			await UniTask.WaitUntil(() => _fileSelected);
-			var data = await _customLevelList.ReadLevel(_selectedFile, this.GetCancellationTokenOnDestroy());
+			await UniTask.WaitUntil(() => _submitFile);
+			var data = await _customLevelList.ReadLevel(_selectedFileName, this.GetCancellationTokenOnDestroy());
 			
-			Destroy(this.gameObject);
+			gameObject.SetActive(false);
 
 			return data;
 		}

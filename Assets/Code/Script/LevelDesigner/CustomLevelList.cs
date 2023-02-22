@@ -31,6 +31,7 @@ namespace LevelDesigner
 
 		void UpdateList()
 		{
+			_levelNames.Clear();
 			_levelNames.AddRange(
 				Directory.GetFiles(levelsDirectory, "*.bytes")
 					.Select(levelPath => Path.GetFileNameWithoutExtension(levelPath)));

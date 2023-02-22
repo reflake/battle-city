@@ -29,7 +29,7 @@ namespace LevelDesigner
 
 		LevelListDialog CreateListPanel()
 		{
-			return _panelManager.CreatePanel<LevelListDialog>(LevelListDialog.prefabPath, 3);
+			return _panelManager.UsePanel<LevelListDialog>(LevelListDialog.prefabPath, 3, "LevelListDialog");
 		}
 
 		async UniTaskVoid SaveLevel()
