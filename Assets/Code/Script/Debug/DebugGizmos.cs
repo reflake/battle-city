@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 public class DebugGizmos : MonoBehaviour
 {
-	struct Box
+	class Box
 	{
-		public float TimeToLife;
 		public Bounds Bounds;
 	}
 	
@@ -20,25 +20,25 @@ public class DebugGizmos : MonoBehaviour
 		Instance = this;
 	}
 
-	public void DrawBox(Bounds bounds)
+	public async UniTaskVoid DrawBox(Bounds bounds)
 	{
 		#if UNITY_EDITOR
-		
-		boxes.Add(new Box
+
+		Box box = new Box
 		{
-			TimeToLife = Time.unscaledTime + 1.5f,
 			Bounds = bounds
-		});
+		};
 		
-		#endif
+		boxes.Add(box);
+
+		await UniTask.Delay(1500);
+
+		boxes.Remove(box);
+
+#endif
 	}
 
 #if UNITY_EDITOR
-
-	void LateUpdate()
-	{
-		boxes.RemoveAll(box => box.TimeToLife < Time.unscaledTime);
-	}
 
 	void OnDrawGizmos()
 	{
