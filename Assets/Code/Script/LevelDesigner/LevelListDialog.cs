@@ -44,6 +44,15 @@ namespace LevelDesigner
 
 		void OnEnable()
 		{
+			UpdateList(_customLevelList.LevelNames);
+
+			_customLevelList.OnListUpdated += UpdateList;
+		}
+
+		void UpdateList(IReadOnlyList<string> listOfLevels)
+		{
+			Clear();
+			
 			int index = 0;
 
 			LevelItem CreateItem(string fileName)
@@ -52,27 +61,47 @@ namespace LevelDesigner
 
 				item.Name = fileName;
 				item.SetBackgroundColor(index++ % 2 == 0 ? _evenItemColor : _oddItemColor);
-				item.ClickCallback = () => SubmitSaveNewFile(fileName);
-			
+				item.SelectedCallback = () =>
+				{
+					if (_savingFile)
+					{
+						SubmitSaveNewFile(fileName);
+					}
+					else
+					{
+						SubmitLoad(fileName);
+					}
+				};
+				item.DeleteCallback = () => AskForDeletion(fileName);
+
 				return item;
 			}
-			
-			_items = _customLevelList.LevelNames
+
+			_items = listOfLevels
 				.Select(CreateItem)
 				.ToList();
-
 		}
 
 		void OnDisable()
 		{
-			foreach (var item in _items)
-			{
-				Destroy(item.gameObject);
-			}
+			Clear();
 
-			_items = null;
-			
 			_cts.Cancel();
+
+			_customLevelList.OnListUpdated -= UpdateList;
+		}
+
+		void Clear()
+		{
+			if (_items != null)
+			{
+				foreach (var item in _items)
+				{
+					Destroy(item.gameObject);
+				}
+
+				_items = null;
+			}
 		}
 
 		void Open()
@@ -100,6 +129,12 @@ namespace LevelDesigner
 			_selectedFileName = fileName;
 		}
 
+		void SubmitLoad(string fileName)
+		{
+			_submitFile = true;
+			_selectedFileName = fileName;
+		}
+
 		async UniTask<bool> AskForPermissionToOverwrite(string fileName)
 		{
 			var builder = _panelManager.MessageBoxBuilder<AcceptOptions>("MessageBox", 3);
@@ -107,6 +142,30 @@ namespace LevelDesigner
 			var messageBox = builder
 				.Description($"File {fileName} already exists. Do you want to overwrite it?")
 				.AddOption(AcceptOptions.OK, "Overwrite")
+				.AddOption(AcceptOptions.Cancel, "Cancel")
+				.DefaultOptions(AcceptOptions.Cancel)
+				.Build();
+
+			return (await messageBox.AsyncShow()) == AcceptOptions.OK;
+		}
+
+		async void AskForDeletion(string fileName)
+		{
+			var permissionGranted = await AskForPermissionToDelete(fileName);
+
+			if (permissionGranted)
+			{
+				_customLevelList.DeleteLevel(fileName);
+			}
+		}
+
+		async UniTask<bool> AskForPermissionToDelete(string fileName)
+		{
+			var builder = _panelManager.MessageBoxBuilder<AcceptOptions>("MessageBox", 3);
+
+			var messageBox = builder
+				.Description($"Do you really want to delete file {fileName}?")
+				.AddOption(AcceptOptions.OK, "Delete")
 				.AddOption(AcceptOptions.Cancel, "Cancel")
 				.DefaultOptions(AcceptOptions.Cancel)
 				.Build();

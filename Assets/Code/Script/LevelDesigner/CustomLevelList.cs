@@ -15,6 +15,8 @@ namespace LevelDesigner
 		public IReadOnlyList<string> LevelNames => _levelNames;
 
 		List<string> _levelNames = new();
+
+		public event Action<IReadOnlyList<string>> OnListUpdated;
 		
 #if UNITY_EDITOR
 		string levelsDirectory => $"{Application.dataPath}/Resources/Level";
@@ -35,6 +37,8 @@ namespace LevelDesigner
 			_levelNames.AddRange(
 				Directory.GetFiles(levelsDirectory, "*.bytes")
 					.Select(levelPath => Path.GetFileNameWithoutExtension(levelPath)));
+			
+			OnListUpdated?.Invoke(_levelNames);
 		}
 
 		public string GetFilePath(string levelName) => $"{levelsDirectory}/{levelName}.bytes";
@@ -69,6 +73,17 @@ namespace LevelDesigner
 
 				await File.WriteAllBytesAsync(filePath, memoryStreamData.ToArray(), cancellationToken);
 			}
+			
+			UpdateList();
+		}
+
+		public void DeleteLevel(string fileName)
+		{
+			var filePath = GetFilePath(fileName);
+			
+			_levelNames.Remove(fileName);
+
+			File.Delete(filePath);
 			
 			UpdateList();
 		}

@@ -1309,10 +1309,15 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4658473502055899036, guid: f6c3e6b9b1659da49bee78d2d5089eec,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6523608965802324423, guid: f6c3e6b9b1659da49bee78d2d5089eec,
         type: 3}
       propertyPath: m_Name
-      value: LevelItem
+      value: StubItem
       objectReference: {fileID: 0}
     - target: {fileID: 7613219578115937470, guid: f6c3e6b9b1659da49bee78d2d5089eec,
         type: 3}

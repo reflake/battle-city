@@ -11,12 +11,15 @@ namespace LevelDesigner
 		[SerializeField] TMP_Text _nameLabel;
 		[SerializeField] Image _background;
 		[SerializeField] Button _button;
+		[SerializeField] Button _deleteButton;
 
-		public Action ClickCallback;
+		public Action SelectedCallback;
+		public Action DeleteCallback;
 
 		void Awake()
 		{
-			_button.onClick.AddListener(Click);
+			_button.onClick.AddListener(SelectClicked);
+			_deleteButton.onClick.AddListener(DeleteClicked);
 		}
 
 		public string Name
@@ -31,9 +34,14 @@ namespace LevelDesigner
 			_background.color = color;
 		}
 		
-		void Click()
+		void SelectClicked()
 		{
-			ClickCallback?.Invoke();
+			SelectedCallback?.Invoke();
+		}
+
+		void DeleteClicked()
+		{
+			DeleteCallback?.Invoke();
 		}
 	}
 }
