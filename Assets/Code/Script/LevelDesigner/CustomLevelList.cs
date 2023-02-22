@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -37,13 +38,13 @@ namespace LevelDesigner
 
 		public string GetFilePath(string levelName) => $"{levelsDirectory}/{levelName}.bytes";
 
-		public async UniTask<LevelData> ReadLevel(string levelName)
+		public async UniTask<LevelData> ReadLevel(string levelName, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if (!_levelNames.Contains(levelName))
 				throw new Exception($"File {levelName} not found");
 
 			var filePath = GetFilePath(levelName);
-			var binaryData = await File.ReadAllBytesAsync(filePath);
+			var binaryData = await File.ReadAllBytesAsync(filePath, cancellationToken);
 			
 			IFormatter formatter = new BinaryFormatter();
 
@@ -55,7 +56,7 @@ namespace LevelDesigner
 			}
 		}
 
-		public async UniTask WriteLevel(string levelName, LevelData levelData)
+		public async UniTask WriteLevel(string levelName, LevelData levelData, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			var filePath = GetFilePath(levelName);
 
@@ -65,7 +66,7 @@ namespace LevelDesigner
 			{
 				formatter.Serialize(memoryStreamData, levelData);
 
-				await File.WriteAllBytesAsync(filePath, memoryStreamData.ToArray());
+				await File.WriteAllBytesAsync(filePath, memoryStreamData.ToArray(), cancellationToken);
 			}
 			
 			UpdateList();
