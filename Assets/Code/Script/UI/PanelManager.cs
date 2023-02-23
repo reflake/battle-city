@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UI;
@@ -29,9 +30,15 @@ namespace UI
 				var newTierTransform = Instantiate(tierPrefab, transform);
 
 				newTierTransform.name = $"Tier {tier}";
-				newTierTransform.SetSiblingIndex(tier);
 			
 				_tiersTransforms[tier] = newTierTransform.transform;
+
+				int index = 0;
+				
+				foreach (var kvp in _tiersTransforms.OrderBy(x => x.Key))
+				{
+					kvp.Value.SetSiblingIndex(index++);
+				}
 			}
 
 			var panel = _panelFactory.Create<T>(prefabPath, _tiersTransforms[tier]);

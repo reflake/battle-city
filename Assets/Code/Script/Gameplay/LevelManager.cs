@@ -24,7 +24,7 @@ namespace Gameplay
 
 		void Awake()
 		{
-			_panel = _panelManager.CreatePanel<TransitionScreen>(TransitionScreen.prefabPath, 1);
+			_panel = _panelManager.CreatePanel<TransitionScreen>(TransitionScreen.prefabPath, 3);
 		}
 
 		void OnDestroy()
