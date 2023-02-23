@@ -7,9 +7,9 @@ namespace Enemies
 	{
 		public class Factory : PlaceholderFactory<EnemyData, Vector2, EnemyAI>
 		{
-			public override EnemyAI Create(EnemyData param1, Vector2 param2)
+			public override EnemyAI Create(EnemyData enemyData, Vector2 spawnPosition)
 			{
-				var enemy = base.Create(param1, param2);
+				var enemy = base.Create(enemyData, spawnPosition);
 
 				enemy.gameObject.SetActive(false);
 				

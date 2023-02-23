@@ -1,6 +1,6 @@
 ﻿namespace Scene
 {
-	public class MainMenuTransitionData
+	public class StartGameConfiguration
 	{
 		public bool constructorMode;
 		public int levelNumber;

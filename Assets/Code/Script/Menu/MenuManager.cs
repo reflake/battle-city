@@ -23,34 +23,26 @@ namespace Menu
 			exitButton.onClick.AddListener(Exit);
 		}
 
+		async UniTaskVoid LoadGameplayScene(StartGameConfiguration configuration)
+		{
+			await _sceneLoader.LoadSceneAsync("Gameplay", LoadSceneMode.Single, container =>
+			{
+				container.BindInstance(configuration);
+			});
+		}
+
 		void StartGame()
 		{
-			async UniTaskVoid LoadGameplay()
+			LoadGameplayScene(new StartGameConfiguration
 			{
-				await _sceneLoader.LoadSceneAsync("Gameplay", LoadSceneMode.Single, container =>
-				{
-					container.BindInstance(new MainMenuTransitionData
-					{
-						constructorMode = false,
-						levelNumber = 0,
-					});
-				});
-			}
-			
-			LoadGameplay();
+				constructorMode = false,
+				levelNumber = 0,
+			});
 		}
 
 		void LaunchConstructorMode()
 		{
-			async UniTaskVoid LoadConstructorMode()
-			{
-				await _sceneLoader.LoadSceneAsync("Gameplay", LoadSceneMode.Single, container =>
-				{
-					container.BindInstance(new MainMenuTransitionData { constructorMode = true, });
-				});
-			}
-
-			LoadConstructorMode();
+			LoadGameplayScene(new StartGameConfiguration { constructorMode = true, });
 		}
 
 		void Exit()

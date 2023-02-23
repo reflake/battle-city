@@ -5,9 +5,8 @@ using Cysharp.Threading.Tasks;
 using Enemies;
 using LevelDesigner;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using Zenject;
+using Scene;
 
 namespace Gameplay
 {
@@ -16,7 +15,7 @@ namespace Gameplay
 		[Inject] readonly LevelManager _levelManager;
 		[Inject] readonly EnemyManager _enemyManager;
 		[Inject] readonly PlayerManager _playerManager;
-		[Inject] readonly ZenjectSceneLoader _sceneLoader;
+		[Inject] readonly SceneManager _sceneManager;
 	
 		public event GameOverDelegate OnGameOver;
 
@@ -69,10 +68,8 @@ namespace Gameplay
 		async UniTaskVoid TransitToMainMenu()
 		{
 			await UniTask.Delay(TimeSpan.FromSeconds(5f), DelayType.Realtime, PlayerLoopTiming.Update);
-			await _sceneLoader.LoadSceneAsync("MainMenu", LoadSceneMode.Single, container =>
-			{
-				// TODO: maybe pass HiScore there to highlight it in main menu
-			});
+			
+			_sceneManager.MoveToMenu();
 		}
 	}
 }

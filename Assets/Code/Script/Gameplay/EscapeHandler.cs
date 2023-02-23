@@ -1,14 +1,14 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using Zenject;
+using Scene;
 
 namespace Gameplay
 {
 	public class EscapeHandler : MonoBehaviour
 	{
-		[Inject] readonly ZenjectSceneLoader _sceneLoader;
+		[Inject] readonly SceneManager _sceneManager;
 		
 		Keyboard _kbDevice;
 
@@ -21,7 +21,7 @@ namespace Gameplay
 		{
 			if (_kbDevice.escapeKey.IsPressed())
 			{
-				_sceneLoader.LoadSceneAsync("MainMenu", LoadSceneMode.Single);
+				_sceneManager.MoveToMenu();
 			}
 		}
 	}
