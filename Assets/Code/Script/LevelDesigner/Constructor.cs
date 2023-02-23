@@ -11,6 +11,7 @@ using UI;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using ModestTree;
+using Project;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
@@ -29,6 +30,7 @@ namespace LevelDesigner
 
 		[Inject] readonly BattleField _battleField;
 		[Inject] readonly PanelManager _panelManager;
+		[Inject] readonly CustomLevelContext _customLevelContext = null;
 		
 		bool _holdPaint = false;
 		bool samePlace = false;
@@ -59,8 +61,15 @@ namespace LevelDesigner
 				// Flicker Easing
 				.SetEase((time, duration, _, __) => time > duration * .5f ? 1f : 0f)
 				.SetLoops(-1);
-			
-			LoadChunk("Base");
+
+			if (_customLevelContext.HasCustomLevelForNewGame)
+			{
+				LoadLevelData(_customLevelContext.GetNewGameLevel());
+			}
+			else
+			{
+				LoadChunk("Base");
+			}
 		}
 
 		void OnEnable()
@@ -210,6 +219,13 @@ namespace LevelDesigner
 			var data = formatter.Deserialize(file) as LevelData;
 
 			LoadLevelData(data);
+		}
+
+		public void SetNewGameCustomLevel()
+		{
+			var customLevelData = GetLevelData();
+
+			_customLevelContext.SetNewGameLevel(customLevelData);
 		}
 	}
 }

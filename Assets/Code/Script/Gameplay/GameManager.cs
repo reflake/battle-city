@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Players;
 using Cysharp.Threading.Tasks;
 using Enemies;
+using LevelDesigner;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -22,11 +23,11 @@ namespace Gameplay
 		bool _gameIsOver = false;
 		int waveStrength = 0;
 
-		public async UniTaskVoid SetLevel(int levelNumber)
+		public async UniTaskVoid StartLevel(int levelNumber, LevelData customLevelData = null)
 		{
 			gameObject.SetActive(true);
 			
-			await _levelManager.SetLevel(levelNumber);
+			await _levelManager.SetLevel(levelNumber, customLevelData);
 
 			BeginGame();
 		}

@@ -32,48 +32,68 @@ namespace Gameplay
 			Destroy(_panel);
 		}
 
-		public async UniTask SetLevel(int levelNumber)
+		public async UniTask SetLevel(int levelNumber, LevelData customLevelData = null)
 		{
 			_currentLevel = levelNumber;
 
-			await LoadLevel(_currentLevel);
+			await ShowLevelTransition(levelNumber);
+
+			if (customLevelData != null)
+			{
+				_constructor.LoadLevelData(customLevelData);
+			}
+			else
+			{ 
+				var levelData = await LoadLevel(levelNumber);
+				
+				_constructor.LoadLevelData(levelData);
+			}
+			
+			
+			await HideLevelTransition();
 		}
 	
 		public async UniTask NextLevel()
 		{
 			_currentLevel = (_currentLevel + 1) % levelList.Length;
-		
-			await LoadLevel(_currentLevel);
+
+			await ShowLevelTransition(_currentLevel);
+			var levelData = await LoadLevel(_currentLevel);
+			
+			_constructor.LoadLevelData(levelData);
+			
+			await HideLevelTransition();
 		}
 
-		async UniTask LoadLevel(int index)
+		async Task ShowLevelTransition(int levelIndex)
 		{
 			// need to switch to main thread so animations play
 			await UniTask.SwitchToMainThread();
-			_panel.Show(index + 1);
+			_panel.Show(levelIndex + 1);
+		}
 
-			var levelDataPath = $"Level/{levelList[index]}";
-			
-			await LoadLevel(levelDataPath);
+		async Task HideLevelTransition()
+		{
 			await Task.Delay(2000, this.GetCancellationTokenOnDestroy());
 
 			// Level loaded, ready to play
 			_panel.Hide();
 		}
 
-		async UniTask LoadLevel(string path)
+		async UniTask<LevelData> LoadLevel(int index)
 		{
+			var levelDataPath = $"Level/{levelList[index]}";
+			
 			// Assets can be loaded only on main thread
 			await UniTask.SwitchToMainThread();
 		
-			var asset = (await Resources.LoadAsync<TextAsset>(path).WithCancellation(this.GetCancellationTokenOnDestroy())) as TextAsset;
+			var asset = (await Resources.LoadAsync<TextAsset>(levelDataPath)
+										.WithCancellation(this.GetCancellationTokenOnDestroy())) as TextAsset;
 
 			using var file = new MemoryStream(asset.bytes);
-			IFormatter formatter = new BinaryFormatter();
+			var formatter = new BinaryFormatter();
 
-			var data = formatter.Deserialize(file) as LevelData;
-		
-			_constructor.LoadLevelData(data);
+			return formatter.Deserialize(file) as LevelData;
 		}
 	}
 }

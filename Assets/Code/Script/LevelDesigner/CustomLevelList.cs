@@ -27,8 +27,6 @@ namespace LevelDesigner
 		void Start()
 		{
 			UpdateList();
-
-			Debug.Log(string.Join("\n",_levelNames));
 		}
 
 		void UpdateList()
