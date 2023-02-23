@@ -43,8 +43,6 @@ namespace Players
 		void Awake()
 		{
 			_tankControls = new TankControls();
-		
-			SetControlsEnabled(true);
 
 			// Bind inputs to tank actions
 			var movement = _tankControls.Movement;
@@ -53,6 +51,16 @@ namespace Players
 			BindInputMoveDirections("Vertical", movement.Vertical, Direction.North, Direction.South);
 
 			_tankControls.Action.Shoot.started += ShootInputPressed;
+		}
+
+		void OnEnable()
+		{
+			SetControlsEnabled(true);
+		}
+
+		void OnDisable()
+		{
+			SetControlsEnabled(false);
 		}
 
 		void OnDestroy()
