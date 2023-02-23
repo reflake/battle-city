@@ -64,14 +64,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 006d48b3022b51841be6af78cb1c6409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
-  maxHp: 1
+  bulletExplosionEffect:
+    period: 0.05
+    sprites:
+    - {fileID: -738345916, guid: effa20817c4656c4db488b6c46f956dc, type: 3}
+    - {fileID: 385265736, guid: effa20817c4656c4db488b6c46f956dc, type: 3}
+    - {fileID: -354553781, guid: effa20817c4656c4db488b6c46f956dc, type: 3}
+    duration: 0.15
   bulletPrefab: {fileID: 2762107655628412679, guid: cf0809c4cd0208b4ebc983190b5bbb7e,
     type: 3}
-  sprites: {fileID: 11400000, guid: 219f808495051cf46976f5b606ff9710, type: 2}
-  FirePower: 1
-  FireRate: 1
-  ProjectileSpeed: 0.6
+  <Stats>k__BackingField:
+    hitPoints: 0
+    fireRate: 0
+    firePower: 0
+    damageBonus: 0
+    moveSpeed: 0
+    projectileSpeed: 0
 --- !u!212 &4416856508075162247
 SpriteRenderer:
   m_ObjectHideFlags: 0

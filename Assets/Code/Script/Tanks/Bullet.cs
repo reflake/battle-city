@@ -17,7 +17,7 @@ namespace Tanks
         Direction _direction;
         int _firePower;
         int _damage;
-        Action _destroyCallback;
+        BulletHitDelegate _hitCallback;
         RaycastHit2D[] _raycastResults = new RaycastHit2D[16];
         Collider2D _ignoreCollider;
 
@@ -37,9 +37,9 @@ namespace Tanks
             rig.velocity = linearVelocity;
         }
 
-        public void WhenDestroyed(Action callback)
+        public void WhenDestroyed(BulletHitDelegate callback)
         {
-            _destroyCallback = callback;
+            _hitCallback = callback;
         }
     
         void FixedUpdate()
@@ -61,7 +61,7 @@ namespace Tanks
 
             HitSomething(closestImpactPoint.transform, closestImpactPoint.point);
             
-            _destroyCallback?.Invoke();
+            _hitCallback?.Invoke(closestImpactPoint.point);
             Destroy(gameObject);
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using Common;
 using Cysharp.Threading.Tasks;
+using Effects;
 using Tanks;
 using UnityEngine;
 using Zenject;
@@ -9,10 +10,12 @@ namespace Tanks
 {
     public class Tank : MonoBehaviour, IDestructible
     {
-        [Space]
+        [Space] 
+        [SerializeField] AnimationData bulletExplosionEffect;
         [SerializeField] Bullet bulletPrefab;
         [field: SerializeField] public Stats Stats { get; set; } = default;
 
+        [Inject] readonly EffectManager _effectManager = null;
         [Inject] readonly SpriteRenderer _spriteRenderer = null;
         [Inject] readonly Rigidbody2D _rig = null;
         [Inject] readonly Collider2D _collider = null;
@@ -42,15 +45,16 @@ namespace Tanks
             var bullet = Instantiate(bulletPrefab, transform.position + transform.right * shootOffset, Quaternion.identity);
         
             bullet.Shoot(shootDirection, Stats, _collider);
-            bullet.WhenDestroyed(DecreaseBulletFiredCount);
+            bullet.WhenDestroyed(BulletHit);
 
             Face(shootDirection);
 
             _bulletsFired++;
         }
 
-        void DecreaseBulletFiredCount()
+        void BulletHit(Vector2 impactPoint)
         {
+            _effectManager.CreateEffect(impactPoint, bulletExplosionEffect);
             _bulletsFired--;
         }
 
