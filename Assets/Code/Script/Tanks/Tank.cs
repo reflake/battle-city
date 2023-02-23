@@ -38,6 +38,9 @@ namespace Tanks
 
         public void Shoot(Direction shootDirection)
         {
+            if (!Alive || !gameObject.activeSelf)
+                return;
+            
             if (_bulletsFired >= Stats.fireRate)
                 return;
 
