@@ -10,9 +10,11 @@ namespace Tanks
 {
     public class Tank : MonoBehaviour, IDestructible
     {
+        [SerializeField] AnimationData _blowUpEffectAnimationData = default;
         [field: SerializeField] public Stats Stats { get; set; } = default;
 
         [Inject] readonly Bullet.Factory _bulletFactory = null;
+        [Inject] readonly EffectManager _effectManager = null;
         [Inject] readonly SpriteRenderer _spriteRenderer = null;
         [Inject] readonly Rigidbody2D _rig = null;
         [Inject] readonly Collider2D _collider = null;
@@ -94,6 +96,8 @@ namespace Tanks
             {
                 Alive = false;
 
+                _effectManager.CreateEffect(transform.position, _blowUpEffectAnimationData);
+                
                 gameObject.SetActive(false);
             
                 OnGetKilled?.Invoke();

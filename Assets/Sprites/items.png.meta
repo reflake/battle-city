@@ -323,7 +323,7 @@ TextureImporter:
         width: 80
         height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -344,7 +344,7 @@ TextureImporter:
         width: 80
         height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -365,7 +365,7 @@ TextureImporter:
         width: 80
         height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -373,6 +373,48 @@ TextureImporter:
       bones: []
       spriteID: 895ed5fbfca667543ad504e834dc6563
       internalID: -354553781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: exp_d
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 480
+        width: 160
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 83e2b29d40dc6fb4ebed194dbe9f1468
+      internalID: -1220823167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: exp_e
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 480
+        width: 160
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e2b2f3ce77575845a93d0d50fc18be1
+      internalID: -2115418943
       vertices: []
       indices: 
       edges: []
@@ -392,6 +434,7 @@ TextureImporter:
       base_destroyed: -174071365
       items_4: 77380524
       bonus_upgrade: 281259021
+      exp_d: -1220823167
       exp_b: 385265736
       items_1: 1301138890
       base: -749806917
@@ -400,6 +443,7 @@ TextureImporter:
       bullet: 181167999
       items_6: -1240255257
       exp_c: -354553781
+      exp_e: -2115418943
       exp_a: -738345916
   spritePackingTag: 
   pSDRemoveMatte: 0
