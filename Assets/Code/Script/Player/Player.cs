@@ -177,14 +177,6 @@ namespace Players
 			_tank.Respawn();
 		}
 
-		void OnTriggerEnter2D(Collider2D other)
-		{
-			if (other.TryGetComponent<PowerUp>(out var powerUp))
-			{
-				powerUp.PickupByPlayer(this);
-			}
-		}
-
 		public void UpgradeTank()
 		{
 			_upgradeLevel++;

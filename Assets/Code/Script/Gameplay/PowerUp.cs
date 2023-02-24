@@ -1,4 +1,5 @@
-﻿using Players;
+﻿using System;
+using Players;
 using Tanks;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace Gameplay
 	{
 		bool _picked = false;
 	
-		public void PickupByPlayer(Player player)
+		void PickupByPlayer(Player player)
 		{
 			if (_picked)
 				return;
@@ -18,6 +19,14 @@ namespace Gameplay
 			_picked = true;
 		
 			Destroy(gameObject);
+		}
+
+		void OnTriggerEnter2D(Collider2D other)
+		{
+			if (other.TryGetComponent<Player>(out var player))
+			{
+				PickupByPlayer(player);
+			}
 		}
 	}
 }
