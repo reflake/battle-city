@@ -27,50 +27,50 @@ namespace Tiles
 
 		public void TakeDamage(DamageData damageData)
 		{
-			if (Alive && damageData.damage >= durability)
-			{
-				const float half = 1 / 2f;
-				float penetrationAbility = damageData.firePower;
-				Vector2 impactPosition = damageData.position;
-				Bounds damageBounds = new Bounds();
-				Vector2 penetrationForward = damageData.directionVector;
-				Vector2 penetrationSide = Vector2.Perpendicular(penetrationForward);
-				
-				// Create hit box
-				damageBounds.Encapsulate(penetrationForward * half * penetrationAbility);
-				damageBounds.Encapsulate(penetrationSide);
-				
-				damageBounds.center = impactPosition;
+			const float half = 1 / 2f;
+			float penetrationAbility = damageData.firePower;
+			Vector2 impactPosition = damageData.position;
+			Bounds damageBounds = new Bounds();
+			Vector2 penetrationForward = damageData.directionVector;
+			Vector2 penetrationSide = Vector2.Perpendicular(penetrationForward);
+			
+			// Create hit box
+			damageBounds.Encapsulate(penetrationForward * half * penetrationAbility);
+			damageBounds.Encapsulate(penetrationSide);
+			
+			damageBounds.center = impactPosition;
 
-				const float errorMargin = -.1f;
-				
-				damageBounds.Expand(errorMargin);
-				
-				// Snap hitbox to grid
-				Vector2 snappedCenter = BattleField.Instance.Tilemap.Snap(damageBounds.center);
+			const float errorMargin = -.1f;
+			
+			damageBounds.Expand(errorMargin);
+			
+			// Snap hitbox to grid
+			Vector2 snappedCenter = BattleField.Instance.Tilemap.Snap(damageBounds.center);
 
-				damageBounds.center = snappedCenter;
+			damageBounds.center = snappedCenter;
 
-				// Raycast closest tiles
-				var hits = Physics2D.OverlapBoxAll(damageBounds.center, damageBounds.size, 0f,
-					LayerMask.GetMask("Default"));
+			// Raycast closest tiles
+			var hits = Physics2D.OverlapBoxAll(damageBounds.center, damageBounds.size, 0f,
+				LayerMask.GetMask("Default"));
 
 #if UNITY_EDITOR
-				DebugGizmos.Instance?.DrawBox(damageBounds);
+			DebugGizmos.Instance?.DrawBox(damageBounds);
 #endif
 
-				foreach (var collider in hits.Where(x => x.CompareTag("Destructible")))
+			foreach (var collider in hits.Where(x => x.CompareTag("Destructible")))
+			{
+				if (collider.TryGetComponent<DestructibleObject>(out var otherDestructibleObject))
 				{
-					if (collider.TryGetComponent<DestructibleObject>(out var otherDestructibleObject))
-					{
-						otherDestructibleObject.InnerTakeDamage();
-					}
+					otherDestructibleObject.InnerTakeDamage(damageData.damage);
 				}
 			}
 		}
 
-		void InnerTakeDamage()
+		void InnerTakeDamage(int damage)
 		{
+			if (!Alive || damage < durability)
+				return;
+			
 			hp--;
 
 			if (hp <= 0)
