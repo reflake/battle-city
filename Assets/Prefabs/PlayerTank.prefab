@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 9146923013432303731}
   - component: {fileID: 2266799760395251496}
   - component: {fileID: 510735627403194195}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PlayerTank
   m_TagString: Destructible
   m_Icon: {fileID: 0}
@@ -64,13 +64,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 006d48b3022b51841be6af78cb1c6409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletExplosionEffect:
-    period: 0.05
-    sprites:
-    - {fileID: -738345916, guid: effa20817c4656c4db488b6c46f956dc, type: 3}
-    - {fileID: 385265736, guid: effa20817c4656c4db488b6c46f956dc, type: 3}
-    - {fileID: -354553781, guid: effa20817c4656c4db488b6c46f956dc, type: 3}
-    duration: 0.15
   <Stats>k__BackingField:
     hitPoints: 1
     fireRate: 1
