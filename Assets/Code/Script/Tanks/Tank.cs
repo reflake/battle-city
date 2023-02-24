@@ -10,12 +10,9 @@ namespace Tanks
 {
     public class Tank : MonoBehaviour, IDestructible
     {
-        [Space] 
-        [SerializeField] AnimationData bulletExplosionEffect;
-        [SerializeField] Bullet bulletPrefab;
         [field: SerializeField] public Stats Stats { get; set; } = default;
 
-        [Inject] readonly EffectManager _effectManager = null;
+        [Inject] readonly Bullet.Factory _bulletFactory = null;
         [Inject] readonly SpriteRenderer _spriteRenderer = null;
         [Inject] readonly Rigidbody2D _rig = null;
         [Inject] readonly Collider2D _collider = null;
@@ -45,9 +42,9 @@ namespace Tanks
                 return;
 
             const float shootOffset = .4f;
-            var bullet = Instantiate(bulletPrefab, transform.position + transform.right * shootOffset, Quaternion.identity);
-        
-            bullet.Shoot(shootDirection, Stats, _collider);
+            var turretOrigin = transform.position + transform.right * shootOffset;
+            var bullet = _bulletFactory.Create(turretOrigin, shootDirection, Stats, _collider);
+
             bullet.WhenDestroyed(BulletHit);
 
             Face(shootDirection);
@@ -55,9 +52,8 @@ namespace Tanks
             _bulletsFired++;
         }
 
-        void BulletHit(Vector2 impactPoint)
+        void BulletHit()
         {
-            _effectManager.CreateEffect(impactPoint, bulletExplosionEffect);
             _bulletsFired--;
         }
 

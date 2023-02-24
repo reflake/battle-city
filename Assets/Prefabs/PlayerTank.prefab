@@ -71,8 +71,6 @@ MonoBehaviour:
     - {fileID: 385265736, guid: effa20817c4656c4db488b6c46f956dc, type: 3}
     - {fileID: -354553781, guid: effa20817c4656c4db488b6c46f956dc, type: 3}
     duration: 0.15
-  bulletPrefab: {fileID: 2762107655628412679, guid: cf0809c4cd0208b4ebc983190b5bbb7e,
-    type: 3}
   <Stats>k__BackingField:
     hitPoints: 1
     fireRate: 1
@@ -210,6 +208,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ed01286dd274699943785a1f30763f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 2762107655628412679, guid: cf0809c4cd0208b4ebc983190b5bbb7e,
+    type: 3}
 --- !u!114 &510735627403194195
 MonoBehaviour:
   m_ObjectHideFlags: 0

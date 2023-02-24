@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Linq;
 using Common;
+using Effects;
 using UnityEngine;
+using Zenject;
 
 namespace Tanks
 {
-    public class Bullet : MonoBehaviour
+    public partial class Bullet : MonoBehaviour
     {
+        [Inject] readonly EffectManager _effectManager = null;
+        
+        [SerializeField] AnimationData bulletExplosionEffect;
         [SerializeField] SpriteRenderer spriteRenderer = null;
         [SerializeField] Rigidbody2D rig = null;
         [SerializeField] Collider2D collider = null;
@@ -21,14 +26,17 @@ namespace Tanks
         RaycastHit2D[] _raycastResults = new RaycastHit2D[16];
         Collider2D _ignoreCollider;
 
-        public void Shoot(Direction shootDirection, Stats tankStats, Collider2D ignoreCollider)
+        void Shoot(Vector3 position, Direction shootDirection, Stats shooterStats, Collider2D ignoreCollider2D)
         {
-            _firePower = tankStats.firePower;
-            _damage = tankStats.damageBonus + 1;
+            transform.position = position;
+            rig.position = position;
+            
+            _firePower = shooterStats.firePower;
+            _damage = shooterStats.damageBonus + 1;
             _vectorDirection = shootDirection.ToVector();
-            _projectileSpeed = tankStats.projectileSpeed * speed;
+            _projectileSpeed = shooterStats.projectileSpeed * speed;
             _direction = shootDirection;
-            _ignoreCollider = ignoreCollider;
+            _ignoreCollider = ignoreCollider2D;
 
             spriteRenderer.TurnToDirection(shootDirection);
 
@@ -60,9 +68,11 @@ namespace Tanks
                                                                 .First();
 
             HitSomething(closestImpactPoint.transform, closestImpactPoint.point);
+
+            _effectManager.CreateEffect(closestImpactPoint.point, bulletExplosionEffect);
+            _hitCallback?.Invoke();
             
-            _hitCallback?.Invoke(closestImpactPoint.point);
-            Destroy(gameObject);
+            Dispose();
         }
 
         void HitSomething(Transform other, Vector2 impactPoint)

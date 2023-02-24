@@ -2,5 +2,5 @@
 
 namespace Tanks
 {
-	public delegate void BulletHitDelegate(Vector2 impactPoint);
+	public delegate void BulletHitDelegate();
 }
