@@ -5,7 +5,7 @@ using Zenject;
 
 namespace Tanks
 {
-	public partial class Bullet : IPoolable<Vector3, Direction, Stats, Collider2D, IMemoryPool>, IDisposable
+	public partial class Bullet : IPoolable<Team, Vector3, Direction, Stats, Collider2D, IMemoryPool>, IDisposable
 	{
 		IMemoryPool _pool;
 		
@@ -14,11 +14,11 @@ namespace Tanks
 			_pool = null;
 		}
 
-		public void OnSpawned(Vector3 position, Direction direction, Stats shooterStats, Collider2D ignoreCollider, IMemoryPool pool)
+		public void OnSpawned(Team team, Vector3 position, Direction direction, Stats shooterStats, Collider2D ignoreCollider, IMemoryPool pool)
 		{
 			transform.parent = null;
 			
-			Shoot(position, direction, shooterStats, ignoreCollider);
+			Shoot(team, position, direction, shooterStats, ignoreCollider);
 			
 			_pool = pool;
 		}

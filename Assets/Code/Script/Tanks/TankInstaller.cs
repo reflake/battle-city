@@ -14,7 +14,7 @@ namespace Tanks
 			Container.Bind<Rigidbody2D>().FromComponentSibling();
 			Container.Bind<Collider2D>().FromComponentSibling();
 			Container.Bind<SpriteRenderer>().FromComponentSibling();
-			Container.BindFactory<Vector3, Direction, Stats, Collider2D, Bullet, Bullet.Factory>()
+			Container.BindFactory<Team, Vector3, Direction, Stats, Collider2D, Bullet, Bullet.Factory>()
 				.FromMonoPoolableMemoryPool(x => x.WithInitialSize(1)
 					.FromComponentInNewPrefab(bulletPrefab));
 		}

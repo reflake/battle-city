@@ -11,6 +11,7 @@ namespace Tanks
     public class Tank : MonoBehaviour, IDestructible
     {
         [SerializeField] AnimationData _blowUpEffectAnimationData = default;
+        [field: SerializeField] public Team Team { get; set; } = default;
         [field: SerializeField] public Stats Stats { get; set; } = default;
 
         [Inject] readonly Bullet.Factory _bulletFactory = null;
@@ -45,7 +46,7 @@ namespace Tanks
 
             const float shootOffset = .4f;
             var turretOrigin = transform.position + transform.right * shootOffset;
-            var bullet = _bulletFactory.Create(turretOrigin, shootDirection, Stats, _collider);
+            var bullet = _bulletFactory.Create(Team, turretOrigin, shootDirection, Stats, _collider);
 
             bullet.WhenDestroyed(BulletHit);
 

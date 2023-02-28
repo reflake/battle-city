@@ -75,6 +75,7 @@ MonoBehaviour:
     - {fileID: -1220823167, guid: effa20817c4656c4db488b6c46f956dc, type: 3}
     - {fileID: 385265736, guid: effa20817c4656c4db488b6c46f956dc, type: 3}
     duration: 0.7
+  <Team>k__BackingField: 1
   <Stats>k__BackingField:
     hitPoints: 0
     fireRate: 0

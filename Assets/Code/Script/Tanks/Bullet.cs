@@ -11,6 +11,8 @@ namespace Tanks
     {
         [Inject] readonly EffectManager _effectManager = null;
         
+        [field: SerializeField] public Team Team { get; set; }
+        
         [SerializeField] AnimationData bulletExplosionEffect;
         [SerializeField] SpriteRenderer spriteRenderer = null;
         [SerializeField] Rigidbody2D rig = null;
@@ -26,8 +28,10 @@ namespace Tanks
         RaycastHit2D[] _raycastResults = new RaycastHit2D[16];
         Collider2D _ignoreCollider;
 
-        void Shoot(Vector3 position, Direction shootDirection, Stats shooterStats, Collider2D ignoreCollider2D)
+        void Shoot(Team team, Vector3 position, Direction shootDirection, Stats shooterStats,
+            Collider2D ignoreCollider2D)
         {
+            Team = team;
             transform.position = position;
             rig.position = position;
             
@@ -58,12 +62,17 @@ namespace Tanks
                 return;
             
             var validContactPoints = _raycastResults.Take(hitCount)
-                .Where(x => x.collider != _ignoreCollider)
-                .ToList();
+                .Where(x => x.collider != _ignoreCollider);
+
+            if (Team == Team.Enemy)
+            {
+                validContactPoints = validContactPoints
+                    .Where(x => !(x.transform.TryGetComponent<Tank>(out var tank) && tank.Team == Team.Enemy));
+            }
 
             if (validContactPoints.Count() == 0)
                 return;
-            
+
             var closestImpactPoint = validContactPoints.OrderBy(x => x.distance)
                                                                 .First();
 
